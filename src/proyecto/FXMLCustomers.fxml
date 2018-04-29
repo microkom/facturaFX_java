@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLCustomersController">
+    <children>
+        <TextField fx:id="tfBusquedaClientes" layoutX="134.0" layoutY="13.0" prefHeight="22.0" prefWidth="160.0" promptText="Búsqueda Clientes" />
+                  
+        <Label layoutX="22.0" layoutY="14.0" styleClass="titulo16" stylesheets="@estilo.css" text="CLIENTE" />
+                  
+        <Label layoutX="470.0" layoutY="50.0" prefHeight="14.0" text="IdCliente" />
+        <TextField fx:id="tfIdCliente" layoutX="550.0" layoutY="50.0" prefHeight="22.0" prefWidth="180.0" promptText="id" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="470.0" layoutY="80.0" text="Nombre" />
+        <TextField fx:id="tfNombreCliente" layoutX="550.0" layoutY="80.0" prefHeight="22.0" prefWidth="180.0" promptText="Nombre" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="470.0" layoutY="110.0" text="Direccion" />
+        <TextField fx:id="tfDireccionCliente" layoutX="550.0" layoutY="110.0" prefHeight="22.0" prefWidth="180.0" promptText="Dirección" stylesheets="@estilo.css" />
+                                                       
+        <Label layoutX="470.0" layoutY="140.0" text="Ciudad" />
+        <TextField fx:id="tfCiudadCliente" layoutX="550.0" layoutY="140.0" prefHeight="22.0" prefWidth="180.0" promptText="Ciudad" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="470.0" layoutY="170.0" text="Telefono" />
+        <TextField fx:id="tfTelefono" layoutX="550.0" layoutY="170.0" prefHeight="22.0" prefWidth="180.0" promptText="Telefono" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="470.0" layoutY="200.0" text="Contacto" />
+        <TextField fx:id="tfContactoCliente" layoutX="550.0" layoutY="200.0" prefHeight="22.0" prefWidth="180.0" promptText="Contacto" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="470.0" layoutY="230.0" text="Cargo Contaco" />
+        <TextField fx:id="tfCargoContactoCliente" layoutX="550.0" layoutY="230.0" prefHeight="22.0" prefWidth="180.0" promptText="Cargo" stylesheets="@estilo.css" />
+                 
+        <Label layoutX="470.0" layoutY="260.0" text="Pais" />
+        <TextField fx:id="tfPaisCliente" layoutX="550.0" layoutY="260.0" prefHeight="22.0" prefWidth="180.0" promptText="Pais" stylesheets="@estilo.css" />
+                  
+        <TableView fx:id="tablaBusquedaCliente" layoutX="22.0" layoutY="49.0" prefHeight="291.0" prefWidth="424.0">
+            <columns>
+                <TableColumn fx:id="tCnombreCliente" prefWidth="185.0" text="Nombre" />
+                <TableColumn fx:id="tCcontacto" prefWidth="85.0" text="Contacto" />
+                <TableColumn fx:id="tCcargoContacto" prefWidth="80.0" text="Cargo Contacto" />
+                <TableColumn fx:id="tCdireccion" prefWidth="80.0" text="Direccion" />
+                <TableColumn fx:id="tCciudad" prefWidth="80.0" text="Ciudad" />
+                <TableColumn fx:id="tCpais" prefWidth="80.0" text="País" />
+                <TableColumn fx:id="tCtelefono" prefWidth="80.0" text="Teléfono" />
+            </columns>
+        </TableView>
+        <Button fx:id="bt_nuevoCliente" layoutX="465.0" layoutY="318.0" mnemonicParsing="true" onAction="#nuevoClienteFX" text="_Nuevo cliente" />
+        <Button fx:id="bt_editarTexto" layoutX="571.0" layoutY="318.0" mnemonicParsing="true" onAction="#editarTextoFX" text="_Editar" />
+        <Button fx:id="bt_borrarRegistro" layoutX="683.0" layoutY="318.0" mnemonicParsing="true" onAction="#borrarRegistroFX" text="_Borrar" />
+        <Button fx:id="bt_cancelarEditar" layoutX="475.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarEditarTextoFX" text="Cancelar" />
+        <Button fx:id="bt_guardarEditar" layoutX="674.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarEditarFX" text="Guardar" />
+        <Button fx:id="bt_cancelarNuevoCliente" layoutX="475.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarNuevoClienteFX" text="Cancelar" />
+        <Button fx:id="bt_guardarNuevoRegistro" layoutX="674.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarNuevoRegistroFX" text="Guardar" />
+        <Button fx:id="bt_refresh" layoutX="-80.0" layoutY="363.0" mnemonicParsing="false" onAction="#actualizaTablaBusqueda" text="Refresh" />
+    </children>
+    
+</AnchorPane>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="502.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLMainMenuController">
+   <children>
+      <BorderPane prefHeight="480.0" prefWidth="740.0">
+         <center>
+            <AnchorPane prefHeight="480.0" prefWidth="533.0" BorderPane.alignment="CENTER">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <children>
+                  <Pane fx:id="pane1" layoutX="36.0" prefHeight="480.0" prefWidth="494.0" style="-fx-background-color: #f6f5f8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Pane fx:id="pane2" layoutX="36.0" prefHeight="480.0" prefWidth="494.0" style="-fx-background-color: #99ff99;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Pane fx:id="pane3" layoutX="36.0" prefHeight="480.0" prefWidth="494.0" style="-fx-background-color: #71ff82;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Pane fx:id="pane4" layoutX="36.0" prefHeight="480.0" prefWidth="494.0" style="-fx-background-color: #8855ff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </center>
+         <left>
+            <AnchorPane prefHeight="480.0" prefWidth="210.0" style="-fx-background-color: #F0F7FF;" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane prefHeight="480.0" prefWidth="40.0" style="-fx-background-color: #ffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </AnchorPane>
+                  <Button fx:id="a" layoutX="55.0" layoutY="431.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="35.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Admin" />
+                  <Button fx:id="bt_personal" layoutX="55.0" layoutY="265.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="48.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Personal" />
+                  <Button fx:id="d" layoutX="55.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="48.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Presupuesto" />
+                  <Button fx:id="b" layoutX="55.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="48.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Facturacion" />
+                  <Button fx:id="bt_quotation" layoutX="55.0" layoutY="323.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="48.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Presupuesto" />
+                  <Button fx:id="bt_clientes" layoutX="55.0" layoutY="384.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="35.0" prefWidth="145.0" style="-fx-background-radius: 0;" text="Clientes" />
+               </children>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </AnchorPane>
+         </left>
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
