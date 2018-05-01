@@ -20,10 +20,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -41,14 +40,54 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private TextField tfUser;
     @FXML
-    private Button login;
+    private Button bt_login;
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tfUser.setText("dav"); //borrar
+        tfPass.setText("123"); //borrar
 
+        enterWithEnter();
+
+    }
+
+    private void enterWithEnter() {
+        tfPass.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println(e.getCode());
+                usuarioPass();
+            } else if (e.getCode() == KeyCode.ESCAPE) {
+                System.out.println(e.getCode());
+                Stage stage2 = (Stage) bt_login.getScene().getWindow();
+                stage2.close();
+            }
+        });
+        tfUser.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println(e.getCode());
+                usuarioPass();
+            } else if (e.getCode() == KeyCode.ESCAPE) {
+                System.out.println(e.getCode());
+                Stage stage2 = (Stage) bt_login.getScene().getWindow();
+                stage2.close();
+            }
+        });
+        bt_login.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                System.out.println(e.getCode());
+                usuarioPass();
+            } else if (e.getCode() == KeyCode.ESCAPE) {
+                System.out.println(e.getCode());
+                Stage stage2 = (Stage) bt_login.getScene().getWindow();
+                stage2.close();
+            }
+        });
     }
 
     @FXML
@@ -65,7 +104,7 @@ public class FXMLLoginController implements Initializable {
 
             if (rs.next()) {
                 try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLFacturacion.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root1));
@@ -73,10 +112,10 @@ public class FXMLLoginController implements Initializable {
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.show();
 
-                    stage.setTitle("..::FACTURACION::..");
+                    stage.setTitle("..::Menú Principal::..");
 
                     //cierra la ventana abierta anteriormente
-                    Stage stage2 = (Stage) login.getScene().getWindow();
+                    Stage stage2 = (Stage) bt_login.getScene().getWindow();
                     stage2.close();
 
                 } catch (Exception ex) {

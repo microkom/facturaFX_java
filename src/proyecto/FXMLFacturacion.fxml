@@ -6,9 +6,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLFacturacionController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLFacturacionController">
    <children>
-      <VBox layoutY="51.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="51.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="675.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="79.0" prefWidth="675.0">
                <children>
@@ -18,7 +18,7 @@
                   <Label fx:id="lbFecha" layoutX="383.0" layoutY="31.0" styleClass="numFactura" stylesheets="@estilo.css" text="Fecha" />
                </children>
             </AnchorPane>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="150.0" prefWidth="675.0">
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="104.0" prefWidth="675.0">
                <children>
                   <Label layoutX="22.0" layoutY="14.0" styleClass="titulo16" stylesheets="@estilo.css" text="CLIENTE" />
                   <Label layoutX="38.0" layoutY="42.0" text="Nombre" />
@@ -48,7 +48,7 @@
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="336.0" prefWidth="675.0">
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="322.0" prefWidth="675.0">
                <children>
                   <Label layoutX="24.0" layoutY="27.0" prefHeight="20.0" prefWidth="84.0" styleClass="titulo16" stylesheets="@estilo.css" text="FACTURA" />
                   <TableView fx:id="tablaLineaFactura" layoutX="19.0" layoutY="66.0" prefHeight="127.0" prefWidth="605.0" stylesheets="@estilo.css">
@@ -66,14 +66,15 @@
                   <Label layoutX="232.0" layoutY="31.0" text="Cant." />
                   <Label layoutX="369.0" layoutY="31.0" text="Desc." />
                   
-                  <Button fx:id="btAgregarItemALineaFactura" layoutX="572.0" layoutY="27.0" mnemonicParsing="false" onAction="#pasarItemAListaFactura" text="Agregar" />
+                        <Button fx:id="btAgregarItemALineaFactura" layoutX="572.0" layoutY="27.0" mnemonicParsing="false" onAction="#pasarItemAListaFactura" text="Agregar" />
                   
-                  <Button fx:id="btBorrarLinea" layoutX="66.0" layoutY="213.0" mnemonicParsing="false" onAction="#borrarLineaNumero" text="Borrar Articulo" />
+                        <Button fx:id="btBorrarLinea" layoutX="66.0" layoutY="213.0" mnemonicParsing="false" onAction="#borrarLineaNumero" text="Borrar Articulo" />
                   <TextField fx:id="tfLineaABorrar" layoutX="165.0" layoutY="213.0" prefHeight="22.0" prefWidth="43.0" />
                   
-                  <Button fx:id="btGuardarFactura" layoutX="66.0" layoutY="255.0" mnemonicParsing="false" onAction="#guardarFactura" text="Guardar Factura" />
+                        <Button fx:id="btGuardarFactura" layoutX="66.0" layoutY="255.0" mnemonicParsing="false" onAction="#guardarFactura" text="Guardar Factura" />
+                        <Button fx:id="bt_menuPrincipal" layoutX="190.0" layoutY="255.0" mnemonicParsing="false" onAction="#menuPrincipalFX" text="Menu Principal" />
                   
-                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="198.0" minWidth="120.0" text="Subtotal" />
+                        <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="198.0" minWidth="120.0" text="Subtotal" />
                   <Label fx:id="lbSubtotal" alignment="CENTER_RIGHT" layoutX="579.0" layoutY="198.0" minWidth="40.0" text="****" />
                   <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="223.0" minWidth="120.0" text="Descuento" />
                   <Label fx:id="lbDescuentoTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="223.0" minWidth="40.0" text="****" />
@@ -84,7 +85,7 @@
                   <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="298.0" minWidth="120.0" text="Total" />
                   <Label fx:id="lbTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="298.0" minWidth="40.0" text="****" />
                   
-                  
+                        
                </children>
           </AnchorPane>
          </children>

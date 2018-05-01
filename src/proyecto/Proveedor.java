@@ -5,27 +5,62 @@
  */
 package proyecto;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javafx.collections.ObservableList;
+
 /**
+ *
  *
  * @author German
  */
-public class Proveedor extends Persona{
-    
-    private Persona representante;
+public class Proveedor extends Persona {
 
-    public Proveedor(Persona personaContacto, String nif, String nombre, String apellido, String direccion, String cp, String telefono, String email) {
-        super(nif, nombre, apellido, direccion, cp, telefono, email);
-        this.representante = personaContacto;
+    public Proveedor(String id, String nombre, String contacto, String cargoContacto, String direccion, String ciudad, String pais, String telefono) {
+        super(id, nombre, contacto, cargoContacto, direccion, ciudad, pais, telefono);
     }
 
-    public Persona getPersonaContacto() {
-        return representante;
+    public String getDatosBusqueda() {
+        return super.getId() + " " + super.getNombre() + " " + super.getContacto() + " " + super.getCargoContacto()
+                + " " + super.getDireccion() + " " + super.getCiudad() + " " + super.getPais() + " " + super.getTelefono();
     }
 
-    public void setPersonaContacto(Persona personaContacto) {
-        this.representante = personaContacto;
+    public static void fillProveedorList(ObservableList<Proveedor> listaProveedor) {
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM proveedores");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                listaProveedor.add(
+                        new Proveedor(
+                                //id, nombre, contacto, cargoContacto, direccion, ciudad, pais, telefono
+                                rs.getString("idProveedor"),
+                                rs.getString("Nombre"),
+                                rs.getString("Contacto"),
+                                rs.getString("CargoContacto"),
+                                rs.getString("Direccion"),
+                                rs.getString("Ciudad"),
+                                rs.getString("Pais"),
+                                rs.getString("Telefono")
+                        ));
+            }
+        } catch (Exception ex) {
+            System.out.println(" fillProveedorList :" + ex.getLocalizedMessage());
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(Proveedor.class.getName() + " Finally ->fillProveedorList :" + ex.getMessage());
+            }
+        }
     }
 
-    
-    
 }

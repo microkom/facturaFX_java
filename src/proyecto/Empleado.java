@@ -13,7 +13,7 @@ import java.time.LocalDate;
  */
 public class Empleado extends Persona {
 
-    private String id;
+    private String apellido;
     private String cargo;
     private LocalDate fNacimiento;
     private LocalDate fContrato;
@@ -21,42 +21,23 @@ public class Empleado extends Persona {
     private String user;
     private String password;
 
-//    public Empleado(String id, String cargo, LocalDate fNacimiento, LocalDate fContrato, String nombre, String apellido, String telefono) {
-//        super(nombre, apellido, telefono);
-//        this.id = id;
-//        this.cargo = cargo;
-//        this.fNacimiento = fNacimiento;
-//        this.fContrato = fContrato;
-//        this.user = null;
-//        this.password = null;
-//    }
-
-    public Empleado(String id, String cargo, LocalDate fNacimiento, LocalDate fContrato, String user, String password, String nif, String nombre, String apellido, String direccion, String cp, String telefono, String email) {
-        super(nif, nombre, apellido, direccion, cp, telefono, email);
-        this.id = id;
+    public Empleado(String apellido, String cargo, LocalDate fNacimiento, LocalDate fContrato, String jefe, String user, String password, String id, String nombre, String telefono) {
+        super(id, nombre, telefono);
+        this.apellido = apellido;
         this.cargo = cargo;
         this.fNacimiento = fNacimiento;
         this.fContrato = fContrato;
+        this.jefe = jefe;
         this.user = user;
         this.password = password;
+    }  
+
+    public String getApellido() {
+        return apellido;
     }
 
-    public Empleado( String nombre) {
-        super(nombre);
-        
-    }
-
-    
-
-   
-    
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getCargo() {
@@ -83,6 +64,14 @@ public class Empleado extends Persona {
         this.fContrato = fContrato;
     }
 
+    public String getJefe() {
+        return jefe;
+    }
+
+    public void setJefe(String jefe) {
+        this.jefe = jefe;
+    }
+
     public String getUser() {
         return user;
     }
@@ -98,13 +87,7 @@ public class Empleado extends Persona {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getJefe() {
-        return jefe;
-    }
-
-    public void setJefe(String jefe) {
-        this.jefe = jefe;
-    }
+    
+    
 
 }

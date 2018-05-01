@@ -19,7 +19,10 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,6 +31,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -61,7 +66,7 @@ public class FXMLCustomersController implements Initializable {
 
     //IDs botones nuevo registro
     @FXML
-    private Button bt_nuevoCliente, bt_cancelarNuevoCliente, bt_borrarRegistro, bt_guardarNuevoRegistro;
+    private Button bt_nuevoCliente, bt_cancelarNuevoCliente, bt_borrarRegistro, bt_guardarNuevoRegistro,bt_menuPrincipal;
 
     private final ListChangeListener<Cliente> selectorTablaClientes = new ListChangeListener<Cliente>() {
         @Override
@@ -140,6 +145,27 @@ public class FXMLCustomersController implements Initializable {
             tfTelefono.setText(cliente.getTelefono());
         }
     }
+    @FXML
+    private void menuPrincipalFX(){
+        try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+                    Parent root1 = (Parent) fxmlLoader.load();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root1));
+
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.show();
+
+                    stage.setTitle("..::Menú Principal::..");
+
+                    //cierra la ventana abierta anteriormente
+                    Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
+                    stage2.close();
+
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+    }
 
     @FXML
     private void editarTextoFX() {
@@ -152,6 +178,8 @@ public class FXMLCustomersController implements Initializable {
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
+        disableTextFieldEditable();
+         clearForm();
     }
 
     @FXML
@@ -159,6 +187,7 @@ public class FXMLCustomersController implements Initializable {
         estadoInicialBotonesVisibles();
         guardarEditado();
         actualizaTablaBusqueda();
+        disableTextFieldEditable();
     }
 
     @FXML
@@ -193,6 +222,7 @@ public class FXMLCustomersController implements Initializable {
     private void cancelarNuevoClienteFX() {
         estadoInicialBotonesVisibles();
         clearForm();
+        disableTextFieldEditable();
     }
 
     @FXML
@@ -284,7 +314,7 @@ public class FXMLCustomersController implements Initializable {
         if (validateEmptyField("No hay datos para guardar", tfIdCliente.getText().isEmpty())) {
             PreparedStatement stmt;
             try {
-                String id = genIdCliente;
+                String id = tfIdCliente.getText();
                 String nombre = tfNombreCliente.getText();
                 String contacto = tfContactoCliente.getText();
                 String cargo = tfCargoContactoCliente.getText();
@@ -310,7 +340,6 @@ public class FXMLCustomersController implements Initializable {
     }
 
     private void enableTextFieldEditable() {
-        tfIdCliente.setMouseTransparent(true);// siempre deshabilitado
         tfIdCliente.setEditable(false);// siempre deshabilitado
         tfNombreCliente.setEditable(true);
         tfContactoCliente.setEditable(true);

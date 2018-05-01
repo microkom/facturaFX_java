@@ -23,16 +23,16 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("FXMLFacturacion.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("FXMLLogin.fxml"));
 
-           // Scene scene = new Scene(root, Color.rgb(0, 0, 0, 0.5));//login
-            Scene scene = new Scene(root, Color.rgb(0, 0, 0, 0.5));
-            
-           // stage.initStyle(StageStyle.TRANSPARENT); //hace que se vea sin botones arriba - login
-            stage.setTitle("Tienda");
+            Scene scene = new Scene(root, Color.rgb(0, 0, 0, 0.5));//login
+
+            stage.initStyle(StageStyle.TRANSPARENT); //hace que se vea sin botones arriba - login
+            stage.setTitle("Login");
             stage.setScene(scene);
+            
             stage.show();
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             System.out.println("Start page: " + ex.getMessage());
         }
     }

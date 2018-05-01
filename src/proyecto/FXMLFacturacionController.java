@@ -22,7 +22,10 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -31,6 +34,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class FXMLFacturacionController implements Initializable {
 
@@ -73,7 +78,7 @@ public class FXMLFacturacionController implements Initializable {
             tfLineaABorrar;
 
     @FXML
-    private Button btAgregarItemALineaFactura, btBorrarLinea, btGuardarFactura;
+    private Button btAgregarItemALineaFactura, btBorrarLinea, btGuardarFactura,bt_menuPrincipal;;
 
     private final ListChangeListener<Cliente> selectorTablaClientes = new ListChangeListener<Cliente>() {
         @Override
@@ -238,9 +243,9 @@ public class FXMLFacturacionController implements Initializable {
                 tfIdProducto.setText(Integer.toString(producto.getId()));
                 tfNombreProducto.setText(producto.getNombreProducto());
                 tfPrecioProducto.setText(Integer.toString(producto.getPrecio()));
-                tfCategoria.setText(producto.getCategoria());
-                tfExistencias.setText(Integer.toString(producto.getExistencia()));
-                tfProveedor.setText(producto.getProveedor());
+                tfCategoria.setText("--facturacion--");
+                tfExistencias.setText(Integer.toString(producto.getExistencias()));
+                tfProveedor.setText("--facturacion--");
 
             }
         } catch (Exception ex) {
@@ -368,55 +373,56 @@ public class FXMLFacturacionController implements Initializable {
         lbNumPedido.setText(Integer.toString(nuevoNumeroFactura()));
         if (validateEmptyField("No hay articulos agregados a la factura", tablaLineaFactura.getItems().isEmpty())) {
             if (validateEmptyField("No ha seleccionado ningún cliente", tfIdCliente.getText().isEmpty())) {
-            Conexion conexion = new Conexion();
-            Connection con = conexion.conectar();
-            ResultSet rs = null;
-            PreparedStatement stmt = null;
+                Conexion conexion = new Conexion();
+                Connection con = conexion.conectar();
+                ResultSet rs = null;
+                PreparedStatement stmt = null;
 
-            String numFactura = lbNumPedido.getText();
-            String cliente = tfIdCliente.getText();
-            String empleado = "3";
-            try {
-                stmt = con.prepareStatement("INSERT INTO pedidos set numPedido="
-                        + numFactura + ", Cliente=\"" + cliente + "\", empleado="
-                        + empleado + " ,Fecha=(SELECT NOW()) ");
-                stmt.executeUpdate();
-
-                for (LineaFactura obj : lineaFacturaList) {
-
-                    int numLinea = obj.getNumLinea();
-                    int producto = obj.getProducto();
-                    int cantidad = obj.getCantidad();
-                    double precio = obj.getPrecio();
-                    double descuento = obj.getDescuento();
-
-                    stmt = con.prepareStatement("INSERT INTO lineasPedido ( NumLinea, "
-                            + "numPedido, producto, precio, cantidad, descuento) "
-                            + " VALUES (" + numLinea + "," + numFactura + ","
-                            + producto + "," + precio + "," + cantidad + "," + descuento + ")");
-                    stmt.executeUpdate();
-                }
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Registros");
-                alert.setHeaderText(null);
-                alert.setContentText("La factura se ha guardado correctamente");
-                alert.showAndWait();
-
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            } finally {
+                String numFactura = lbNumPedido.getText();
+                String cliente = tfIdCliente.getText();
+                String empleado = "3";
                 try {
-                    stmt.close();
-                } catch (SQLException ex) {
-                    System.out.println("Finally, guardarFactura: " + ex.getMessage());
-                }
-            }
-            //cargar número de factura a pantalla
+                    stmt = con.prepareStatement("INSERT INTO pedidos set numPedido="
+                            + numFactura + ", Cliente=\"" + cliente + "\", empleado="
+                            + empleado + " ,Fecha=(SELECT NOW()) ");
+                    stmt.executeUpdate();
 
-            lbNumPedido.setText(Integer.toString(nuevoNumeroFactura()));
-            limpiarFactura();
+                    for (LineaFactura obj : lineaFacturaList) {
+
+                        int numLinea = obj.getNumLinea();
+                        int producto = obj.getProducto();
+                        int cantidad = obj.getCantidad();
+                        double precio = obj.getPrecio();
+                        double descuento = obj.getDescuento();
+
+                        stmt = con.prepareStatement("INSERT INTO lineasPedido ( NumLinea, "
+                                + "numPedido, producto, precio, cantidad, descuento) "
+                                + " VALUES (" + numLinea + "," + numFactura + ","
+                                + producto + "," + precio + "," + cantidad + "," + descuento + ")");
+                        stmt.executeUpdate();
+                    }
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("Registros");
+                    alert.setHeaderText(null);
+                    alert.setContentText("La factura se ha guardado correctamente");
+                    alert.showAndWait();
+
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                } finally {
+                    try {
+                        stmt.close();
+                    } catch (SQLException ex) {
+                        System.out.println("Finally, guardarFactura: " + ex.getMessage());
+                    }
+                }
+                //cargar número de factura a pantalla
+
+                lbNumPedido.setText(Integer.toString(nuevoNumeroFactura()));
+                limpiarFactura();
+            }
         }
-    }}
+    }
 
     private void limpiarFactura() {
         tfNombreCliente.clear();
@@ -598,4 +604,27 @@ public class FXMLFacturacionController implements Initializable {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+    
+    @FXML
+    public void menuPrincipalFX() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+            stage.setTitle("..::Menú Principal::..");
+
+            //cierra la ventana abierta anteriormente
+            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
+            stage2.close();
+
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+    }
+
 }

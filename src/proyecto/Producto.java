@@ -9,8 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -21,18 +23,17 @@ public class Producto {
 
     private int id;
     private String nombreProducto;
-    private String proveedor;
-    private String categoria;
     private int precio;
-    private int existencia;
+    private int existencias;
 
-    public Producto(int id, String nombreProducto, String proveedor, String categoria, int precio, int existencia) {
+    public static ObservableList<Proveedor> listaProveedor = FXCollections.observableArrayList();
+    public static ObservableList<Categoria> listaCategoria = FXCollections.observableArrayList();
+
+    public Producto(int id, String nombreProducto, String proveedor, String categoria, int precio, int existencias) {
         this.id = id;
         this.nombreProducto = nombreProducto;
-        this.proveedor = proveedor;
-        this.categoria = categoria;
         this.precio = precio;
-        this.existencia = existencia;
+        this.existencias = existencias;
     }
 
     public int getId() {
@@ -51,22 +52,6 @@ public class Producto {
         this.nombreProducto = nombreProducto;
     }
 
-    public String getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     public int getPrecio() {
         return precio;
     }
@@ -75,19 +60,35 @@ public class Producto {
         this.precio = precio;
     }
 
-    public int getExistencia() {
-        return existencia;
+    public int getExistencias() {
+        return existencias;
     }
 
-    public void setExistencia(int existencia) {
-        this.existencia = existencia;
+    public void setExistencias(int existencias) {
+        this.existencias = existencias;
     }
+
+//    public String getProveedor() {
+//        String prov = "";
+//        Proveedor proveedor = null;
+//        prov = proveedor.getNombre();
+//        return prov;
+//    }
+
+//    public String getCategoria() {
+//        String cat = "";
+//        Categoria categoria = null;
+//        cat = categoria.getNombre();
+//        return cat;
+//    }
 
     public String getDatosBusqueda() {
-        return id + " " + nombreProducto + " " + proveedor + " " + categoria + " " + precio;
+        return id + " " + nombreProducto +" "+ precio;
     }
 
     public static void fillProductosList(ObservableList<Producto> listaProductos) {
+        Proveedor.fillProveedorList(listaProveedor);
+        Categoria.fillCategoriaList(listaCategoria);
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
         ResultSet rs;
@@ -95,23 +96,19 @@ public class Producto {
 
         try {
             stmt = con.prepareStatement("SELECT * FROM productos");
-
-            stmt.executeQuery();
             rs = stmt.executeQuery();
             while (rs.next()) {
                 listaProductos.add(
-                        new Producto( //int id, String nombreProducto, int proveedor, int categoria, double precio, int existencia) 
+                        new Producto( //int id, String nombreProducto, int proveedor, int categoria, double precio, int existencias) 
                                 rs.getInt("idProducto"),
                                 rs.getString("nomProducto"),
                                 getNombreProveedor(rs.getInt("Proveedor")),
                                 getNombreCategoria(rs.getInt("categoria")),
                                 rs.getInt("precio"),
                                 rs.getInt("existencias")));
-
             }
             stmt.close();
             rs.close();
-
         } catch (SQLException ex) {
             System.out.println("fillProductosList: " + ex.getMessage());
         } finally {
@@ -123,6 +120,40 @@ public class Producto {
         }
     }
 
+//    public static String getNombreProveedor(int proveedor) {
+//
+//        boolean found = false;
+//        String nombre = "";
+//        Iterator<Proveedor> ite = listaProveedor.iterator();
+//        Proveedor obj;
+//
+//        while (ite.hasNext() && found == false) {
+//            obj = ite.next();
+//            if (Integer.parseInt(obj.getId()) == proveedor) {
+//                nombre = obj.getNombre();
+//                found = true;
+//            }
+//        }
+//        return nombre;
+//    }
+//
+//    public static String getNombreCategoria(int categoria) {
+//
+//        boolean found = false;
+//        String nombre = "";
+//        Iterator<Categoria> ite = listaCategoria.iterator();
+//        Categoria obj;
+//
+//        while (ite.hasNext() && found == false) {
+//            obj = ite.next();
+//            if (Integer.parseInt(obj.getId()) == categoria) {
+//                nombre = obj.getNombre();
+//                found = true;
+//            }
+//        }
+//        return nombre;
+//    }
+    
     public static String getNombreProveedor(int proveedor) {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
