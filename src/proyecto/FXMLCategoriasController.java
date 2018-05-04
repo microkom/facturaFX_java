@@ -27,7 +27,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -40,26 +39,26 @@ import javafx.stage.Stage;
  *
  * @author German
  */
-public class FXMLEmpleadosController implements Initializable {
+public class FXMLCategoriasController implements Initializable {
 
-    private String genIdEmpleado = "";
+    private String genIdCategoria = "";
     private ResultSet rs;
     private ResultSet rs2;
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
 
-    private ObservableList<Empleado> listaEmpleados = FXCollections.observableArrayList();
-    private FilteredList<Empleado> listaEmpleadosFiltrada = new FilteredList(listaEmpleados, obj -> true);
-    int posicionEmpleado = 0;
+    private ObservableList<Categoria> listaCategorias = FXCollections.observableArrayList();
+    private FilteredList<Categoria> listaCategoriasFiltrada = new FilteredList(listaCategorias, obj -> true);
+    int posicionCategoria = 0;
 
     @FXML
-    private TableView<Empleado> tablaBusquedaEmpleado;
+    private TableView<Categoria> tablaBusquedaCategoria;
 
     @FXML
-    private TableColumn<Empleado, String> tcIdEmpleado, tcNombre, tcApellidos, tcCargo, tcJefe, tcTelefono, tcFNacimiento, tcFContrato;
+    private TableColumn<Categoria, String> tcIdCategoria, tcNombre, tcDescripcion;
 
     @FXML
-    private TextField tfIdEmpleado, tfNombre, tfApellidos, tfCargo, tfJefe, tfTelefono, tfFNacimiento, tfFContrato, tfBusquedaEmpleados;
+    private TextField tfIdCategoria, tfNombre, tfDescripcion, tfBusquedaCategorias;
 
     //IDs botones de edición
     @FXML
@@ -67,14 +66,12 @@ public class FXMLEmpleadosController implements Initializable {
 
     //IDs botones nuevo registro
     @FXML
-    private Button bt_nuevoEmpleado, bt_cancelarNuevoEmpleado, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
+    private Button bt_nuevaCategoria, bt_cancelarNuevaCategoria, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
 
-    @FXML
-    private ComboBox cb_empleados;
-    private final ListChangeListener<Empleado> selectorTablaEmpleados = new ListChangeListener<Empleado>() {
+    private final ListChangeListener<Categoria> selectorTablaCategorias = new ListChangeListener<Categoria>() {
         @Override
-        public void onChanged(ListChangeListener.Change<? extends Empleado> c) {
-            ponerEmpleadoSeleccionado();
+        public void onChanged(ListChangeListener.Change<? extends Categoria> c) {
+            ponerCategoriaSeleccionada();
         }
     };
 
@@ -85,34 +82,29 @@ public class FXMLEmpleadosController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             //CLIENTES
-            //rellenar lista de empleados en listado
-            Empleado.fillEmpleadoList(listaEmpleados);
+            //rellenar lista de categorias en listado
+            Categoria.fillCategoriaList(listaCategorias);
 
-            //lista de empleados para filtrar
-            tablaBusquedaEmpleado.setItems(listaEmpleadosFiltrada);
+            //lista de categorias para filtrar
+            tablaBusquedaCategoria.setItems(listaCategoriasFiltrada);
 
             //busqueda en tiempo real por nombre, contacto, cargo contacto, ciudad. Tiene en cuenta las tildes 
-            tfBusquedaEmpleados.setOnKeyReleased(keyEvent -> {
-                listaEmpleadosFiltrada.setPredicate(obj -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaEmpleados.getText().toLowerCase().trim()));
+            tfBusquedaCategorias.setOnKeyReleased(keyEvent -> {
+                listaCategoriasFiltrada.setPredicate(obj -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaCategorias.getText().toLowerCase().trim()));
             });
 
             //Valores para rellenar la vista de la tabla
-            tcIdEmpleado.setCellValueFactory(new PropertyValueFactory<Empleado, String>("id"));
-            tcNombre.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nombre"));
-            tcApellidos.setCellValueFactory(new PropertyValueFactory<Empleado, String>("apellido"));
-            tcCargo.setCellValueFactory(new PropertyValueFactory<Empleado, String>("cargo"));
-            tcJefe.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nomJefe"));
-            tcTelefono.setCellValueFactory(new PropertyValueFactory<Empleado, String>("telefono"));
-            tcFNacimiento.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fNacimiento"));
-            tcFContrato.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fContrato"));
+            tcIdCategoria.setCellValueFactory(new PropertyValueFactory<Categoria, String>("id"));
+            tcNombre.setCellValueFactory(new PropertyValueFactory<Categoria, String>("nombre"));
+            tcDescripcion.setCellValueFactory(new PropertyValueFactory<Categoria, String>("descripcion"));
 
             //En el initialize añadimos el «Listener» al TableView
-            final ObservableList<Empleado> tablaEmpleadoSel
-                    = tablaBusquedaEmpleado.getSelectionModel().getSelectedItems();
-            tablaEmpleadoSel.addListener(selectorTablaEmpleados);
+            final ObservableList<Categoria> tablaCategoriaSel
+                    = tablaBusquedaCategoria.getSelectionModel().getSelectedItems();
+            tablaCategoriaSel.addListener(selectorTablaCategorias);
 
         } catch (Exception ex) {
-            System.out.println("Relacionado con Empleados en el initialize: " + ex.getMessage());
+            System.out.println("Relacionado con Categorias en el initialize: " + ex.getMessage());
         }
 
         disableTextFieldEditable();
@@ -121,37 +113,29 @@ public class FXMLEmpleadosController implements Initializable {
     }
 
     //Método que devuelve el objeto de la fila seleccionada
-    public Empleado getTablaEmpleadosSeleccionado() { //de aqui va a los textfields
+    public Categoria getTablaCategoriasSeleccionado() { //de aqui va a los textfields
 
-        Empleado empleadoSeleccionado = null;
-        if (tablaBusquedaEmpleado != null) {
-            List<Empleado> tabla = tablaBusquedaEmpleado.getSelectionModel().getSelectedItems();
+        Categoria categoriaSeleccionada = null;
+        if (tablaBusquedaCategoria != null) {
+            List<Categoria> tabla = tablaBusquedaCategoria.getSelectionModel().getSelectedItems();
             if (tabla.size() == 1) {
-                empleadoSeleccionado = tabla.get(0);
-                return empleadoSeleccionado;
+                categoriaSeleccionada = tabla.get(0);
+                return categoriaSeleccionada;
             }
         }
-        return empleadoSeleccionado;
+        return categoriaSeleccionada;
     }
 
     //Método que a partir del objeto seleccionado lo muestra en el formulario
     //También puede habilitar/deshabilitar botones en el formualrio
-    public void ponerEmpleadoSeleccionado() {
-        final Empleado empleado = getTablaEmpleadosSeleccionado();
-        posicionEmpleado = listaEmpleados.indexOf(empleado);
-        if (empleado != null) {
+    public void ponerCategoriaSeleccionada() {
+        final Categoria categoria = getTablaCategoriasSeleccionado();
+        posicionCategoria = listaCategorias.indexOf(categoria);
+        if (categoria != null) {
 
-            tfIdEmpleado.setText(empleado.getId());
-            tfNombre.setText(empleado.getNombre());
-            tfApellidos.setText(empleado.getApellido());
-            tfCargo.setText(empleado.getCargo());
-            //tfJefe.setText(empleado.getNomJefe());
-            cb_empleados.setItems(listaEmpleados);
-            cb_empleados.setValue(empleado.getNomJefe()); //listaEmpleados.get(posicionEmpleado).getNomJefe()
-            tfTelefono.setText(empleado.getTelefono());
-            tfFNacimiento.setText(empleado.getfNacimiento());
-            tfFContrato.setText(empleado.getfContrato());
-
+            tfIdCategoria.setText(categoria.getId());
+            tfNombre.setText(categoria.getNombre());
+            tfDescripcion.setText(categoria.getDescripcion());
         }
     }
 
@@ -179,7 +163,7 @@ public class FXMLEmpleadosController implements Initializable {
 
     @FXML
     private void editarTextoFX() {
-        if (validateEmptyField("Debe seleccionar primero un empleado", tfIdEmpleado.getText().isEmpty())) {
+        if (validateEmptyField("Debe seleccionar primero una categoria", tfIdCategoria.getText().isEmpty())) {
             enableTextFieldEditable();
             editarTextoPressed();
         }
@@ -202,27 +186,24 @@ public class FXMLEmpleadosController implements Initializable {
 
     @FXML
     private void actualizaTablaBusqueda() {
-        listaEmpleados.clear();
-        Empleado.fillEmpleadoList(listaEmpleados);
+        listaCategorias.clear();
+        Categoria.fillCategoriaList(listaCategorias);
     }
 
     @FXML
-    private void nuevoEmpleadoFX() {
+    private void nuevaCategoriaFX() {
         clearForm();
-        genIdEmpleado = Integer.toString(nuevoNumeroId());
-        tfIdEmpleado.setText(genIdEmpleado);
-        tfJefe.setVisible(false);
-        cb_empleados.setItems(listaEmpleados);
-        cb_empleados.setValue(listaEmpleados.get(posicionEmpleado).getNomJefe());
+        genIdCategoria = Integer.toString(nuevoNumeroId());
+        tfIdCategoria.setText(genIdCategoria);
         enableTextFieldEditable();
-        nuevoEmpleadoPressed();
+        nuevaCategoriaPressed();
         actualizaTablaBusqueda();
         //el usuario rellena los datos en este punto
     }
 
     @FXML
     private void guardarNuevoRegistroFX() {
-        if (validateEmptyField("No hay datos para guardar", tfIdEmpleado.getText().isEmpty())) {
+        if (validateEmptyField("No hay datos para guardar", tfIdCategoria.getText().isEmpty())) {
             if (validateEmptyField("Ingrese el nombre", tfNombre.getText().isEmpty())) {
                 estadoInicialBotonesVisibles();
                 guardarNuevoRegistro();
@@ -232,7 +213,7 @@ public class FXMLEmpleadosController implements Initializable {
     }
 
     @FXML
-    private void cancelarNuevoEmpleadoFX() {
+    private void cancelarNuevaCategoriaFX() {
         estadoInicialBotonesVisibles();
         clearForm();
         disableTextFieldEditable();
@@ -240,7 +221,7 @@ public class FXMLEmpleadosController implements Initializable {
 
     @FXML
     private void borrarRegistroFX() {
-        if (validateEmptyField("Debe seleccionar primero un empleado", tfIdEmpleado.getText().isEmpty())) {
+        if (validateEmptyField("Debe seleccionar primero una categoria", tfIdCategoria.getText().isEmpty())) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Borrado de datos");
             alert.setHeaderText("");
@@ -249,7 +230,7 @@ public class FXMLEmpleadosController implements Initializable {
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 borrarRegistro();
-                tablaBusquedaEmpleado.refresh();//Actualizar la tabla que muestra los registros
+                tablaBusquedaCategoria.refresh();//Actualizar la tabla que muestra los registros
                 estadoInicialBotonesVisibles();
                 System.out.println("OK");
             } else {
@@ -264,8 +245,8 @@ public class FXMLEmpleadosController implements Initializable {
         PreparedStatement stmt2;
 
         try {
-            stmt2 = con.prepareStatement("DELETE FROM empleados where idempleado=?");
-            stmt2.setString(1, tfIdEmpleado.getText());
+            stmt2 = con.prepareStatement("DELETE FROM categorias where idcategoria=?");
+            stmt2.setString(1, tfIdCategoria.getText());
             stmt2.executeUpdate();
             stmt2.close();
         } catch (SQLException ex) {
@@ -280,20 +261,20 @@ public class FXMLEmpleadosController implements Initializable {
         PreparedStatement stmt = null;
         int numFactura = 0;
         try {
-            stmt = con.prepareStatement("SELECT max(idempleado) FROM empleados");
+            stmt = con.prepareStatement("SELECT max(IdCategoria) FROM categorias");
             stmt.executeQuery();
             rs = stmt.executeQuery();
             rs.first();
             numFactura = rs.getInt(1);
         } catch (SQLException ex) {
-            System.out.println("nuevoNumeroId: " + ex.getMessage());
+            System.out.println("nuevoNumeroiId: " + ex.getMessage());
         } finally {
             try {
                 stmt.close();
                 rs.close();
                 con.close();
             } catch (SQLException ex) {
-                System.out.println("Finally, nuevoNumeroId: " + ex.getMessage());
+                System.out.println("Finally, nuevoNumeroiId: " + ex.getMessage());
             }
         }
         return numFactura + 1;
@@ -301,38 +282,28 @@ public class FXMLEmpleadosController implements Initializable {
 
     //mostrar formulario en blanco
     private void clearForm() {
-        tfIdEmpleado.clear();
+        tfIdCategoria.clear();
         tfNombre.clear();
-        tfApellidos.clear();
-        tfCargo.clear();
-        //tfJefe.clear();
-        tfFNacimiento.clear();
-        tfFContrato.clear();
-        tfTelefono.clear();
-        tfJefe.setVisible(false);
+        tfDescripcion.clear();
+
     }
 
     //Guarda un registro nuevo
     private void guardarNuevoRegistro() {
         PreparedStatement stmt;
         try {
-            String id = genIdEmpleado;
+            String id = genIdCategoria;
             String nombre = tfNombre.getText();
-            String apellidos = tfApellidos.getText();
-            String cargo = tfCargo.getText();
-            int jefe = cb_empleados.getSelectionModel().getSelectedIndex()+1;
-            String telefono = tfTelefono.getText();
-            String fNac = "2012-01-01";//tfFNacimiento.getText();
-            String fCont = "2012-01-01";//tfFContrato.getText();
+            String descripcion = tfDescripcion.getText();
 
-            stmt = con.prepareStatement("INSERT INTO empleados ( idempleado, nombre, apellidos,Cargo, jefe, telefono, fnacimiento, fcontrato) "
-                    + " VALUES (\"" + id + "\",\"" + nombre + "\",\"" + apellidos + "\",\"" + cargo + "\",\"" + jefe + "\",\"" + telefono + "\",\"" + fNac + "\",\"" + fCont + "\" )");
+            stmt = con.prepareStatement("INSERT INTO categorias ( idcategoria, nombre, descripcion ) "
+                    + " VALUES (\"" + id + "\",\"" + nombre + "\",\"" + descripcion + "\" )");
             stmt.executeUpdate();
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Registros");
             alert.setHeaderText(null);
-            alert.setContentText("Nuevo Empleado guardado correctamente");
+            alert.setContentText("Nueva Categoria guardada correctamente");
             alert.showAndWait();
 
             stmt.close();
@@ -343,27 +314,18 @@ public class FXMLEmpleadosController implements Initializable {
 
     //Guarda lo editado
     private void guardarEditado() {
-        if (validateEmptyField("No hay datos para guardar", tfIdEmpleado.getText().isEmpty())) {
+        if (validateEmptyField("No hay datos para guardar", tfIdCategoria.getText().isEmpty())) {
             PreparedStatement stmt;
             try {
-                String id = genIdEmpleado;
+                String id = genIdCategoria;
                 String nombre = tfNombre.getText();
-                String apellidos = tfApellidos.getText();
-                String cargo = tfCargo.getText();
-                int jefe = cb_empleados.getSelectionModel().getSelectedIndex()+1;
-                String telefono = tfTelefono.getText();
-                String fNac = "2012-01-01";//tfFNacimiento.getText();
-            String fCont = "2012-01-01";//tfFContrato.getText();
-                stmt = con.prepareStatement("UPDATE empleados SET nombre=\"" + nombre
-                        + "\", Apellidos=\"" + apellidos
-                        + "\",cargo=\"" + cargo
-                        + "\" ,Jefe=" + jefe
-                        + ", telefono=\"" + telefono
-                        + "\",FNacimiento=\"" + fNac
-                        + "\",FContrato=\"" + fCont
-                        + "\" where idempleado=? ");
+                String descripcion = tfDescripcion.getText();
 
-                stmt.setString(1, tfIdEmpleado.getText());
+                stmt = con.prepareStatement("UPDATE categorias SET nombre=\"" + nombre
+                        + "\", Descripcion=\"" + descripcion
+                        + "\" where idcategoria=? ");
+
+                stmt.setString(1, tfIdCategoria.getText());
                 stmt.executeUpdate();
                 stmt.close();
 
@@ -380,60 +342,49 @@ public class FXMLEmpleadosController implements Initializable {
     }
 
     private void enableTextFieldEditable() {
-        tfIdEmpleado.setEditable(false);// siempre deshabilitado
+        tfIdCategoria.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(true);
-        tfApellidos.setEditable(true);
-        tfCargo.setEditable(true);
-        tfJefe.setEditable(true);
-        tfFNacimiento.setEditable(true);
-        tfFContrato.setEditable(true);
-        tfTelefono.setEditable(true);
+        tfDescripcion.setEditable(true);
     }
 
     private void disableTextFieldEditable() {
-        tfIdEmpleado.setEditable(false);// siempre deshabilitado
+        tfIdCategoria.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(false);
-        tfApellidos.setEditable(false);
-        tfCargo.setEditable(false);
-        tfJefe.setEditable(false);
-        tfFNacimiento.setEditable(false);
-        tfFContrato.setEditable(false);
-        tfTelefono.setEditable(false);
+        tfDescripcion.setEditable(false);
+
     }
 
     private void editarTextoPressed() {
-        tablaBusquedaEmpleado.setDisable(true);
+        tablaBusquedaCategoria.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(true);
         bt_guardarEditar.setVisible(true);
-        bt_nuevoEmpleado.setVisible(false);
-        bt_cancelarNuevoEmpleado.setVisible(false);
+        bt_nuevaCategoria.setVisible(false);
+        bt_cancelarNuevaCategoria.setVisible(false);
         bt_guardarNuevoRegistro.setVisible(false);
         bt_borrarRegistro.setVisible(false);
     }
 
-    private void nuevoEmpleadoPressed() {
-        tablaBusquedaEmpleado.setDisable(true);
+    private void nuevaCategoriaPressed() {
+        tablaBusquedaCategoria.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
-        bt_nuevoEmpleado.setVisible(false);
-        bt_cancelarNuevoEmpleado.setVisible(true);
+        bt_nuevaCategoria.setVisible(false);
+        bt_cancelarNuevaCategoria.setVisible(true);
         bt_guardarNuevoRegistro.setVisible(true);
         bt_borrarRegistro.setVisible(false);
-        tfJefe.setVisible(false);
     }
 
     private void estadoInicialBotonesVisibles() {
-        tablaBusquedaEmpleado.setDisable(false);
+        tablaBusquedaCategoria.setDisable(false);
         bt_editarTexto.setVisible(true);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
-        bt_nuevoEmpleado.setVisible(true);
-        bt_cancelarNuevoEmpleado.setVisible(false);
+        bt_nuevaCategoria.setVisible(true);
+        bt_cancelarNuevaCategoria.setVisible(false);
         bt_guardarNuevoRegistro.setVisible(false);
         bt_borrarRegistro.setVisible(true);
-        tfJefe.setVisible(false);
     }
 
     private boolean validateEmptyField(String text, boolean field) {

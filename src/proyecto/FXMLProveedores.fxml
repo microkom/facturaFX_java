@@ -48,7 +48,7 @@
             </columns>
         </TableView>
         <Button fx:id="bt_nuevoProveedor" layoutX="431.0" layoutY="318.0" mnemonicParsing="true" onAction="#nuevoProveedorFX" text="_Nuevo proveedor" />
-        <Button fx:id="bt_editarTexto" layoutX="537.0" layoutY="318.0" mnemonicParsing="true" onAction="#editarTextoFX" text="_Editar" />
+        <Button fx:id="bt_editarTexto" layoutX="547.0" layoutY="318.0" mnemonicParsing="true" onAction="#editarTextoFX" text="_Editar" />
         <Button fx:id="bt_borrarRegistro" layoutX="601.0" layoutY="318.0" mnemonicParsing="true" onAction="#borrarRegistroFX" text="_Borrar" />
         <Button fx:id="bt_cancelarEditar" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarEditarTextoFX" text="Cancelar" />
         <Button fx:id="bt_guardarEditar" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarEditarFX" text="Guardar" />

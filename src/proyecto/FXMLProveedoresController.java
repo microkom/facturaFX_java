@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 public class FXMLProveedoresController implements Initializable {
 
     private String genIdProveedor = "";
- 
+
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
 
@@ -61,7 +61,7 @@ public class FXMLProveedoresController implements Initializable {
 
     //IDs botones de edición
     @FXML
-    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar,bt_menuPrincipal;
+    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar, bt_menuPrincipal;
 
     //IDs botones nuevo registro
     @FXML
@@ -145,7 +145,6 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
-    
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero un proveedor", tfIdProveedor.getText().isEmpty())) {
@@ -158,7 +157,7 @@ public class FXMLProveedoresController implements Initializable {
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
         disableTextFieldEditable();
-         clearForm();
+        clearForm();
     }
 
     @FXML
@@ -178,7 +177,7 @@ public class FXMLProveedoresController implements Initializable {
     @FXML
     private void nuevoProveedorFX() {
         clearForm();
-        genIdProveedor = generateString();
+        genIdProveedor = Integer.toString(nuevoNumeroId());
         tfIdProveedor.setText(genIdProveedor);
         enableTextFieldEditable();
         nuevoProveedorPressed();
@@ -239,12 +238,30 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
-    //Generador de codigos aleatorios usados como ID del proveedor
-    public String generateString() {
-        String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replace("-", "");
-        uuid = uuid.substring(0, Math.min(uuid.length(), 5));
-        return uuid.toUpperCase();
+    private int nuevoNumeroId() {
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        int numFactura = 0;
+        try {
+            stmt = con.prepareStatement("SELECT max(IdProveedor) FROM proveedores");
+            stmt.executeQuery();
+            rs = stmt.executeQuery();
+            rs.first();
+            numFactura = rs.getInt(1);
+        } catch (SQLException ex) {
+            System.out.println("nuevoNumeroId: " + ex.getMessage());
+        } finally {
+            try {
+                stmt.close();
+                rs.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Finally, nuevoNumeroId: " + ex.getMessage());
+            }
+        }
+        return numFactura + 1;
     }
 
     //mostrar formulario en blanco
@@ -382,6 +399,7 @@ public class FXMLProveedoresController implements Initializable {
         }
         return true;
     }
+
     @FXML
     private void menuPrincipalFX() {
         try {

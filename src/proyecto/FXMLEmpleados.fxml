@@ -1,68 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="542.0" prefWidth="362.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLEmpleadosController">
-   <children>
-      <Pane layoutX="20.0" layoutY="87.0" prefHeight="143.0" prefWidth="303.0" styleClass="fondoAzul" stylesheets="@estilo.css" />
-      <Pane layoutX="20.0" layoutY="245.0" prefHeight="115.0" prefWidth="303.0" style="-fx-background-radius: 1px;" styleClass="fondoRosa" stylesheets="@estilo.css" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="26.0" prefHeight="17.0" prefWidth="336.0" text="Empleados" textAlignment="CENTER">
-         <font>
-            <Font name="Ebrima Bold" size="32.0" />
-         </font></Label>
-      <Label layoutX="27.0" layoutY="254.0" text="IdEmpleado" textAlignment="RIGHT" />
-      <Label layoutX="26.0" layoutY="98.0" text="Nombre" />
-      <Label layoutX="26.0" layoutY="150.0" text="Fecha de nacimiento" />
-      <Label layoutX="26.0" layoutY="306.0" text="Fecha de contrato" />
-      <Label layoutX="26.0" layoutY="124.0" text="Apellidos" />
-      <Label layoutX="26.0" layoutY="280.0" text="Cargo" />
-      <Label layoutX="26.0" layoutY="176.0" text="Telefono" />
-      <TextField fx:id="tf_nombre" alignment="CENTER" layoutX="164.0" layoutY="94.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <TextField fx:id="tf_apellidos" alignment="CENTER" layoutX="164.0" layoutY="120.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <DatePicker fx:id="dp_fechaNacimiento" layoutX="164.0" layoutY="146.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <TextField fx:id="tf_telefono" alignment="CENTER" layoutX="164.0" layoutY="172.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <ComboBox fx:id="cb_estadoCivil" layoutX="164.0" layoutY="198.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <TextField fx:id="tf_IdEmpleado" alignment="CENTER" layoutX="164.0" layoutY="250.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <TextField fx:id="tf_cargo" alignment="CENTER" layoutX="164.0" layoutY="276.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <DatePicker fx:id="dp_fechaContrato" layoutX="164.0" layoutY="302.0" prefHeight="22.0" prefWidth="150.0" stylesheets="@estilo.css">
-         <styleClass>
-            <String fx:value="textoCentrado" />
-            <String fx:value="disabledText" />
-         </styleClass></DatePicker>
-      <TextField fx:id="tf_jefe" alignment="CENTER" layoutX="164.0" layoutY="328.0" prefHeight="22.0" prefWidth="150.0" styleClass="disabledText" stylesheets="@estilo.css" />
-      <Button fx:id="bt_last" layoutX="274.0" layoutY="454.0" mnemonicParsing="false" onMouseClicked="#lastRegistry" prefHeight="28.0" prefWidth="66.0" styleClass="boton" stylesheets="@estilo.css" text="Último" />
-      <Button fx:id="bt_next" layoutX="176.0" layoutY="454.0" mnemonicParsing="false" onMouseClicked="#nextRegistry" prefHeight="29.0" prefWidth="88.0" styleClass="boton" stylesheets="@estilo.css" text="Siguiente" />
-      <Button fx:id="bt_previous" layoutX="93.0" layoutY="454.0" mnemonicParsing="false" onMouseClicked="#previousRegistry" prefHeight="29.0" prefWidth="76.0" styleClass="boton" stylesheets="@estilo.css" text="Anterior">
-         <font>
-            <Font name="Ebrima" size="11.0" />
-         </font></Button>
-      <Button fx:id="bt_first" layoutX="22.0" layoutY="454.0" mnemonicParsing="false" onMouseClicked="#firstRegistry" prefHeight="25.0" prefWidth="66.0" styleClass="boton" stylesheets="@estilo.css" text="Pimero">
-         <font>
-            <Font name="Ebrima" size="11.0" />
-         </font></Button>
-      <Label layoutX="29.0" layoutY="202.0" text="Estado Civil" />
-      <Label layoutX="26.0" layoutY="332.0" text="Jefe" />
-      <Hyperlink fx:id="id_salir" alignment="CENTER" contentDisplay="CENTER" layoutX="263.0" layoutY="496.0" mnemonicParsing="true" onAction="#salir" prefHeight="25.0" prefWidth="76.0" text="_Salir" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
-         <font>
-            <Font name="Ebrima Bold" size="13.0" />
-         </font>
-      </Hyperlink>
-      <Button fx:id="bt_newEntry" layoutX="20.0" layoutY="377.0" mnemonicParsing="false" onAction="#newEntry" onMouseClicked="#newEntry" text="Nuevo empleado" />
-      <Button fx:id="bt_editText" layoutX="127.0" layoutY="377.0" mnemonicParsing="false" onAction="#editText" onMouseClicked="#editText" text="Editar" />
-      <Button fx:id="bt_deleteEntry" layoutX="284.0" layoutY="377.0" mnemonicParsing="false" onAction="#delete" text="Borrar" />
-      <Button fx:id="bt_cancelEdit" layoutX="191.0" layoutY="377.0" mnemonicParsing="false" onAction="#cancelEditText" text="Cancelar" />
-      <Button fx:id="bt_saveEdit" layoutX="263.0" layoutY="377.0" mnemonicParsing="false" onAction="#saveForm" text="Actualizar" />
-      <Button fx:id="bt_cancelNewEntry" layoutX="191.0" layoutY="377.0" mnemonicParsing="false" onAction="#cancelNewEntry" text="Cancelar" />
-      <Button fx:id="bt_saveNewEntry" layoutX="260.0" layoutY="377.0" mnemonicParsing="false" onAction="#saveNewUser" text="Guardar" />
-      <Button fx:id="bt_refresh" layoutX="-87.0" layoutY="390.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-      <ComboBox fx:id="cb_jefe" layoutX="29.0" layoutY="412.0" prefWidth="150.0" />
-   </children>
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLEmpleadosController">
+    <children>
+        <TextField fx:id="tfBusquedaEmpleados" layoutX="134.0" layoutY="13.0" prefHeight="22.0" prefWidth="160.0" promptText="Búsqueda Empleados" />
+         
+        <Label layoutX="34.0" layoutY="14.0" styleClass="titulo16" stylesheets="@estilo.css" text="Empleados" />
+         
+        <Label layoutX="421.0" layoutY="50.0" prefHeight="14.0" text="IdEmpleado" />
+        <TextField fx:id="tfIdEmpleado" layoutX="501.0" layoutY="50.0" prefHeight="22.0" prefWidth="160.0" promptText="id" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="80.0" text="Nombre" />
+        <TextField fx:id="tfNombre" layoutX="501.0" layoutY="80.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="110.0" text="Apellidos" />
+        <TextField fx:id="tfApellidos" layoutX="501.0" layoutY="110.0" prefHeight="22.0" prefWidth="160.0" promptText="Apellidos" stylesheets="@estilo.css" />
+                                                       
+        <Label layoutX="421.0" layoutY="140.0" text="Cargo" />
+        <TextField fx:id="tfCargo" layoutX="501.0" layoutY="140.0" prefHeight="22.0" prefWidth="160.0" promptText="Cargo" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="170.0" text="Jefe" />
+        <TextField fx:id="tfJefe" layoutX="501.0" layoutY="170.0" prefHeight="22.0" prefWidth="160.0" promptText="Jefe" stylesheets="@estilo.css" />
+        <ComboBox fx:id="cb_empleados" layoutX="501.0" layoutY="170.0" />
+        
+        <Label layoutX="421.0" layoutY="200.0" text="Telefono" />
+        <TextField fx:id="tfTelefono" layoutX="501.0" layoutY="200.0" prefHeight="22.0" prefWidth="160.0" promptText="Telefono" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="230.0" text="FNacimiento" />
+        <TextField fx:id="tfFNacimiento" layoutX="501.0" layoutY="230.0" prefHeight="22.0" prefWidth="160.0" promptText="FNacimiento" stylesheets="@estilo.css" />
+                 
+        <Label layoutX="421.0" layoutY="260.0" text="FContrato" />
+        <TextField fx:id="tfFContrato" layoutX="501.0" layoutY="260.0" prefHeight="22.0" prefWidth="160.0" promptText="FContrato" stylesheets="@estilo.css" />
+                  
+        <TableView fx:id="tablaBusquedaEmpleado" layoutX="22.0" layoutY="49.0" prefHeight="291.0" prefWidth="389.0">
+            <columns>
+                <TableColumn fx:id="tcIdEmpleado" text="Id" />
+                <TableColumn fx:id="tcNombre" text="Nombre" />
+                <TableColumn fx:id="tcApellidos" text="Apellidos" />
+                <TableColumn fx:id="tcCargo" prefWidth="100.0" text="Cargo" />
+                <TableColumn fx:id="tcJefe" text="Jefe" />
+                <TableColumn fx:id="tcTelefono" text="Telefono" />
+                <TableColumn fx:id="tcFNacimiento" text="FNac." />
+                <TableColumn fx:id="tcFContrato" text="FContrato" />
+                
+            </columns>
+        </TableView>
+        <Button fx:id="bt_nuevoEmpleado" layoutX="431.0" layoutY="318.0" mnemonicParsing="true" onAction="#nuevoEmpleadoFX" text="_Nuevo Empleado" />
+        <Button fx:id="bt_editarTexto" layoutX="546.0" layoutY="318.0" mnemonicParsing="true" onAction="#editarTextoFX" text="_Editar" />
+        <Button fx:id="bt_borrarRegistro" layoutX="601.0" layoutY="318.0" mnemonicParsing="true" onAction="#borrarRegistroFX" text="_Borrar" />
+        <Button fx:id="bt_cancelarEditar" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarEditarTextoFX" text="Cancelar" />
+        <Button fx:id="bt_guardarEditar" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarEditarFX" text="Guardar" />
+        <Button fx:id="bt_cancelarNuevoEmpleado" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarNuevoEmpleadoFX" text="Cancelar" />
+        <Button fx:id="bt_guardarNuevoRegistro" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarNuevoRegistroFX" text="Guardar" />
+        <Button fx:id="bt_menuPrincipal" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" onAction="#menuPrincipalFX" prefHeight="25.0" prefWidth="110.0" style="-fx-background-radius: 0;" text="Menu Principal" />
+
+        <Button fx:id="bt_refresh" layoutX="-80.0" layoutY="363.0" mnemonicParsing="false" onAction="#actualizaTablaBusqueda" text="Refresh" />
+    </children>
+    
 </AnchorPane>

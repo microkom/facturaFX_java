@@ -36,6 +36,10 @@ public class Persona {
         this.nombre = nombre;
         this.telefono = telefono;
     }
+    public Persona(String id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
     
 
     public String getId() {

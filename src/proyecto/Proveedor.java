@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import javafx.collections.ObservableList;
+import static proyecto.Producto.listaProveedor;
 
 /**
  *
@@ -23,8 +25,12 @@ public class Proveedor extends Persona {
     }
 
     public String getDatosBusqueda() {
-        return super.getId() + " " + super.getNombre() + " " + super.getContacto() + " " + super.getCargoContacto()
-                + " " + super.getDireccion() + " " + super.getCiudad() + " " + super.getPais() + " " + super.getTelefono();
+        return super.id + " " + super.nombre + " " + super.contacto + " " + super.cargoContacto
+                + " " + super.direccion + " " + super.ciudad + " " + super.pais + " " + super.telefono;
+    }
+
+    public String toString() {
+        return super.nombre;
     }
 
     public static void fillProveedorList(ObservableList<Proveedor> listaProveedor) {
@@ -39,7 +45,6 @@ public class Proveedor extends Persona {
             while (rs.next()) {
                 listaProveedor.add(
                         new Proveedor(
-                                //id, nombre, contacto, cargoContacto, direccion, ciudad, pais, telefono
                                 rs.getString("idProveedor"),
                                 rs.getString("Nombre"),
                                 rs.getString("Contacto"),
@@ -61,6 +66,23 @@ public class Proveedor extends Persona {
                 System.out.println(Proveedor.class.getName() + " Finally ->fillProveedorList :" + ex.getMessage());
             }
         }
+    }
+
+    public static String getNombreProveedor(int proveedor) {
+
+        boolean found = false;
+        String nombre = "";
+        Iterator<Proveedor> ite = listaProveedor.iterator();
+        Proveedor obj;
+
+        while (ite.hasNext() && found == false) {
+            obj = ite.next();
+            if (Integer.parseInt(obj.getId()) == proveedor) {
+                nombre = obj.getNombre();
+                found = true;
+            }
+        }
+        return nombre;
     }
 
 }

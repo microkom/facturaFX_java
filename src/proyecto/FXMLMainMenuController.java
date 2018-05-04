@@ -32,7 +32,7 @@ public class FXMLMainMenuController implements Initializable {
 //        pane1.toFront();
 //    }
     @FXML
-    private Button bt_controlDeGastos, bt_personal, bt_clientes, bt_presupuesto, bt_facturacion, bt_menuPrincipal,bt_productos;
+    private Button bt_controlDeGastos, bt_personal, bt_clientes, bt_presupuesto, bt_facturacion, bt_menuPrincipal, bt_productos, bt_categorias;
 
 //    @FXML
 //    private void handleButtonAction(ActionEvent event) throws IOException {
@@ -52,6 +52,7 @@ public class FXMLMainMenuController implements Initializable {
 //    }
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -78,7 +79,29 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("productosFX: " + ex.getMessage());
+        }
+    }
+
+    @FXML
+    private void categoriasFX() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLCategorias.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+            stage.setTitle("..:: Categorias ::..");
+
+            //cierra la ventana abierta anteriormente
+            Stage stage2 = (Stage) bt_categorias.getScene().getWindow();
+            stage2.close();
+
+        } catch (IOException ex) {
+            System.out.println("categoriasFX: " + ex.getMessage());
         }
     }
 
@@ -100,7 +123,7 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("personalFX: " + ex.getMessage());
         }
     }
 
@@ -122,7 +145,7 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("proveedoresFX: " + ex.getMessage());
         }
     }
 
@@ -144,7 +167,7 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("facturacionFX: " + ex.getMessage());
         }
     }
 
@@ -169,7 +192,6 @@ public class FXMLMainMenuController implements Initializable {
 //            ex.getMessage();
 //        }
 //    }
-
     @FXML
     private void presupuestoFX(ActionEvent event) {
         try {
@@ -188,7 +210,7 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("presupuestoFX: " + ex.getMessage());
         }
     }
 
@@ -210,7 +232,7 @@ public class FXMLMainMenuController implements Initializable {
             stage2.close();
 
         } catch (IOException ex) {
-            ex.getMessage();
+            System.out.println("clientexFX: " + ex.getMessage());
         }
     }
 

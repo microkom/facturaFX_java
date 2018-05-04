@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLCategoriasController">
+    <children>
+        <TextField fx:id="tfBusquedaCategorias" layoutX="134.0" layoutY="13.0" prefHeight="22.0" prefWidth="160.0" promptText="Búsqueda Categorias" />
+         
+        <Label layoutX="34.0" layoutY="14.0" styleClass="titulo16" stylesheets="@estilo.css" text="Categorías" />
+         
+        <Label layoutX="421.0" layoutY="50.0" prefHeight="14.0" text="IdCategoria" />
+        <TextField fx:id="tfIdCategoria" layoutX="501.0" layoutY="50.0" prefHeight="22.0" prefWidth="160.0" promptText="id" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="80.0" text="Nombre" />
+        <TextField fx:id="tfNombre" layoutX="501.0" layoutY="80.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" stylesheets="@estilo.css" />
+                  
+        <Label layoutX="421.0" layoutY="110.0" text="Descripcion" />
+        <TextField fx:id="tfDescripcion" layoutX="501.0" layoutY="110.0" prefHeight="22.0" prefWidth="160.0" promptText="Descripcion" stylesheets="@estilo.css" />
+                                                       
+                   
+        <TableView fx:id="tablaBusquedaCategoria" layoutX="22.0" layoutY="49.0" prefHeight="291.0" prefWidth="389.0">
+            <columns>
+                <TableColumn fx:id="tcIdCategoria" prefWidth="25.0" text="Id" />
+                <TableColumn fx:id="tcNombre" prefWidth="80.0" text="Nombre" />
+                <TableColumn fx:id="tcDescripcion" prefWidth="80.0" text="Apellidos" />
+                
+            </columns>
+        </TableView>
+        <Button fx:id="bt_nuevaCategoria" layoutX="431.0" layoutY="318.0" mnemonicParsing="true" onAction="#nuevaCategoriaFX" text="_Nueva Categoria" />
+        <Button fx:id="bt_editarTexto" layoutX="545.0" layoutY="318.0" mnemonicParsing="true" onAction="#editarTextoFX" text="_Editar" />
+        <Button fx:id="bt_borrarRegistro" layoutX="601.0" layoutY="318.0" mnemonicParsing="true" onAction="#borrarRegistroFX" text="_Borrar" />
+        <Button fx:id="bt_cancelarEditar" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarEditarTextoFX" text="Cancelar" />
+        <Button fx:id="bt_guardarEditar" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarEditarFX" text="Guardar" />
+        <Button fx:id="bt_cancelarNuevaCategoria" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarNuevaCategoriaFX" text="Cancelar" />
+        <Button fx:id="bt_guardarNuevoRegistro" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarNuevoRegistroFX" text="Guardar" />
+        <Button fx:id="bt_menuPrincipal" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" onAction="#menuPrincipalFX" prefHeight="25.0" prefWidth="110.0" style="-fx-background-radius: 0;" text="Menu Principal" />
+
+        <Button fx:id="bt_refresh" layoutX="-80.0" layoutY="363.0" mnemonicParsing="false" onAction="#actualizaTablaBusqueda" text="Refresh" />
+    </children>
+    
+</AnchorPane>

@@ -253,17 +253,7 @@ public class FXMLFacturacionController implements Initializable {
         }
     }
 
-    private boolean validateProductos() {
-        if (tfIdProducto.getText().isEmpty()) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Validación de campos");
-            alert.setHeaderText(null);
-            alert.setContentText("Falta seleccionar un producto");
-            alert.showAndWait();
-            return false;
-        }
-        return true;
-    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     //  LINEA FACTURA
@@ -530,7 +520,7 @@ public class FXMLFacturacionController implements Initializable {
             }
         }
     }
-
+    
     private void setNumLinea() {
         int numLinea = 0;
         for (LineaFactura obj : lineaFacturaList) {

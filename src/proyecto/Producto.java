@@ -23,18 +23,45 @@ public class Producto {
 
     private int id;
     private String nombreProducto;
+    private int proveedor;
+    private String nomProveedor;
+    private String nomCategoria;
+    private int categoria;
     private int precio;
     private int existencias;
 
     public static ObservableList<Proveedor> listaProveedor = FXCollections.observableArrayList();
     public static ObservableList<Categoria> listaCategoria = FXCollections.observableArrayList();
 
-    public Producto(int id, String nombreProducto, String proveedor, String categoria, int precio, int existencias) {
+    public Producto(int id, String nombreProducto, int proveedor, int categoria, int precio, int existencias) {
         this.id = id;
         this.nombreProducto = nombreProducto;
+        this.proveedor = proveedor;  
+        setNomProveedor();
+        setNomCategoria();
+        this.categoria = categoria;
         this.precio = precio;
         this.existencias = existencias;
     }
+
+    public String getNomProveedor() {
+        return Proveedor.getNombreProveedor(proveedor);
+        
+    }
+
+    public void setNomProveedor() {
+        this.nomProveedor = Proveedor.getNombreProveedor(this.proveedor);
+    }
+
+    public String getNomCategoria() {
+        return Categoria.getNombreCategoria(categoria);
+    }
+
+    public void setNomCategoria() {
+        this.nomCategoria = Categoria.getNombreCategoria(this.categoria);
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -50,6 +77,22 @@ public class Producto {
 
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
+    }
+
+    public int getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(int proveedor) {
+        this.proveedor = proveedor;
+    }
+
+    public int getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(int categoria) {
+        this.categoria = categoria;
     }
 
     public int getPrecio() {
@@ -68,27 +111,50 @@ public class Producto {
         this.existencias = existencias;
     }
 
+    public static ObservableList<Proveedor> getListaProveedor() {
+        return listaProveedor;
+    }
+
+    public static void setListaProveedor(ObservableList<Proveedor> listaProveedor) {
+        Producto.listaProveedor = listaProveedor;
+    }
+
+    public static ObservableList<Categoria> getListaCategoria() {
+        return listaCategoria;
+    }
+
+    public static void setListaCategoria(ObservableList<Categoria> listaCategoria) {
+        Producto.listaCategoria = listaCategoria;
+    }
+ 
+    public String toString(){
+        return nombreProducto;
+    }
+
+
 //    public String getProveedor() {
 //        String prov = "";
 //        Proveedor proveedor = null;
 //        prov = proveedor.getNombre();
 //        return prov;
 //    }
-
 //    public String getCategoria() {
 //        String cat = "";
 //        Categoria categoria = null;
 //        cat = categoria.getNombre();
 //        return cat;
 //    }
-
     public String getDatosBusqueda() {
-        return id + " " + nombreProducto +" "+ precio;
+        return id + " " + nombreProducto + " " + precio;
     }
 
     public static void fillProductosList(ObservableList<Producto> listaProductos) {
+        
+        //Necesarios para mostrar los valores en el tableview en la tabla Productos
         Proveedor.fillProveedorList(listaProveedor);
         Categoria.fillCategoriaList(listaCategoria);
+        
+        
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
         ResultSet rs;
@@ -100,12 +166,12 @@ public class Producto {
             while (rs.next()) {
                 listaProductos.add(
                         new Producto( //int id, String nombreProducto, int proveedor, int categoria, double precio, int existencias) 
-                                rs.getInt("idProducto"),
-                                rs.getString("nomProducto"),
-                                getNombreProveedor(rs.getInt("Proveedor")),
-                                getNombreCategoria(rs.getInt("categoria")),
-                                rs.getInt("precio"),
-                                rs.getInt("existencias")));
+                                rs.getInt("IdProducto"),
+                                rs.getString("NomProducto"),
+                                rs.getInt("Proveedor"),
+                                rs.getInt("Categoria"),
+                                rs.getInt("Precio"),
+                                rs.getInt("Existencias")));
             }
             stmt.close();
             rs.close();
@@ -115,14 +181,14 @@ public class Producto {
             try {
                 con.close();
             } catch (SQLException ex) {
-                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Finally, fillProductosList: " + ex.getMessage());
             }
         }
     }
 
-//    public static String getNombreProveedor(int proveedor) {
-//
-//        boolean found = false;
+//    public String getNombreProveedor(int proveedor) {
+//         
+//       boolean found = false;
 //        String nombre = "";
 //        Iterator<Proveedor> ite = listaProveedor.iterator();
 //        Proveedor obj;
@@ -153,57 +219,57 @@ public class Producto {
 //        }
 //        return nombre;
 //    }
-    
-    public static String getNombreProveedor(int proveedor) {
-        Conexion conexion = new Conexion();
-        Connection con = conexion.conectar();
-        ResultSet rs;
-        PreparedStatement stmt;
-        String nombre = "";
-        try {
-            stmt = con.prepareStatement("SELECT nombre FROM proveedores where idproveedor=?");
-            stmt.setInt(1, proveedor);
-            rs = stmt.executeQuery();
-            rs.first();
-            nombre = rs.getString("nombre");
-            stmt.close();
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println("getNombreProveedor: " + ex.getMessage());
-        } finally {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return nombre;
-    }
+//    public static String getNombreProveedor(int proveedor) {
+//
+//        Conexion conexion = new Conexion();
+//        Connection con = conexion.conectar();
+//        ResultSet rs;
+//        PreparedStatement stmt;
+//        String nombre = "";
+//        try {
+//            stmt = con.prepareStatement("SELECT nombre FROM proveedores where idproveedor=?");
+//            stmt.setInt(1, proveedor);
+//            rs = stmt.executeQuery();
+//            rs.first();
+//            nombre = rs.getString("nombre");
+//            stmt.close();
+//            rs.close();
+//        } catch (SQLException ex) {
+//            System.out.println("getNombreProveedor: " + ex.getMessage());
+//        } finally {
+//            try {
+//                con.close();
+//            } catch (SQLException ex) {
+//                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        return nombre;
+//    }
 
-    public static String getNombreCategoria(int categoria) {
-        Conexion conexion = new Conexion();
-        Connection con = conexion.conectar();
-        ResultSet rs = null;
-        PreparedStatement stmt = null;
-        String nombre = "";
-        try {
-            stmt = con.prepareStatement("SELECT nomCategoria FROM categorias where idcategoria=?");
-            stmt.setInt(1, categoria);
-            rs = stmt.executeQuery();
-            rs.first();
-            nombre = rs.getString("nomCategoria");
-
-        } catch (SQLException ex) {
-            System.out.println("getNombreCategoria: " + ex.getMessage());
-        } finally {
-            try {
-                stmt.close();
-                rs.close();
-                con.close();
-            } catch (SQLException ex) {
-                System.out.println("FINALLY: getNombreCategoria:  " + ex.getMessage());
-            }
-        }
-        return nombre;
-    }
+//    public static String getNombreCategoria(int categoria) {
+//        Conexion conexion = new Conexion();
+//        Connection con = conexion.conectar();
+//        ResultSet rs = null;
+//        PreparedStatement stmt = null;
+//        String nombre = "";
+//        try {
+//            stmt = con.prepareStatement("SELECT nomCategoria FROM categorias where idcategoria=?");
+//            stmt.setInt(1, categoria);
+//            rs = stmt.executeQuery();
+//            rs.first();
+//            nombre = rs.getString("nomCategoria");
+//
+//        } catch (SQLException ex) {
+//            System.out.println("getNombreCategoria: " + ex.getMessage());
+//        } finally {
+//            try {
+//                stmt.close();
+//                rs.close();
+//                con.close();
+//            } catch (SQLException ex) {
+//                System.out.println("FINALLY: getNombreCategoria:  " + ex.getMessage());
+//            }
+//        }
+//        return nombre;
+//    }
 }

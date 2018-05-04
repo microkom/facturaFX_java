@@ -50,7 +50,7 @@ public class FXMLLoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        tfUser.setText("dav"); //borrar
+        tfUser.setText("andrew"); //borrar
         tfPass.setText("123"); //borrar
 
         enterWithEnter();
@@ -97,7 +97,7 @@ public class FXMLLoginController implements Initializable {
         tfPass.setPromptText("Contraseña");
         try {
 
-            stmt = con.prepareStatement("SELECT * from empleados where usuario=? and contrasena=?");
+            stmt = con.prepareStatement("SELECT * from usuarios where usuario=? and contrasena=?");
             stmt.setString(1, tfUser.getText());
             stmt.setString(2, tfPass.getText());
             rs = stmt.executeQuery();

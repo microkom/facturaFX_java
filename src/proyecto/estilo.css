@@ -30,11 +30,24 @@ and open the template in the editor.
     -fx-alignment:CENTER;
 }
 
+.botonMainMenu{
+    -fx-border-radius:0;
+    -fx-border-color:#000000;
+    -fx-background-radius:0;
+    -fx-border-width:1px;
+}
+.botonMainMenuOK{
+    -fx-border-radius:0;
+    -fx-border-color:#44ff55;
+    -fx-background-radius:0;
+    -fx-border-width:1px;
+}
 .boton{
     -fx-font-family:"Ebrima";
     -fx-border-color: #3d5afe;
     -fx-background-color:#80deea ;
     -fx-border-radius:18;
+    -fx-border-color:#44ff55;
     -fx-background-radius:18;
     -fx-border-width:1.5;
 }

@@ -48,6 +48,18 @@ public class Fecha {
     public String corta(){
         return this.day+"-"+this.month+"-"+this.year;
     }
+    
+    public static Fecha stringToFecha(String texto) {
+        Fecha fecha = null;
+        String[] array = texto.split("-");
+        fecha = new Fecha(
+                Integer.parseInt(array[2]),
+                Integer.parseInt(array[1]),
+                Integer.parseInt(array[0])
+        );
+        return fecha;
+    }
+    
      public LocalDate datePicker() {
         String fecha = this.year + "/" + this.month + "/" + this.day;
         final DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MMM/dd");

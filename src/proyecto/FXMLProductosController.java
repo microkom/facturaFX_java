@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -26,12 +28,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import static proyecto.Producto.listaCategoria;
+import static proyecto.Producto.listaProveedor;
 
 /**
  * FXML Controller class
@@ -47,6 +52,8 @@ public class FXMLProductosController implements Initializable {
     Connection con = conexion.conectar();
 
     private ObservableList<Producto> listaProductos = FXCollections.observableArrayList();
+    private ObservableList<Categoria> listaCategoria = FXCollections.observableArrayList();
+    private ObservableList<Proveedor> listaProveedor = FXCollections.observableArrayList();
     private FilteredList<Producto> listaProductosFiltrada = new FilteredList(listaProductos, obj -> true);
     int posicionProducto = 0;
 
@@ -56,7 +63,7 @@ public class FXMLProductosController implements Initializable {
     private TableColumn<Producto, String> tCidProducto, tCnombreProducto, tCproveedor, tCcategoria, tCPrecio, tCexistencias;
 
     @FXML
-    private TextField tfIdProducto, tfNombreProducto, tfProveedor, tfCategoria, tfPrecio, tfExistencias, tfBusquedaProductos;
+    private TextField tfIdProducto, tfNombreProducto, tfPrecio, tfExistencias, tfBusquedaProductos;
 
     //IDs botones de edición
     @FXML
@@ -66,6 +73,8 @@ public class FXMLProductosController implements Initializable {
     @FXML
     private Button bt_nuevoProducto, bt_cancelarNuevoProducto, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
 
+    @FXML
+    private ComboBox cb_categorias, cb_proveedores;
     private final ListChangeListener<Producto> selectorTablaProductos = new ListChangeListener<Producto>() {
         @Override
         public void onChanged(ListChangeListener.Change<? extends Producto> c) {
@@ -81,6 +90,8 @@ public class FXMLProductosController implements Initializable {
         try {
             //PRODUCTOS
             //rellenar lista de productos en listado
+            Proveedor.fillProveedorList(listaProveedor);
+            Categoria.fillCategoriaList(listaCategoria);
             Producto.fillProductosList(listaProductos);
 
             //lista de productos para filtrar
@@ -88,15 +99,14 @@ public class FXMLProductosController implements Initializable {
 
             //busqueda en tiempo real por nombre, contacto, cargo contacto, ciudad. Tiene en cuenta las tildes 
             tfBusquedaProductos.setOnKeyReleased(keyEvent -> {
-                listaProductosFiltrada.setPredicate(obj -> 
-                        obj.getDatosBusqueda().toLowerCase().contains(
-                                tfBusquedaProductos.getText().toLowerCase().trim()));
+                listaProductosFiltrada.setPredicate(obj
+                        -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaProductos.getText().toLowerCase().trim()));
             });
             //Valores para rellenar la vista de la tabla
             tCidProducto.setCellValueFactory(new PropertyValueFactory<Producto, String>("id"));
             tCnombreProducto.setCellValueFactory(new PropertyValueFactory<Producto, String>("nombreProducto"));
-            tCproveedor.setCellValueFactory(new PropertyValueFactory<Producto, String>("proveedor"));
-            tCcategoria.setCellValueFactory(new PropertyValueFactory<Producto, String>("categoria"));
+            tCproveedor.setCellValueFactory(new PropertyValueFactory<Producto, String>("nomProveedor"));
+            tCcategoria.setCellValueFactory(new PropertyValueFactory<Producto, String>("nomCategoria"));
             tCPrecio.setCellValueFactory(new PropertyValueFactory<Producto, String>("precio"));
             tCexistencias.setCellValueFactory(new PropertyValueFactory<Producto, String>("existencias"));
 
@@ -134,10 +144,13 @@ public class FXMLProductosController implements Initializable {
         final Producto producto = getTablaProductosSeleccionado();
         posicionProducto = listaProductos.indexOf(producto);
         if (producto != null) {
+
             tfIdProducto.setText(Integer.toString(producto.getId()));
             tfNombreProducto.setText(producto.getNombreProducto());
-            tfProveedor.setText("***productos***");
-            tfCategoria.setText("***productos**");
+            cb_proveedores.setItems(listaProveedor);
+            cb_proveedores.setValue(producto.getNomProveedor());
+            cb_categorias.setItems(listaCategoria);
+            cb_categorias.setValue(producto.getNomCategoria());
             tfPrecio.setText(Double.toString(producto.getPrecio()));
             tfExistencias.setText(Integer.toString(producto.getExistencias()));
         }
@@ -172,21 +185,33 @@ public class FXMLProductosController implements Initializable {
     @FXML
     private void nuevoProductoFX() {
         clearForm();
-        genIdProducto = Integer.toString(nuevoNumeroIdProudcto());
-        tfIdProducto.setText(genIdProducto);
+        nuevoNumeroIdProudcto();
+        tfIdProducto.setText(Integer.toString(nuevoNumeroIdProudcto()));
         enableTextFieldEditable();
         nuevoProductoPressed();
         actualizaTablaBusqueda();
+        cb_proveedores.setItems(listaProveedor);
+        cb_proveedores.setValue(listaProveedor.toString());
+        cb_categorias.setItems(listaCategoria);
+        cb_categorias.setValue(listaCategoria.toString());
         //el usuario rellena los datos en este punto
     }
 
     @FXML
     private void guardarNuevoRegistroFX() {
+
         if (validateEmptyField("No hay datos para guardar", tfIdProducto.getText().isEmpty())) {
             if (validateEmptyField("Ingrese el nombre", tfNombreProducto.getText().isEmpty())) {
-                estadoInicialBotonesVisibles();
-                guardarNuevoRegistro();
-                actualizaTablaBusqueda();
+                if (validateEmptyField("Indique Existencias. Si no hay escriba 0", tfExistencias.getText().isEmpty())) {
+                    if (validateEmptyField("precio", tfPrecio.getText().isEmpty())) {
+                        if (validateFormatNumber("Revise el precio", tfPrecio.getText())) {
+                        if (validateFormatNumber("Revise las existencias", tfExistencias.getText())) {
+                            guardarNuevoRegistro();
+                            actualizaTablaBusqueda();
+                            estadoInicialBotonesVisibles();
+                        }
+                    }}
+                }
             }
         }
     }
@@ -220,6 +245,8 @@ public class FXMLProductosController implements Initializable {
     }
 
     private void borrarRegistro() {
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
         PreparedStatement stmt2;
 
         try {
@@ -236,26 +263,27 @@ public class FXMLProductosController implements Initializable {
     private void clearForm() {
         tfIdProducto.clear();
         tfNombreProducto.clear();
-        tfProveedor.clear();
-        tfCategoria.clear();
         tfPrecio.clear();
         tfExistencias.clear();
     }
 
     //Guarda un registro nuevo
     private void guardarNuevoRegistro() {
+
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
         PreparedStatement stmt;
         try {
             String id = Integer.toString(nuevoNumeroIdProudcto());
             String nombre = tfNombreProducto.getText();
-            String proveedor = tfProveedor.getText();
-            String categoria = tfCategoria.getText();
+            int proveedor = cb_proveedores.getSelectionModel().getSelectedIndex() + 1;
+            int categoria = cb_categorias.getSelectionModel().getSelectedIndex() + 1;
             String precio = tfPrecio.getText();
             String existencias = tfExistencias.getText();
 
             stmt = con.prepareStatement("INSERT INTO productos ( idproducto, "
                     + "nomProducto, proveedor, categoria, precio, existencias) "
-                    + " VALUES (\"" + id + "\",\"" + nombre + "\",\"" + proveedor 
+                    + " VALUES (\"" + id + "\",\"" + nombre + "\",\"" + proveedor
                     + "\",\"" + categoria + "\",\"" + precio + "\",\"" + existencias + "\" )");
             stmt.executeUpdate();
 
@@ -269,11 +297,14 @@ public class FXMLProductosController implements Initializable {
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+
     }
 //Sacar el último número de la factura de la base de datos
 
     private int nuevoNumeroIdProudcto() {
 
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
         ResultSet rs = null;
         PreparedStatement stmt = null;
         int idProducto = 0;
@@ -294,48 +325,45 @@ public class FXMLProductosController implements Initializable {
                 System.out.println("Finally, nuevoNumeroIdProudcto: " + ex.getMessage());
             }
         }
-        genIdProducto = Integer.toString(idProducto + 1);
-
         return idProducto + 1;
     }
 
     //Guarda lo editado
     private void guardarEditado() {
-        if (validateEmptyField("No hay datos para guardar", tfIdProducto.getText().isEmpty())) {
-            PreparedStatement stmt;
-            try {
-                String id = tfIdProducto.getText();
-                String nombre = tfNombreProducto.getText();
-                String proveedor = tfProveedor.getText();
-                String categoria = tfCategoria.getText();
-                String precio = tfPrecio.getText();
-                String existencias = tfExistencias.getText();
 
-                stmt = con.prepareStatement("UPDATE productos SET nomProducto=\"" + nombre
-                        + "\", Proveedor=\"" + proveedor + "\",categoria=\"" + categoria
-                        + "\" ,precio=\"" + precio + "\", existencias=\"" + existencias
-                        + "\" where idproducto=? ");
-                stmt.setString(1, tfIdProducto.getText());
-                stmt.executeUpdate();
-                stmt.close();
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        PreparedStatement stmt;
+        try {
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Registros");
-                alert.setHeaderText(null);
-                alert.setContentText("Datos actualizados correctamente");
-                alert.showAndWait();
+            String nombre = tfNombreProducto.getText();
+            int proveedor = cb_proveedores.getSelectionModel().getSelectedIndex() + 1;
+            int categoria = cb_categorias.getSelectionModel().getSelectedIndex() + 1;
+            String precio = tfPrecio.getText();
+            String existencias = tfExistencias.getText();
 
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
+            stmt = con.prepareStatement("UPDATE productos SET nomProducto=\"" + nombre
+                    + "\", Proveedor=\"" + proveedor + "\",categoria=\"" + categoria
+                    + "\" ,precio=\"" + precio + "\", existencias=\"" + existencias
+                    + "\" where idproducto=? ");
+            stmt.setString(1, tfIdProducto.getText());
+            stmt.executeUpdate();
+            stmt.close();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Registros");
+            alert.setHeaderText(null);
+            alert.setContentText("Datos actualizados correctamente");
+            alert.showAndWait();
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
     private void enableTextFieldEditable() {
         tfIdProducto.setEditable(false);// siempre deshabilitado
         tfNombreProducto.setEditable(true);
-        tfProveedor.setEditable(true);
-        tfCategoria.setEditable(true);
         tfPrecio.setEditable(true);
         tfExistencias.setEditable(true);
     }
@@ -343,13 +371,12 @@ public class FXMLProductosController implements Initializable {
     private void disableTextFieldEditable() {
         tfIdProducto.setEditable(false);// siempre deshabilitado
         tfNombreProducto.setEditable(false);
-        tfProveedor.setEditable(false);
-        tfCategoria.setEditable(false);
         tfPrecio.setEditable(false);
         tfExistencias.setEditable(false);
     }
 
     private void editarTextoPressed() {
+        tablaBusquedaProducto.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(true);
         bt_guardarEditar.setVisible(true);
@@ -360,6 +387,7 @@ public class FXMLProductosController implements Initializable {
     }
 
     private void nuevoProductoPressed() {
+        tablaBusquedaProducto.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
@@ -370,6 +398,7 @@ public class FXMLProductosController implements Initializable {
     }
 
     private void estadoInicialBotonesVisibles() {
+        tablaBusquedaProducto.setDisable(false);
         bt_editarTexto.setVisible(true);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
@@ -391,25 +420,42 @@ public class FXMLProductosController implements Initializable {
         return true;
     }
 
+//| tfCantidadLineaFactura.getText().isEmpty()
+    //Validar si el texto es un número
+    private boolean validateFormatNumber(String campo, String numero) {
+        Pattern p = Pattern.compile("[0-9]+");
+        Matcher m = p.matcher(numero);
+        if (m.find() && m.group().equals(numero)) {
+            return true;
+        } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de números");
+            alert.setHeaderText(null);
+            alert.setContentText(campo);
+            alert.showAndWait();
+            return false;
+        }
+    }
+
     @FXML
-    private void menuPrincipalFX(){
+    private void menuPrincipalFX() {
         try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-                    Parent root1 = (Parent) fxmlLoader.load();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root1));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
 
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-                    stage.setTitle("..::Menú Principal::..");
+            stage.setTitle("..::Menú Principal::..");
 
-                    //cierra la ventana abierta anteriormente
-                    Stage stage3 = (Stage) bt_menuPrincipal.getScene().getWindow();
-                    stage3.close();
+            //cierra la ventana abierta anteriormente
+            Stage stage3 = (Stage) bt_menuPrincipal.getScene().getWindow();
+            stage3.close();
 
-                } catch (Exception ex) {
-                    ex.getMessage();
-                }
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
     }
 }

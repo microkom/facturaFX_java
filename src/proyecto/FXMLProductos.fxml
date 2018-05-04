@@ -19,10 +19,12 @@
         <TextField fx:id="tfNombreProducto" layoutX="501.0" layoutY="80.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" stylesheets="@estilo.css" />
                   
         <Label layoutX="421.0" layoutY="110.0" text="Proveedor" />
-        <TextField fx:id="tfProveedor" layoutX="501.0" layoutY="110.0" prefHeight="22.0" prefWidth="160.0" promptText="Proveedor" stylesheets="@estilo.css" />
+        <ComboBox fx:id="cb_proveedores" layoutX="501.0" layoutY="110.0" prefWidth="160.0" prefHeight="22.0" />
+        <TextField fx:id="tfProveedor" layoutX="-180.0" layoutY="110.0" prefHeight="22.0" prefWidth="160.0" promptText="Proveedor" stylesheets="@estilo.css" />
                                                        
         <Label layoutX="421.0" layoutY="140.0" text="Categoria" />
-        <TextField fx:id="tfCategoria" layoutX="501.0" layoutY="140.0" prefHeight="22.0" prefWidth="160.0" promptText="Categoria" stylesheets="@estilo.css" />
+        <ComboBox fx:id="cb_categorias" layoutX="501.0" layoutY="140.0" prefWidth="160.0" prefHeight="22.0" />
+        <TextField fx:id="tfCategoria" layoutX="-180.0" layoutY="140.0" prefHeight="22.0" prefWidth="160.0" promptText="Categoria" stylesheets="@estilo.css" />
                   
         <Label layoutX="421.0" layoutY="170.0" text="Precio" />
         <TextField fx:id="tfPrecio" layoutX="501.0" layoutY="170.0" prefHeight="22.0" prefWidth="160.0" promptText="Telefono" stylesheets="@estilo.css" />
@@ -50,6 +52,7 @@
         <Button fx:id="bt_guardarNuevoRegistro" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarNuevoRegistroFX" text="Guardar" />
         <Button fx:id="bt_refresh" layoutX="-80.0" layoutY="363.0" mnemonicParsing="false" onAction="#actualizaTablaBusqueda" text="Refresh" />
         <Button fx:id="bt_menuPrincipal" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" onAction="#menuPrincipalFX" prefHeight="25.0" prefWidth="110.0" text="Menu Principal" />
+     
     </children>
     
 </AnchorPane>

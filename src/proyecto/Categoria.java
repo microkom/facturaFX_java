@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
 import javafx.collections.ObservableList;
+import static proyecto.Producto.listaCategoria;
 
 /**
  *
@@ -51,6 +53,14 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
+    public String getDatosBusqueda() {
+        return id + " " + nombre + " " + descripcion;
+    }
+
+    public String toString() {
+        return nombre;
+    }
+
     public static void fillCategoriaList(ObservableList<Categoria> listaCagegoria) {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -69,7 +79,6 @@ public class Categoria {
                                 rs.getString("Descripcion")
                         ));
             }
-
         } catch (SQLException ex) {
             System.out.println(Categoria.class.getName() + " fillCategoriaList :" + ex.getMessage());
         } finally {
@@ -81,5 +90,22 @@ public class Categoria {
                 System.out.println(Categoria.class.getName() + " Finally->fillCategoriaList :" + ex.getMessage());
             }
         }
+    }
+
+    public static String getNombreCategoria(int categoria) {
+
+        boolean found = false;
+        String nombre = "";
+        Iterator<Categoria> ite = listaCategoria.iterator();
+        Categoria obj;
+
+        while (ite.hasNext() && found == false) {
+            obj = ite.next();
+            if (Integer.parseInt(obj.getId()) == categoria) {
+                nombre = obj.getNombre();
+                found = true;
+            }
+        }
+        return nombre;
     }
 }
