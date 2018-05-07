@@ -31,11 +31,11 @@
         <Label layoutX="421.0" layoutY="200.0" text="Telefono" />
         <TextField fx:id="tfTelefono" layoutX="501.0" layoutY="200.0" prefHeight="22.0" prefWidth="160.0" promptText="Telefono" stylesheets="@estilo.css" />
                   
-        <Label layoutX="421.0" layoutY="230.0" text="FNacimiento" />
-        <TextField fx:id="tfFNacimiento" layoutX="501.0" layoutY="230.0" prefHeight="22.0" prefWidth="160.0" promptText="FNacimiento" stylesheets="@estilo.css" />
+        <Label layoutX="420.0" layoutY="232.0" text="FNacimiento" />
+        <TextField fx:id="tfFNacimiento" layoutX="501.0" layoutY="-55.0" prefHeight="22.0" prefWidth="160.0" promptText="FNacimiento" stylesheets="@estilo.css" />
                  
         <Label layoutX="421.0" layoutY="260.0" text="FContrato" />
-        <TextField fx:id="tfFContrato" layoutX="501.0" layoutY="260.0" prefHeight="22.0" prefWidth="160.0" promptText="FContrato" stylesheets="@estilo.css" />
+        <TextField fx:id="tfFContrato" layoutX="499.0" layoutY="-89.0" prefHeight="22.0" prefWidth="160.0" promptText="FContrato" stylesheets="@estilo.css" />
                   
         <TableView fx:id="tablaBusquedaEmpleado" layoutX="22.0" layoutY="49.0" prefHeight="291.0" prefWidth="389.0">
             <columns>
@@ -46,7 +46,7 @@
                 <TableColumn fx:id="tcJefe" text="Jefe" />
                 <TableColumn fx:id="tcTelefono" text="Telefono" />
                 <TableColumn fx:id="tcFNacimiento" text="FNac." />
-                <TableColumn fx:id="tcFContrato" text="FContrato" />
+                <TableColumn fx:id="tcFContrato" text="FCont." />
                 
             </columns>
         </TableView>
@@ -58,8 +58,10 @@
         <Button fx:id="bt_cancelarNuevoEmpleado" layoutX="441.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancelarNuevoEmpleadoFX" text="Cancelar" />
         <Button fx:id="bt_guardarNuevoRegistro" layoutX="606.0" layoutY="318.0" mnemonicParsing="false" onAction="#guardarNuevoRegistroFX" text="Guardar" />
         <Button fx:id="bt_menuPrincipal" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" onAction="#menuPrincipalFX" prefHeight="25.0" prefWidth="110.0" style="-fx-background-radius: 0;" text="Menu Principal" />
-
+ 
         <Button fx:id="bt_refresh" layoutX="-80.0" layoutY="363.0" mnemonicParsing="false" onAction="#actualizaTablaBusqueda" text="Refresh" />
+      <DatePicker fx:id="dpFcontrato" layoutX="501.0" layoutY="228.0" prefHeight="25.0" prefWidth="160.0" />
+      <DatePicker fx:id="dpFnacimiento" layoutX="501.0" layoutY="256.0" prefHeight="25.0" prefWidth="160.0" />
     </children>
     
 </AnchorPane>

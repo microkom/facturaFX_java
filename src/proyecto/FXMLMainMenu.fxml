@@ -25,12 +25,12 @@
             <AnchorPane prefHeight="456.0" prefWidth="685.0" style="-fx-background-color: #F0F7FF;" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="bt_productos" layoutX="34.0" layoutY="335.0" mnemonicParsing="false" onAction="#productosFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenuOK" stylesheets="@estilo.css" text="Productos" />
-                  <Button fx:id="bt_personal" layoutX="23.0" layoutY="165.0" mnemonicParsing="false" onAction="#personalFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenu" stylesheets="@estilo.css" text="Empleados" />
+                  <Button fx:id="btEmpleados" layoutX="23.0" layoutY="165.0" mnemonicParsing="false" onAction="#empleadosFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenu" stylesheets="@estilo.css" text="Empleados" />
                   <Button fx:id="bt_controlDeGastos" layoutX="384.0" layoutY="165.0" mnemonicParsing="false" onAction="#proveedoresFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenuOK" stylesheets="@estilo.css" text="Proveedores" />
                   <Button fx:id="bt_facturacion" layoutX="23.0" layoutY="30.0" mnemonicParsing="false" onAction="#facturacionFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenuOK" stylesheets="@estilo.css" text="Facturacion" />
-                  <Button fx:id="bt_presupuesto" layoutX="203.0" layoutY="30.0" mnemonicParsing="false" onAction="#presupuestoFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenu" stylesheets="@estilo.css" text="Presupuesto" />
                   <Button fx:id="bt_clientes" layoutX="203.0" layoutY="165.0" mnemonicParsing="false" onAction="#clientexFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenuOK" stylesheets="@estilo.css" text="Clientes" />
                   <Button fx:id="bt_categorias" layoutX="203.0" layoutY="335.0" mnemonicParsing="false" onAction="#categoriasFX" prefHeight="48.0" prefWidth="145.0" styleClass="botonMainMenuOK" stylesheets="@estilo.css" text="Categorias" />
+                  <Button fx:id="btEditarFactura" layoutX="51.0" layoutY="88.0" mnemonicParsing="false" onAction="#busquedaFacturaFX" text="Editar Factura" />
                </children>
                <effect>
                   <DropShadow />

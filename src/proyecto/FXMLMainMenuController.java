@@ -25,6 +25,11 @@ import javafx.stage.Stage;
  */
 public class FXMLMainMenuController implements Initializable {
 
+    private String usuario;
+   
+    public void setUser(String usuario){
+        this.usuario = usuario;
+    }
 //    @FXML
 //    private void loadFxml(ActionEvent event) throws IOException {
 //        Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLEmpleados.fxml"));
@@ -32,7 +37,7 @@ public class FXMLMainMenuController implements Initializable {
 //        pane1.toFront();
 //    }
     @FXML
-    private Button bt_controlDeGastos, bt_personal, bt_clientes, bt_presupuesto, bt_facturacion, bt_menuPrincipal, bt_productos, bt_categorias;
+    private Button btEditarFactura,bt_controlDeGastos, btEmpleados, bt_clientes, bt_presupuesto, bt_facturacion, bt_menuPrincipal, bt_productos, bt_categorias;
 
 //    @FXML
 //    private void handleButtonAction(ActionEvent event) throws IOException {
@@ -59,6 +64,7 @@ public class FXMLMainMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        System.out.println(usuario);
     }
 
     @FXML
@@ -106,7 +112,7 @@ public class FXMLMainMenuController implements Initializable {
     }
 
     @FXML
-    private void personalFX(ActionEvent event) {
+    private void empleadosFX(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLEmpleados.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
@@ -119,7 +125,7 @@ public class FXMLMainMenuController implements Initializable {
             stage.setTitle("..::Empleados::..");
 
             //cierra la ventana abierta anteriormente
-            Stage stage2 = (Stage) bt_personal.getScene().getWindow();
+            Stage stage2 = (Stage) btEmpleados.getScene().getWindow();
             stage2.close();
 
         } catch (IOException ex) {
@@ -170,32 +176,10 @@ public class FXMLMainMenuController implements Initializable {
             System.out.println("facturacionFX: " + ex.getMessage());
         }
     }
-
-//    @FXML
-//    private void menuPrincipalFX() {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-//            Parent root1 = (Parent) fxmlLoader.load();
-//            Stage stage = new Stage();
-//            stage.setScene(new Scene(root1));
-//
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.show();
-//
-//            stage.setTitle("..::Menú Principal::..");
-//
-//            //cierra la ventana abierta anteriormente
-//            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
-//            stage2.close();
-//
-//        } catch (Exception ex) {
-//            ex.getMessage();
-//        }
-//    }
     @FXML
-    private void presupuestoFX(ActionEvent event) {
+    private void busquedaFacturaFX() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(""));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLBusquedaFactura.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
@@ -203,18 +187,19 @@ public class FXMLMainMenuController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
 
-            stage.setTitle("..::Menú Principal::..");
+            stage.setTitle("..:: Buscar Factura ::..");
 
             //cierra la ventana abierta anteriormente
-            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
+            Stage stage2 = (Stage) btEditarFactura.getScene().getWindow();
             stage2.close();
 
         } catch (IOException ex) {
-            System.out.println("presupuestoFX: " + ex.getMessage());
+            System.out.println("busquedaFacturaFX: " + ex.getMessage());
         }
     }
 
-    @FXML
+
+     @FXML
     private void clientexFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLCustomers.fxml"));

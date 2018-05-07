@@ -9,8 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -79,4 +82,54 @@ public class Cliente extends Persona {
                 + " " + super.getDireccion() + " " + super.getCiudad() + " " + super.getPais() + " " + super.getTelefono();
     }
 
+    public static String nombreCliente(String cliente) {
+
+        ArrayList<Cliente> listaClientes = new ArrayList<Cliente>();
+        boolean found = false;
+        String nombre = "";
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM Clientes");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                listaClientes.add(
+                        new Cliente(
+                                rs.getString("IdCliente"),
+                                rs.getString("Nombre"),
+                                rs.getString("Contacto"),
+                                rs.getString("CargoContacto"),
+                                rs.getString("Direccion"),
+                                rs.getString("Ciudad"),
+                                rs.getString("Pais"),
+                                rs.getString("Telefono")));
+                //rs.getString("observaciones")
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("nombreCliente: " + ex.getMessage());
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Finally, nombreCliente: " + ex.getMessage());
+            }
+        }
+        Iterator<Cliente> ite = listaClientes.iterator();
+        Cliente obj;
+
+        while (ite.hasNext() && found == false) {
+            obj = ite.next();
+            if (obj.getId().equals(cliente)) {
+                nombre = obj.nombre;
+                found = true;
+            }
+        }
+        return nombre;
+    }
 }

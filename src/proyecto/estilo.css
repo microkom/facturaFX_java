@@ -27,7 +27,6 @@ and open the template in the editor.
     -fx-font-weight:bold;
     -fx-font-color: #ccccff;
     -fx-font-size:16;
-    -fx-alignment:CENTER;
 }
 
 .botonMainMenu{
@@ -111,7 +110,10 @@ and open the template in the editor.
     -fx-min-height:0;
 
 }
-
+.tableview:disabled{
+    -fx-opacity: 0.7; /* Muestra el texto deshabilitado con más claridad*/
+    -fx-background-color: rgba(0,0,22,0.5);
+}
 .TextField{
     -fx-background-color:rgba(0,0,0,0);
     -fx-opacity: 1.0; /* Muestra el texto deshabilitado con más claridad*/

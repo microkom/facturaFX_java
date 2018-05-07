@@ -22,7 +22,7 @@
         <TextField fx:id="tfDescripcion" layoutX="501.0" layoutY="110.0" prefHeight="22.0" prefWidth="160.0" promptText="Descripcion" stylesheets="@estilo.css" />
                                                        
                    
-        <TableView fx:id="tablaBusquedaCategoria" layoutX="22.0" layoutY="49.0" prefHeight="291.0" prefWidth="389.0">
+        <TableView fx:id="tablaBusquedaCategoria" layoutX="22.0" layoutY="49.0" prefHeight="291.0" styleClass="tableview" stylesheets="@estilo.css" prefWidth="389.0">
             <columns>
                 <TableColumn fx:id="tcIdCategoria" prefWidth="25.0" text="Id" />
                 <TableColumn fx:id="tcNombre" prefWidth="80.0" text="Nombre" />

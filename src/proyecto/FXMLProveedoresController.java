@@ -18,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,6 +32,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -40,6 +42,8 @@ import javafx.stage.Stage;
  * @author German
  */
 public class FXMLProveedoresController implements Initializable {
+
+    private String usuario;
 
     private String genIdProveedor = "";
 
@@ -90,7 +94,9 @@ public class FXMLProveedoresController implements Initializable {
             //busqueda en tiempo real por nombre, contacto, cargo contacto, ciudad. Tiene en cuenta las tildes 
             tfBusquedaProveedor.setOnKeyReleased(keyEvent -> {
                 listaProveedorFiltrada.setPredicate(obj -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaProveedor.getText().toLowerCase().trim()));
+
             });
+        
             //Valores para rellenar la vista de la tabla
             tCnombreProveedor.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("nombre"));
             tCcontacto.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("contacto"));
@@ -359,6 +365,7 @@ public class FXMLProveedoresController implements Initializable {
     }
 
     private void editarTextoPressed() {
+        tablaBusquedaProveedor.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(true);
         bt_guardarEditar.setVisible(true);
@@ -369,6 +376,7 @@ public class FXMLProveedoresController implements Initializable {
     }
 
     private void nuevoProveedorPressed() {
+        tablaBusquedaProveedor.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
@@ -379,6 +387,7 @@ public class FXMLProveedoresController implements Initializable {
     }
 
     private void estadoInicialBotonesVisibles() {
+        tablaBusquedaProveedor.setDisable(false);
         bt_editarTexto.setVisible(true);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import static proyecto.Empleado.listaEmpleado;
+//import static proyecto.Empleado.listaEmpleado;
 
 
 /**
@@ -31,7 +31,7 @@ public class Empleado extends Persona {
     private int jefe;
     private String nomJefe;
 
-    public static ObservableList<Empleado> listaEmpleado = FXCollections.observableArrayList();
+    //public static ObservableList<Empleado> listaEmpleado = FXCollections.observableArrayList();
 
     public Empleado(String apellido, String cargo, String fNacimiento,
             String fContrato, int jefe, String id, String nombre, String telefono, String nomJefe) {

@@ -363,6 +363,7 @@ public class FXMLCustomersController implements Initializable {
     }
 
     private void editarTextoPressed() {
+        tablaBusquedaCliente.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(true);
         bt_guardarEditar.setVisible(true);
@@ -373,6 +374,7 @@ public class FXMLCustomersController implements Initializable {
     }
 
     private void nuevoClientePressed() {
+        tablaBusquedaCliente.setDisable(true);
         bt_editarTexto.setVisible(false);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);
@@ -383,6 +385,7 @@ public class FXMLCustomersController implements Initializable {
     }
 
     private void estadoInicialBotonesVisibles() {
+        tablaBusquedaCliente.setDisable(false);
         bt_editarTexto.setVisible(true);
         bt_cancelarEditar.setVisible(false);
         bt_guardarEditar.setVisible(false);

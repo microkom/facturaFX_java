@@ -10,7 +10,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -28,6 +34,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -77,6 +84,11 @@ public class FXMLEmpleadosController implements Initializable {
             ponerEmpleadoSeleccionado();
         }
     };
+    @FXML
+    private Button bt_refresh;
+
+    @FXML
+    private DatePicker dpFcontrato, dpFnacimiento;
 
     /**
      * Initializes the controller class.
@@ -141,6 +153,10 @@ public class FXMLEmpleadosController implements Initializable {
         posicionEmpleado = listaEmpleados.indexOf(empleado);
         if (empleado != null) {
 
+            //convert String to LocalDate
+            LocalDate fContratoLocalDate = LocalDate.parse(empleado.getfContrato());
+            LocalDate fNacimientoLocalDate = LocalDate.parse(empleado.getfNacimiento());
+
             tfIdEmpleado.setText(empleado.getId());
             tfNombre.setText(empleado.getNombre());
             tfApellidos.setText(empleado.getApellido());
@@ -149,9 +165,12 @@ public class FXMLEmpleadosController implements Initializable {
             cb_empleados.setItems(listaEmpleados);
             cb_empleados.setValue(empleado.getNomJefe()); //listaEmpleados.get(posicionEmpleado).getNomJefe()
             tfTelefono.setText(empleado.getTelefono());
-            tfFNacimiento.setText(empleado.getfNacimiento());
-            tfFContrato.setText(empleado.getfContrato());
 
+            dpFcontrato.setValue(fContratoLocalDate);
+            dpFnacimiento.setValue(fNacimientoLocalDate);
+
+            //tfFNacimiento.setText(empleado.getfNacimiento());
+            //tfFContrato.setText(empleado.getfContrato());
         }
     }
 
@@ -314,16 +333,18 @@ public class FXMLEmpleadosController implements Initializable {
 
     //Guarda un registro nuevo
     private void guardarNuevoRegistro() {
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
         PreparedStatement stmt;
         try {
             String id = genIdEmpleado;
             String nombre = tfNombre.getText();
             String apellidos = tfApellidos.getText();
             String cargo = tfCargo.getText();
-            int jefe = cb_empleados.getSelectionModel().getSelectedIndex()+1;
+            int jefe = cb_empleados.getSelectionModel().getSelectedIndex() + 1;
             String telefono = tfTelefono.getText();
-            String fNac = "2012-01-01";//tfFNacimiento.getText();
-            String fCont = "2012-01-01";//tfFContrato.getText();
+            String fNac = dpFnacimiento.getValue().format(DateTimeFormatter.ISO_DATE);
+            String fCont = dpFcontrato.getValue().format(DateTimeFormatter.ISO_DATE);
 
             stmt = con.prepareStatement("INSERT INTO empleados ( idempleado, nombre, apellidos,Cargo, jefe, telefono, fnacimiento, fcontrato) "
                     + " VALUES (\"" + id + "\",\"" + nombre + "\",\"" + apellidos + "\",\"" + cargo + "\",\"" + jefe + "\",\"" + telefono + "\",\"" + fNac + "\",\"" + fCont + "\" )");
@@ -343,25 +364,22 @@ public class FXMLEmpleadosController implements Initializable {
 
     //Guarda lo editado
     private void guardarEditado() {
+
         if (validateEmptyField("No hay datos para guardar", tfIdEmpleado.getText().isEmpty())) {
+            Conexion conexion = new Conexion();
+            Connection con = conexion.conectar();
             PreparedStatement stmt;
             try {
-                String id = genIdEmpleado;
                 String nombre = tfNombre.getText();
                 String apellidos = tfApellidos.getText();
                 String cargo = tfCargo.getText();
-                int jefe = cb_empleados.getSelectionModel().getSelectedIndex()+1;
+                int jefe = cb_empleados.getSelectionModel().getSelectedIndex() + 1;
                 String telefono = tfTelefono.getText();
-                String fNac = "2012-01-01";//tfFNacimiento.getText();
-            String fCont = "2012-01-01";//tfFContrato.getText();
-                stmt = con.prepareStatement("UPDATE empleados SET nombre=\"" + nombre
-                        + "\", Apellidos=\"" + apellidos
-                        + "\",cargo=\"" + cargo
-                        + "\" ,Jefe=" + jefe
-                        + ", telefono=\"" + telefono
-                        + "\",FNacimiento=\"" + fNac
-                        + "\",FContrato=\"" + fCont
-                        + "\" where idempleado=? ");
+                String fNac = dpFnacimiento.getValue().format(DateTimeFormatter.ISO_DATE);
+                String fCont = dpFcontrato.getValue().format(DateTimeFormatter.ISO_DATE);
+                System.out.println(fNac);
+                System.out.println(fCont);
+                stmt = con.prepareStatement("UPDATE empleados SET Nombre=\""+nombre+"\", Apellidos=\""+apellidos+"\", Cargo=\""+cargo+"\", FNacimiento=\""+fNac+"\", FContrato=\""+fCont+"\", Telefono=\""+telefono+"\", Jefe="+jefe+" where idempleado=?");
 
                 stmt.setString(1, tfIdEmpleado.getText());
                 stmt.executeUpdate();

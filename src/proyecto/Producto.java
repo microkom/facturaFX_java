@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -147,6 +148,24 @@ public class Producto {
     public String getDatosBusqueda() {
         return id + " " + nombreProducto + " " + precio;
     }
+    
+    static ObservableList<Producto> nombreProdList = FXCollections.observableArrayList();
+
+    public static String getNombreProducto(int idRecibido){
+        
+        String nombre = "";
+        boolean found = false;
+        Iterator<Producto> pro = nombreProdList.iterator();
+        Producto obj = null;
+        while (pro.hasNext() && found == false) {
+           obj = pro.next();
+            if (obj.id == idRecibido){
+               nombre = obj.nombreProducto;
+               found = true;
+           }
+        }
+        return nombre;
+    }
 
     public static void fillProductosList(ObservableList<Producto> listaProductos) {
         
@@ -172,7 +191,9 @@ public class Producto {
                                 rs.getInt("Categoria"),
                                 rs.getInt("Precio"),
                                 rs.getInt("Existencias")));
+                
             }
+            nombreProdList = listaProductos;
             stmt.close();
             rs.close();
         } catch (SQLException ex) {
@@ -185,7 +206,24 @@ public class Producto {
             }
         }
     }
+  /*  
+    public static String getNombreProducto(int producto) {
 
+        boolean found = false;
+        String nombre = "";
+        Iterator<Proveedor> ite = listaProductos.iterator();
+        Proveedor obj;
+
+        while (ite.hasNext() && found == false) {
+            obj = ite.next();
+            if (Integer.parseInt(obj.getId()) == producto) {
+                nombre = obj.getNombre();
+                found = true;
+            }
+        }
+        return nombre;
+    }
+*/
 //    public String getNombreProveedor(int proveedor) {
 //         
 //       boolean found = false;

@@ -31,6 +31,8 @@ import javafx.stage.Stage;
  */
 public class FXMLLoginController implements Initializable {
 
+    private String usuario;
+    private String contrasena;
     private ResultSet rs;
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
@@ -93,19 +95,23 @@ public class FXMLLoginController implements Initializable {
     @FXML
     private void usuarioPass() {
         PreparedStatement stmt;
+        usuario = tfUser.getText();
+        contrasena = tfPass.getText();
         tfUser.setPromptText("Usuario");
         tfPass.setPromptText("Contraseña");
         try {
 
             stmt = con.prepareStatement("SELECT * from usuarios where usuario=? and contrasena=?");
-            stmt.setString(1, tfUser.getText());
-            stmt.setString(2, tfPass.getText());
+            stmt.setString(1, usuario);
+            stmt.setString(2, contrasena);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
+                    FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+                    controller.setUser(usuario);
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root1));
 
@@ -131,4 +137,8 @@ public class FXMLLoginController implements Initializable {
             System.out.println("USUARIO: " + ex.getMessage());
         }
     }
+//    
+//    public void setUser(String usuario){
+//         this.usuario = usuario;
+//    }
 }

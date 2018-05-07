@@ -149,6 +149,8 @@ public class FXMLProductosController implements Initializable {
             tfNombreProducto.setText(producto.getNombreProducto());
             cb_proveedores.setItems(listaProveedor);
             cb_proveedores.setValue(producto.getNomProveedor());
+            cb_proveedores.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> System.out.println(newValue));
+
             cb_categorias.setItems(listaCategoria);
             cb_categorias.setValue(producto.getNomCategoria());
             tfPrecio.setText(Double.toString(producto.getPrecio()));

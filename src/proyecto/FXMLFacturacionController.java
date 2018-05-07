@@ -29,6 +29,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -53,7 +54,7 @@ public class FXMLFacturacionController implements Initializable {
     int posicionItem = 0;
 
     @FXML
-    private Label titleFacturacion, lbIdProducto, lbIdCliente, lbNumPedido, lbIVA, lbDescuentoTotal, lbTotal, lbSubtotal, lbSubtotalDescuento;
+    private Label lbFecha, titleFacturacion, lbIdProducto, lbIdCliente, lbNumPedido, lbIVA, lbDescuentoTotal, lbTotal, lbSubtotal, lbSubtotalDescuento, lbTextoFecha;
 
     @FXML
     private TableView<Cliente> tablaBusquedaCliente;
@@ -78,7 +79,8 @@ public class FXMLFacturacionController implements Initializable {
             tfLineaABorrar;
 
     @FXML
-    private Button btAgregarItemALineaFactura, btBorrarLinea, btGuardarFactura,bt_menuPrincipal;;
+    private Button btAgregarItemALineaFactura, btBorrarLinea, btGuardarFactura, bt_menuPrincipal;
+    ;
 
     private final ListChangeListener<Cliente> selectorTablaClientes = new ListChangeListener<Cliente>() {
         @Override
@@ -176,6 +178,12 @@ public class FXMLFacturacionController implements Initializable {
         //texto por defecto al iniciar la factura
         tfCantidadLineaFactura.setText("1");
         tfDescuentoLineaFactura.setText("0");
+
+        ///////////////////////////////////////////////////////////////////////////
+        //  FECHA
+        ///////////////////////////////////////////////////////////////////////////
+        lbFecha.setText(Fecha.hoyDiaMesAnyo());
+
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -243,9 +251,9 @@ public class FXMLFacturacionController implements Initializable {
                 tfIdProducto.setText(Integer.toString(producto.getId()));
                 tfNombreProducto.setText(producto.getNombreProducto());
                 tfPrecioProducto.setText(Integer.toString(producto.getPrecio()));
-                tfCategoria.setText("--facturacion--");
+                tfCategoria.setText("--revisar--");
                 tfExistencias.setText(Integer.toString(producto.getExistencias()));
-                tfProveedor.setText("--facturacion--");
+                tfProveedor.setText("--revisar--");
 
             }
         } catch (Exception ex) {
@@ -253,39 +261,10 @@ public class FXMLFacturacionController implements Initializable {
         }
     }
 
-
-
     ///////////////////////////////////////////////////////////////////////////
     //  LINEA FACTURA
     ///////////////////////////////////////////////////////////////////////////
-    private boolean validateEmptyField(String text, boolean field) {
-        if (field) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Validación de campos");
-            alert.setHeaderText(null);
-            alert.setContentText(text);
-            alert.showAndWait();
-            return false;
-        }
-        return true;
-    }
-
-//| tfCantidadLineaFactura.getText().isEmpty()
-    //Validar si el texto es un número
-    private boolean validateFormatNumber(String campo, String numero) {
-        Pattern p = Pattern.compile("[0-9]+");
-        Matcher m = p.matcher(numero);
-        if (m.find() && m.group().equals(numero)) {
-            return true;
-        } else {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Validación de números");
-            alert.setHeaderText(null);
-            alert.setContentText("El valor " + campo + " no es número");
-            alert.showAndWait();
-            return false;
-        }
-    }
+    
 
     @FXML
     public void pasarItemAListaFactura() {
@@ -368,13 +347,15 @@ public class FXMLFacturacionController implements Initializable {
                 ResultSet rs = null;
                 PreparedStatement stmt = null;
 
-                String numFactura = lbNumPedido.getText();
+                String numFactura = Integer.toString(nuevoNumeroFactura());;
                 String cliente = tfIdCliente.getText();
                 String empleado = "3";
+                System.out.println(Fecha.hoyAnyoMesDia());
                 try {
                     stmt = con.prepareStatement("INSERT INTO pedidos set numPedido="
                             + numFactura + ", Cliente=\"" + cliente + "\", empleado="
-                            + empleado + " ,Fecha=(SELECT NOW()) ");
+                            + empleado + " ,Fecha=\"" + Fecha.hoyAnyoMesDia() + "\"");
+
                     stmt.executeUpdate();
 
                     for (LineaFactura obj : lineaFacturaList) {
@@ -520,7 +501,7 @@ public class FXMLFacturacionController implements Initializable {
             }
         }
     }
-    
+
     private void setNumLinea() {
         int numLinea = 0;
         for (LineaFactura obj : lineaFacturaList) {
@@ -530,6 +511,8 @@ public class FXMLFacturacionController implements Initializable {
 
     }
 
+    
+    //para borrar las lineas en la factura
     //Método que devuelve el objeto de la fila seleccionada
     public LineaFactura getItemSeleccionado() { //de aqui va a los textfields
 
@@ -584,17 +567,35 @@ public class FXMLFacturacionController implements Initializable {
         //calculo del importe total más el IVA
         return (sumaSubtotal() - descuentoTotal()) * IVA;
     }
-
-    public static double round(double value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
+    private boolean validateEmptyField(String text, boolean field) {
+        if (field) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de campos");
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            alert.showAndWait();
+            return false;
         }
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return true;
     }
-    
+
+//| tfCantidadLineaFactura.getText().isEmpty()
+    //Validar si el texto es un número
+    private boolean validateFormatNumber(String campo, String numero) {
+        Pattern p = Pattern.compile("[0-9]+");
+        Matcher m = p.matcher(numero);
+        if (m.find() && m.group().equals(numero)) {
+            return true;
+        } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de números");
+            alert.setHeaderText(null);
+            alert.setContentText("El valor " + campo + " no es número");
+            alert.showAndWait();
+            return false;
+        }
+    }
+
     @FXML
     public void menuPrincipalFX() {
         try {

@@ -27,7 +27,7 @@ public class Main extends Application {
 
             Scene scene = new Scene(root, Color.rgb(0, 0, 0, 0.5));//login
 
-            stage.initStyle(StageStyle.TRANSPARENT); //hace que se vea sin botones arriba - login
+            //stage.initStyle(StageStyle.TRANSPARENT); //hace que se vea sin botones arriba - login
             stage.setTitle("Login");
             stage.setScene(scene);
             

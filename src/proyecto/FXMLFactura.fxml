@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLFacturaController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane minHeight="-Infinity" prefHeight="92.0" prefWidth="675.0">
+               <children>
+                  <Label layoutX="23.0" layoutY="18.0" styleClass="titulo16" stylesheets="@estilo.css" text="FACTURA" />
+                  <Label layoutX="394.0" layoutY="56.0" styleClass="titulo16" stylesheets="@estilo.css" text="Nº" />
+                  <Label fx:id="lbNumFactura" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="424.0" layoutY="55.0" styleClass="titulo16" stylesheets="@estilo.css" text="numFactura" />
+                  <Label fx:id="lbFecha" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="521.0" layoutY="55.0" prefHeight="25.0" prefWidth="90.0" styleClass="titulo16" stylesheets="@estilo.css" text="fecha" />
+                  <Label fx:id="lbCliente" alignment="CENTER_LEFT" contentDisplay="LEFT" layoutX="84.0" layoutY="55.0" prefHeight="25.0" prefWidth="310.0" styleClass="titulo16" stylesheets="@estilo.css" text="cliente" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="186.0" prefWidth="675.0">
+               <children>
+                  <TableView fx:id="tvFactura" prefHeight="177.0" prefWidth="675.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="tcNumLinea" prefWidth="75.0" text="Num" />
+                      <TableColumn fx:id="tcProducto" prefWidth="376.0" text="Producto" />
+                        <TableColumn fx:id="tcPrecio" prefWidth="68.0" text="Precio" />
+                        <TableColumn fx:id="tcCantidad" prefWidth="74.0" text="Cantidad" />
+                        <TableColumn fx:id="tcDescuento" prefWidth="77.0" text="Descuento" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="245.0" prefWidth="675.0">
+               <children>
+                  <Label fx:id="lbTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="600.0" layoutY="103.0" minWidth="40.0" text="****" />
+                  <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="103.0" minWidth="120.0" text="Total" />
+                  <Label fx:id="lbIVA" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="600.0" layoutY="86.0" minWidth="40.0" text="****" />
+                  <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="86.0" minWidth="120.0" text="IVA" />
+                  <Label fx:id="lbSubtotalDescuento" alignment="CENTER_RIGHT" layoutX="600.0" layoutY="69.0" minWidth="40.0" text="****" />
+                  <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="69.0" minWidth="120.0" text="Subtotal - Descuento" />
+                  <Label fx:id="lbDescuentoTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="600.0" layoutY="50.0" minWidth="40.0" text="****" />
+                  <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="50.0" minWidth="120.0" text="Descuento" />
+                  <Label fx:id="lbSubtotal" alignment="CENTER_RIGHT" layoutX="600.0" layoutY="33.0" minWidth="40.0" text="****" />
+                  <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="33.0" minWidth="120.0" text="Subtotal" />
+                  <TextField fx:id="tfDescuento" layoutX="331.0" layoutY="82.0" prefHeight="25.0" prefWidth="48.0" promptText="Desc." />
+                  <TextField fx:id="tfActCant" layoutX="99.0" layoutY="14.0" prefHeight="25.0" prefWidth="48.0" promptText="Cant." />
+                  <TextField fx:id="tfCantidad" layoutX="274.0" layoutY="82.0" prefHeight="25.0" prefWidth="48.0" promptText="Cant." />
+                  <ComboBox fx:id="cbProductos" layoutX="91.0" layoutY="82.0" prefHeight="25.0" prefWidth="171.0" promptText="Productos" />
+                  <Button fx:id="btActualizar" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#actualizarFX" prefHeight="25.0" prefWidth="73.0" text="Actualizar" />
+                  <Button fx:id="btBorrar" layoutX="306.0" layoutY="16.0" mnemonicParsing="false" onAction="#borrarLineaDeFacturaFX" text="Borrar linea:" />
+                  <Button fx:id="btAgregar" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#pasarItemAListaFacturaFX" prefHeight="25.0" prefWidth="73.0" text="Agregar" />
+                  <TextField fx:id="tfActDesc" layoutX="153.0" layoutY="14.0" prefHeight="25.0" prefWidth="48.0" promptText="Desc." />
+                  <TextField fx:id="tfLineaAActualizar" layoutX="389.0" layoutY="16.0" prefHeight="25.0" prefWidth="31.0" promptText="Elim." />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
