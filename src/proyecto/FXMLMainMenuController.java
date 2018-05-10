@@ -15,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,11 +27,9 @@ import javafx.stage.Stage;
  */
 public class FXMLMainMenuController implements Initializable {
 
-    private String usuario;
-   
-    public void setUser(String usuario){
-        this.usuario = usuario;
-    }
+    private int tipoUsuario;
+    private int empleado;
+
 //    @FXML
 //    private void loadFxml(ActionEvent event) throws IOException {
 //        Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLEmpleados.fxml"));
@@ -37,19 +37,28 @@ public class FXMLMainMenuController implements Initializable {
 //        pane1.toFront();
 //    }
     @FXML
-    private Button btEditarFactura,bt_controlDeGastos, btEmpleados, bt_clientes, bt_presupuesto, bt_facturacion, bt_menuPrincipal, bt_productos, bt_categorias;
+    private Button btEditarFactura, btProveedores, btEmpleados, bt_clientes, bt_facturacion, 
+            bt_productos, bt_categorias;
+    @FXML
+    private AnchorPane pnLeftPane, pnRightPane;
+    
+    
 
 //    @FXML
 //    private void handleButtonAction(ActionEvent event) throws IOException {
-//        if (event.getSource() == a) {
-//            pane1.toFront();
-//        } else if (event.getSource() == b) {
-//            pane2.toFront();
-//        } else if (event.getSource() == bt_personal) {
-//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLEmpleados.fxml"));
-//            pane3.getChildren().add(newLoadedPane);
-//            pane3.toFront();
-//        } else if (event.getSource() == bt_clientes) {
+//        if (event.getSource() == btProveedores) {
+//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLProveedores.fxml"));
+//            pnProveedores.getChildren().add(newLoadedPane);
+//            pnProveedores.toFront();
+//        } else if (event.getSource() == btEmpleados) {
+//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLClientes.fxml"));
+//            pnClientes.getChildren().add(newLoadedPane);
+//            pnClientes.toFront();
+//        }else if (event.getSource() == bt_clientes) {
+//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLBusquedaFactura.fxml"));
+//            pnBusquedaFactura.getChildren().add(newLoadedPane);
+//            pnBusquedaFactura.toFront();
+//        }else if (event.getSource() == bt_facturacion) {
 //            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLClientes.fxml"));
 //            pane4.getChildren().add(newLoadedPane);
 //            pane4.toFront();
@@ -64,7 +73,48 @@ public class FXMLMainMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        System.out.println(usuario);
+        seguridadSegunUsuario();
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
+        seguridadSegunUsuario();
+
+    }
+
+    public void seguridadSegunUsuario() {
+        switch (tipoUsuario) {
+            case 1:
+                btEditarFactura.setDisable(false);
+                btEmpleados.setDisable(false);
+                bt_clientes.setDisable(false);
+                bt_facturacion.setDisable(false);
+                bt_productos.setDisable(false);
+                bt_categorias.setDisable(false);
+                btProveedores.setDisable(false);
+                break;
+            case 2:
+                btEditarFactura.setDisable(true);
+                btEmpleados.setDisable(true);
+                bt_clientes.setDisable(true);
+                bt_facturacion.setDisable(true);
+                bt_productos.setDisable(true);
+                bt_categorias.setDisable(true);
+                btProveedores.setDisable(true);
+                break;
+            case 3:
+                btEditarFactura.setDisable(false);
+                btEmpleados.setDisable(true);
+                bt_clientes.setDisable(true);
+                bt_facturacion.setDisable(false);
+                bt_productos.setDisable(true);
+                bt_categorias.setDisable(true);
+                btProveedores.setDisable(true);
+                break;
+            default:
+                break;
+        }
     }
 
     @FXML
@@ -72,6 +122,8 @@ public class FXMLMainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLProductos.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLProductosController controller = fxmlLoader.<FXMLProductosController>getController();
+            controller.initVariable(tipoUsuario , empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -94,6 +146,8 @@ public class FXMLMainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLCategorias.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLCategoriasController controller = fxmlLoader.<FXMLCategoriasController>getController();
+            controller.initVariable(tipoUsuario,empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -116,6 +170,8 @@ public class FXMLMainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLEmpleados.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLEmpleadosController controller = fxmlLoader.<FXMLEmpleadosController>getController();
+            controller.initVariable(tipoUsuario,empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -138,6 +194,9 @@ public class FXMLMainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLProveedores.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLProveedoresController controller = fxmlLoader.<FXMLProveedoresController>getController();
+            controller.initVariable(tipoUsuario,empleado);
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -147,7 +206,7 @@ public class FXMLMainMenuController implements Initializable {
             stage.setTitle("..::Proveedores::..");
 
             //cierra la ventana abierta anteriormente
-            Stage stage2 = (Stage) bt_controlDeGastos.getScene().getWindow();
+            Stage stage2 = (Stage) btProveedores.getScene().getWindow();
             stage2.close();
 
         } catch (IOException ex) {
@@ -160,6 +219,8 @@ public class FXMLMainMenuController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLFacturacion.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLFacturacionController controller = fxmlLoader.<FXMLFacturacionController>getController();
+            controller.initVariable(tipoUsuario,empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -176,11 +237,14 @@ public class FXMLMainMenuController implements Initializable {
             System.out.println("facturacionFX: " + ex.getMessage());
         }
     }
+
     @FXML
     private void busquedaFacturaFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLBusquedaFactura.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLBusquedaFacturaController controller = fxmlLoader.<FXMLBusquedaFacturaController>getController();
+            controller.initVariable(tipoUsuario,empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -198,12 +262,13 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
-
-     @FXML
+    @FXML
     private void clientexFX() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLCustomers.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLClientes.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLClientesController controller = fxmlLoader.<FXMLClientesController>getController();
+            controller.initVariable(tipoUsuario,empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 

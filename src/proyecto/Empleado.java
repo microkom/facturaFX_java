@@ -9,12 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 //import static proyecto.Empleado.listaEmpleado;
-
 
 /**
  *
@@ -31,7 +29,7 @@ public class Empleado extends Persona {
     private int jefe;
     private String nomJefe;
 
-    //public static ObservableList<Empleado> listaEmpleado = FXCollections.observableArrayList();
+    public static ObservableList<Empleado> listaEmpleadoLocal = FXCollections.observableArrayList();
 
     public Empleado(String apellido, String cargo, String fNacimiento,
             String fContrato, int jefe, String id, String nombre, String telefono, String nomJefe) {
@@ -43,16 +41,18 @@ public class Empleado extends Persona {
         this.jefe = jefe;
         this.nomJefe = nomJefe;
     }
-    public Empleado(String id, String nombre, String apellido,int jefe  ) {
+
+    public Empleado(String id, String nombre, String apellido, int jefe) {
         super(id, nombre);
         this.apellido = apellido;
         this.jefe = jefe;
     }
-    
-     public String getNomJefe() {
+
+    public String getNomJefe() {
         return this.nomJefe;
-        
+
     }
+
     public void setNomJefe(String nomJefe) {
         this.nomJefe = nomJefe;
     }
@@ -77,6 +77,7 @@ public class Empleado extends Persona {
         return fNacimiento;
     }
 
+
     public void setfNacimiento(String fNacimiento) {
         this.fNacimiento = fNacimiento;
     }
@@ -96,11 +97,10 @@ public class Empleado extends Persona {
     public void setJefe(int jefe) {
         this.jefe = jefe;
     }
-    
-    public String toString(){
+
+    public String toString() {
         return nombre;
     }
-
 
     public String getDatosBusqueda() {
         return id + " " + nombre + " " + apellido + " " + telefono;
@@ -113,6 +113,20 @@ public class Empleado extends Persona {
         PreparedStatement stmt = null;
 
         try {
+            stmt = con.prepareStatement("SELECT * FROM empleados");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+
+                listaEmpleadoLocal.add(
+                        new Empleado(
+                                rs.getString("idEmpleado"),
+                                rs.getString("Nombre"),
+                                rs.getString("Apellidos"),
+                                rs.getInt("Jefe")));
+            }
+            rs.close();
+            stmt.close();
+            
             stmt = con.prepareStatement("SELECT * FROM empleados");
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -131,10 +145,9 @@ public class Empleado extends Persona {
                                 rs.getString("Nombre"),
                                 rs.getString("Telefono"),
                                 JefeList(rs.getInt("Jefe"))
-                                
                         ));
-                
             }
+
         } catch (SQLException ex) {
             System.out.println(" fillEmpleadoList :" + ex.getLocalizedMessage());
         } finally {
@@ -148,45 +161,12 @@ public class Empleado extends Persona {
         }
     }
 
-     public static String JefeList(int empleado) {
-        
-        ObservableList<Empleado> listaJefe = FXCollections.observableArrayList();
+    public static String JefeList(int empleado) {
+
         boolean found = false;
         String nombre = "";
-        Conexion conexion = new Conexion();
-        Connection con = conexion.conectar();
-        ResultSet rs = null;
-        PreparedStatement stmt = null;
 
-        try {
-            stmt = con.prepareStatement("SELECT * FROM empleados");
-            rs = stmt.executeQuery();
-            while (rs.next()) {
-                listaJefe.add(
-                        new Empleado(
-                                /*
-                                (String apellido, String cargo, fecha fNacimiento, 
-            Fecha fContrato, String jefe, String id, String nombre, String telefono)
-                                 */
-                                rs.getString("idEmpleado"),
-                                rs.getString("Nombre"),
-                                rs.getString("Apellidos"),
-                                rs.getInt("Jefe")
-                        ));
-                
-            }
-        } catch (SQLException ex) {
-            System.out.println(" fillEmpleadoList :" + ex.getLocalizedMessage());
-        } finally {
-            try {
-                rs.close();
-                stmt.close();
-                con.close();
-            } catch (SQLException ex) {
-                System.out.println(Empleado.class.getName() + " Finally ->fillEmpleadoList :" + ex.getMessage());
-            }
-        }
-        Iterator<Empleado> ite = listaJefe.iterator();
+        Iterator<Empleado> ite = listaEmpleadoLocal.iterator();
         Empleado obj;
 
         while (ite.hasNext() && found == false) {
@@ -197,7 +177,6 @@ public class Empleado extends Persona {
             }
         }
         return nombre;
-     }
-   
+    }
 
 }

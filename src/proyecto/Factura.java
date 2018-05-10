@@ -9,7 +9,6 @@ import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-
 public class Factura {
 
     private String numPedido;
@@ -33,8 +32,9 @@ public class Factura {
 
     }
 //pendiente de arreglar
+
     public void setTotal() {
-        
+
         double total = 0;
         for (LineaFactura obj : lineas) {
             total = obj.getSubtotal() - (obj.getPrecio() * obj.getCantidad() * (obj.getDescuento() / 100) * 0.21);
@@ -85,6 +85,13 @@ public class Factura {
         return fecha;
     }
 
+//    public boolean getFechaTipoFecha(Fecha f1, Fecha f2) {
+//        if (f1.mayorIgualQue(Fecha.stringToFecha(this.fecha)) && f2.menorIgualQue(Fecha.stringToFecha(this.fecha))) {
+//            return true;
+//        }
+//        return false;
+//    }
+
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
@@ -102,7 +109,7 @@ public class Factura {
     }
 
     public static void fillFacturasList(ObservableList<Factura> listaFacturas) {
-        
+
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
         ResultSet rs = null;
@@ -133,11 +140,10 @@ public class Factura {
             }
         }
     }
-    
+
 //    public void fetchLineas(){
 //        for(LineaFactura obj:lineas){
 //            this.obj.getNumPedido()
 //        }
 //    }
-
 }

@@ -9,9 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -142,15 +139,9 @@ public class LineaFactura {
             stmt = con.prepareStatement("SELECT * FROM lineaspedido");
             rs = stmt.executeQuery();
             while (rs.next()) {
-                double p = rs.getDouble("precio");
-                int c = rs.getInt("cantidad");
-                double d = rs.getDouble("descuento");
-                double subtotal =  0;
-                if (d >0){
-                    subtotal = p * c * ((100-d)/100);
-                }else{
-                    subtotal = p * c;
-                }
+                double subtotalL =0;
+                subtotalL = rs.getDouble("precio") * rs.getInt("cantidad");
+                
                 
                 listaFacturas.add(
                         new LineaFactura( //int numLinea, int numPedido, int producto, double precio, 
@@ -162,7 +153,7 @@ public class LineaFactura {
                                 rs.getInt("cantidad"),
                                 rs.getDouble("descuento"),
                                 //rs.getString("nombreProducto"),
-                                subtotal                                
+                                subtotalL                                
                         ));
             }
 

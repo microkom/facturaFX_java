@@ -5,18 +5,10 @@
  */
 package proyecto;
 
-import java.awt.Insets;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -29,8 +21,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -54,8 +44,11 @@ public class FXMLBusquedaFacturaController implements Initializable {
     ObservableList<Factura> lista = FXCollections.observableArrayList();
     FilteredList<Factura> listaF = new FilteredList(lista, obj -> true);
 
+    private int tipoUsuario;
+    private int empleado;
     int posicionItem = 0;
     int numFactura = 0;
+
     @FXML
     private TableView<Factura> tablaBusquedaF, tablaBusqueda;
     @FXML
@@ -65,10 +58,9 @@ public class FXMLBusquedaFacturaController implements Initializable {
     @FXML
     private DatePicker dpFechaFinal, dpFechaInicial;
     @FXML
-    private Button btFiltrarFecha, btEditarFactura, btEditarFactura2;
+    private Button btFiltrarFecha, btEditarFactura, btEditarFactura2, btMenuPrincipal, btMenuPrincipal2;
     @FXML
     private Label lbTitulo;
-  
 
     private final ListChangeListener<Factura> selectorItemFactura = new ListChangeListener<Factura>() {
         @Override
@@ -85,6 +77,12 @@ public class FXMLBusquedaFacturaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
 
         Factura.fillFacturasList(listaFacturas);
 
@@ -123,56 +121,76 @@ public class FXMLBusquedaFacturaController implements Initializable {
         tablaBusquedaF.setDisable(true);
     }
 
+//    @FXML
+//    public void filtroFechaFX() {
+//        Fecha fechaMayor = Fecha.stringToFecha(dpFechaFinal.getValue().toString());
+//        Fecha fechaMenor = Fecha.stringToFecha(dpFechaInicial.getValue().toString());
+//        btFiltrarFecha.setOnKeyReleased(keyEvent -> {
+//            listaF.setPredicate(obj
+//                    -> obj.getFechaTipoFecha(fechaMenor,fechaMayor));
+//        });
+//    }
+
     @FXML
     public void filtroFechaFX() {
+        try {
+            if (validaFechaVacia("Hay que seleccionar las fechas primero", dpFechaFinal.getValue() == null)) {
+                if (validaFechaVacia("Hay que seleccionar las fechas primero", dpFechaInicial.getValue() == null)) {
 
-        listaF.clear();
-        Fecha fechaMayor = Fecha.stringToFecha(dpFechaFinal.getValue().toString());
-        Fecha fechaMenor = Fecha.stringToFecha(dpFechaInicial.getValue().toString());
+                    Fecha fechaMayor = Fecha.stringToFecha(dpFechaFinal.getValue().toString());
+                    Fecha fechaMenor = Fecha.stringToFecha(dpFechaInicial.getValue().toString());
+                    
+                    lista.clear();
+                    for (Factura obj : listaFacturas) {
+                        Fecha fechaObj = Fecha.stringToFecha(obj.getFecha());
 
-        for (Factura obj : listaFacturas) {
-            Fecha fechaObj = Fecha.stringToFecha(obj.getFecha());
+                        if (fechaObj.mayorIgualQue(fechaMenor) && fechaObj.menorIgualQue(fechaMayor)) {
+                            lista.add(obj);
+                        }
+                    }
 
-            if (fechaObj.mayorIgualQue(fechaMenor) && fechaObj.menorIgualQue(fechaMayor)) {
-                lista.add(obj);
+                    tablaBusquedaF.setItems(listaF);
+
+                    tcNumF.setCellValueFactory(new PropertyValueFactory<Factura, String>("numPedido"));
+                    tcClienteF.setCellValueFactory(new PropertyValueFactory<Factura, String>("nombreCliente"));
+                    tcFechaF.setCellValueFactory(new PropertyValueFactory<Factura, String>("fecha"));
+                    tcTotal.setCellValueFactory(new PropertyValueFactory<Factura, String>("subtotal"));
+
+                    tablaBusquedaF.setDisable(false);
+                    
+                }
             }
+        } catch (Exception ex) {
+            System.out.println("filtroFechaFX: " + ex.getMessage());
+            System.out.println("filtroFechaFX: localizedMessage " + ex.getLocalizedMessage());
         }
-        
-        tablaBusquedaF.setItems(listaF);
-
-        tcNumF.setCellValueFactory(new PropertyValueFactory<Factura, String>("numPedido"));
-        tcClienteF.setCellValueFactory(new PropertyValueFactory<Factura, String>("nombreCliente"));
-        tcFechaF.setCellValueFactory(new PropertyValueFactory<Factura, String>("fecha"));
-        tcTotal.setCellValueFactory(new PropertyValueFactory<Factura, String>("subtotal"));
-
-        tablaBusquedaF.setDisable(false);
-        
     }
-
+     
     @FXML
     public void editarFacturaFX() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLFactura.fxml"));
-            
-            Parent root1 = (Parent) fxmlLoader.load();
-            FXMLFacturaController controller = fxmlLoader.<FXMLFacturaController>getController();
-            controller.initVariable(numFactura);
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
 
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+        if (validateInteger("Hay que seleccionar una factura", numFactura)) {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLFactura.fxml"));
 
-            stage.setTitle("..:: Editar Factura " + numFactura + " ::..");
+                Parent root1 = (Parent) fxmlLoader.load();
+                FXMLFacturaController controller = fxmlLoader.<FXMLFacturaController>getController();
+                controller.initVariable(numFactura, tipoUsuario, empleado);
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1));
 
-            //cierra la ventana abierta anteriormente
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+
+                stage.setTitle("..:: Editar Factura " + numFactura + " ::..");
+
+                //cierra la ventana abierta anteriormente
 //            Stage stage2 = (Stage) bt_categorias.getScene().getWindow();
 //            stage2.close();
-        } catch (IOException ex) {
-            System.out.println("categoriasFX: " + ex.getMessage());
+            } catch (IOException ex) {
+                System.out.println("categoriasFX: " + ex.getMessage());
+            }
         }
-        System.out.println(numFactura);
-
     }
 
     //para borrar las lineas en la factura
@@ -225,6 +243,58 @@ public class FXMLBusquedaFacturaController implements Initializable {
         if (item != null) {
             numFactura = Integer.parseInt(item.getNumPedido());
 
+        }
+
+    }
+
+    private boolean validateInteger(String text, int field) {
+        if (field == 0) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de campos");
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validaFechaVacia(String text, boolean field) {
+        if (field) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de campos");
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    public void menuPrincipalFX() {
+        System.out.println("presionado");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+            stage.setTitle("..::Menú Principal::..");
+
+            //cierra la ventana abierta anteriormente
+            Stage stage2 = (Stage) btMenuPrincipal.getScene().getWindow();
+            stage2.close();
+            Stage stage3 = (Stage) btMenuPrincipal2.getScene().getWindow();
+            stage3.close();
+
+        } catch (IOException ex) {
+            ex.getMessage();
         }
     }
 }

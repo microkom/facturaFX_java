@@ -13,18 +13,19 @@
             <AnchorPane minHeight="-Infinity" prefHeight="92.0" prefWidth="675.0">
                <children>
                   <Label layoutX="23.0" layoutY="18.0" styleClass="titulo16" stylesheets="@estilo.css" text="FACTURA" />
-                  <Label layoutX="394.0" layoutY="56.0" styleClass="titulo16" stylesheets="@estilo.css" text="Nº" />
-                  <Label fx:id="lbNumFactura" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="424.0" layoutY="55.0" styleClass="titulo16" stylesheets="@estilo.css" text="numFactura" />
-                  <Label fx:id="lbFecha" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="521.0" layoutY="55.0" prefHeight="25.0" prefWidth="90.0" styleClass="titulo16" stylesheets="@estilo.css" text="fecha" />
-                  <Label fx:id="lbCliente" alignment="CENTER_LEFT" contentDisplay="LEFT" layoutX="84.0" layoutY="55.0" prefHeight="25.0" prefWidth="310.0" styleClass="titulo16" stylesheets="@estilo.css" text="cliente" />
+                  <Label layoutX="573.0" layoutY="34.0" styleClass="titulo16" stylesheets="@estilo.css" text="Fecha" />
+                  <Label layoutX="391.0" layoutY="55.0" styleClass="titulo16" stylesheets="@estilo.css" text="Nº" />
+                  <Label fx:id="lbNumFactura" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="420.0" layoutY="55.0" styleClass="titulo16" stylesheets="@estilo.css" text="numFactura" />
+                  <Label fx:id="lbFecha" alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="560.0" layoutY="55.0" styleClass="titulo16" stylesheets="@estilo.css" text="fecha" />
+                  <Label fx:id="lbCliente" alignment="CENTER_LEFT" contentDisplay="LEFT" layoutX="84.0" layoutY="55.0" prefHeight="25.0" prefWidth="264.0" styleClass="titulo16" stylesheets="@estilo.css" text="cliente" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="186.0" prefWidth="675.0">
                <children>
                   <TableView fx:id="tvFactura" prefHeight="177.0" prefWidth="675.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="tcNumLinea" prefWidth="75.0" text="Num" />
-                      <TableColumn fx:id="tcProducto" prefWidth="376.0" text="Producto" />
+                      <TableColumn fx:id="tcNumLinea" prefWidth="45.0" text="Num" />
+                      <TableColumn fx:id="tcProducto" prefWidth="406.0" text="Producto" />
                         <TableColumn fx:id="tcPrecio" prefWidth="68.0" text="Precio" />
                         <TableColumn fx:id="tcCantidad" prefWidth="74.0" text="Cantidad" />
                         <TableColumn fx:id="tcDescuento" prefWidth="77.0" text="Descuento" />
@@ -53,6 +54,7 @@
                   <Button fx:id="btAgregar" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#pasarItemAListaFacturaFX" prefHeight="25.0" prefWidth="73.0" text="Agregar" />
                   <TextField fx:id="tfActDesc" layoutX="153.0" layoutY="14.0" prefHeight="25.0" prefWidth="48.0" promptText="Desc." />
                   <TextField fx:id="tfLineaAActualizar" layoutX="389.0" layoutY="16.0" prefHeight="25.0" prefWidth="31.0" promptText="Elim." />
+                  <Button fx:id="btGuardar" layoutX="391.0" layoutY="82.0" mnemonicParsing="false" onAction="#guardarFacturaFX" text="Guardar" />
                </children>
             </AnchorPane>
          </children>

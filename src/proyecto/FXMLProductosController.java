@@ -45,6 +45,8 @@ import static proyecto.Producto.listaProveedor;
  */
 public class FXMLProductosController implements Initializable {
 
+    private int tipoUsuario;
+    private int empleado;
     private String genIdProducto = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -87,6 +89,12 @@ public class FXMLProductosController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //PRODUCTOS
             //rellenar lista de productos en listado
@@ -207,12 +215,13 @@ public class FXMLProductosController implements Initializable {
                 if (validateEmptyField("Indique Existencias. Si no hay escriba 0", tfExistencias.getText().isEmpty())) {
                     if (validateEmptyField("precio", tfPrecio.getText().isEmpty())) {
                         if (validateFormatNumber("Revise el precio", tfPrecio.getText())) {
-                        if (validateFormatNumber("Revise las existencias", tfExistencias.getText())) {
-                            guardarNuevoRegistro();
-                            actualizaTablaBusqueda();
-                            estadoInicialBotonesVisibles();
+                            if (validateFormatNumber("Revise las existencias", tfExistencias.getText())) {
+                                guardarNuevoRegistro();
+                                actualizaTablaBusqueda();
+                                estadoInicialBotonesVisibles();
+                            }
                         }
-                    }}
+                    }
                 }
             }
         }
@@ -444,6 +453,8 @@ public class FXMLProductosController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 

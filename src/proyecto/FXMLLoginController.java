@@ -5,6 +5,7 @@
  */
 package proyecto;
 
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -33,6 +35,8 @@ public class FXMLLoginController implements Initializable {
 
     private String usuario;
     private String contrasena;
+    private int tipoUsuario;
+    private int empleado;
     private ResultSet rs;
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
@@ -100,7 +104,6 @@ public class FXMLLoginController implements Initializable {
         tfUser.setPromptText("Usuario");
         tfPass.setPromptText("Contraseña");
         try {
-
             stmt = con.prepareStatement("SELECT * from usuarios where usuario=? and contrasena=?");
             stmt.setString(1, usuario);
             stmt.setString(2, contrasena);
@@ -108,23 +111,26 @@ public class FXMLLoginController implements Initializable {
 
             if (rs.next()) {
                 try {
+                    this.tipoUsuario = rs.getInt("tipo");
+                    this.empleado = rs.getInt("empleado");
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
                     FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
-                    controller.setUser(usuario);
+                    controller.initVariable(this.tipoUsuario,this.empleado);
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root1));
 
                     stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.getIcons().add(new Image("s_supermarket.png"));
                     stage.show();
 
-                    stage.setTitle("..::Menú Principal::..");
+                    stage.setTitle(" ·· Menú Principal·· ");
 
                     //cierra la ventana abierta anteriormente
                     Stage stage2 = (Stage) bt_login.getScene().getWindow();
                     stage2.close();
 
-                } catch (Exception ex) {
+                } catch (IOException | SQLException ex) {
                     ex.getMessage();
                 }
                 System.out.println("login ok");

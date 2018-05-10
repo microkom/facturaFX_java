@@ -43,7 +43,8 @@ import javafx.stage.Stage;
  */
 public class FXMLProveedoresController implements Initializable {
 
-    private String usuario;
+    private int tipoUsuario;
+    private int empleado;
 
     private String genIdProveedor = "";
 
@@ -81,8 +82,16 @@ public class FXMLProveedoresController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @Override
+        @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+
+    }
+
+    
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //PROVEEDORES
             //rellenar lista de proveedores en listado
@@ -414,6 +423,8 @@ public class FXMLProveedoresController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 

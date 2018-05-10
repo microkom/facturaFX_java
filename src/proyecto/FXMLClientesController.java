@@ -39,8 +39,10 @@ import javafx.stage.Stage;
  *
  * @author German
  */
-public class FXMLCustomersController implements Initializable {
+public class FXMLClientesController implements Initializable {
 
+    private int tipoUsuario;
+    private int empleado;
     private String genIdCliente = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -66,7 +68,7 @@ public class FXMLCustomersController implements Initializable {
 
     //IDs botones nuevo registro
     @FXML
-    private Button bt_nuevoCliente, bt_cancelarNuevoCliente, bt_borrarRegistro, bt_guardarNuevoRegistro,bt_menuPrincipal;
+    private Button bt_nuevoCliente, bt_cancelarNuevoCliente, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
 
     private final ListChangeListener<Cliente> selectorTablaClientes = new ListChangeListener<Cliente>() {
         @Override
@@ -80,6 +82,13 @@ public class FXMLCustomersController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //CLIENTES
             //rellenar lista de clientes en listado
@@ -112,7 +121,6 @@ public class FXMLCustomersController implements Initializable {
 
         disableTextFieldEditable();
         estadoInicialBotonesVisibles();
-
     }
 
     //Método que devuelve el objeto de la fila seleccionada
@@ -145,26 +153,29 @@ public class FXMLCustomersController implements Initializable {
             tfTelefono.setText(cliente.getTelefono());
         }
     }
+
     @FXML
-    private void menuPrincipalFX(){
+    private void menuPrincipalFX() {
         try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-                    Parent root1 = (Parent) fxmlLoader.load();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root1));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
 
-                    stage.initModality(Modality.APPLICATION_MODAL);
-                    stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
 
-                    stage.setTitle("..::Menú Principal::..");
+            stage.setTitle("..::Menú Principal::..");
 
-                    //cierra la ventana abierta anteriormente
-                    Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
-                    stage2.close();
+            //cierra la ventana abierta anteriormente
+            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
+            stage2.close();
 
-                } catch (Exception ex) {
-                    ex.getMessage();
-                }
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
     }
 
     @FXML
@@ -179,7 +190,7 @@ public class FXMLCustomersController implements Initializable {
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
         disableTextFieldEditable();
-         clearForm();
+        clearForm();
     }
 
     @FXML
@@ -406,4 +417,5 @@ public class FXMLCustomersController implements Initializable {
         }
         return true;
     }
+
 }

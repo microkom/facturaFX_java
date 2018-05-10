@@ -69,6 +69,10 @@ public class Fecha {
         final LocalDate fechaConvertida = LocalDate.parse(fecha, formato);
         return fechaConvertida;
     }
+    
+    public boolean contains(Fecha fecha){
+        return true;
+    }
 
     public boolean menorQue(Fecha fecha) {
         boolean lower = false;

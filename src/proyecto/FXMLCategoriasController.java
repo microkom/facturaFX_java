@@ -41,6 +41,8 @@ import javafx.stage.Stage;
  */
 public class FXMLCategoriasController implements Initializable {
 
+    private int tipoUsuario;
+    private int empleado;
     private String genIdCategoria = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -80,6 +82,12 @@ public class FXMLCategoriasController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //CLIENTES
             //rellenar lista de categorias en listado
@@ -144,6 +152,8 @@ public class FXMLCategoriasController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 

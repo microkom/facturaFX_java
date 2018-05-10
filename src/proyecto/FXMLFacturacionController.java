@@ -5,8 +5,7 @@
  */
 package proyecto;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,18 +28,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FXMLFacturacionController implements Initializable {
 
-    private double IVA = 0.21;
+    private int tipoUsuario;
+    private int empleado;
+    private final double IVA = 0.21;
+    private String idCliente = "";
+    private int idProducto = 0;
 
     private ObservableList<Cliente> listaClientes = FXCollections.observableArrayList();
     private FilteredList<Cliente> listaClientesFiltrada = new FilteredList(listaClientes, obj -> true);
@@ -54,7 +58,7 @@ public class FXMLFacturacionController implements Initializable {
     int posicionItem = 0;
 
     @FXML
-    private Label lbFecha, titleFacturacion, lbIdProducto, lbIdCliente, lbNumPedido, lbIVA, lbDescuentoTotal, lbTotal, lbSubtotal, lbSubtotalDescuento, lbTextoFecha;
+    private Label lbFecha, titleFacturacion, lbNumPedido, lbIVA, lbDescuentoTotal, lbTotal, lbSubtotal, lbSubtotalDescuento, lbTextoFecha;
 
     @FXML
     private TableView<Cliente> tablaBusquedaCliente;
@@ -72,10 +76,8 @@ public class FXMLFacturacionController implements Initializable {
     private TableColumn<LineaFactura, String> tCnumLinea, tCnombreProductoFactura, tCprecio, tCcantidad, tCdescuento, tCsubtotal;
 
     @FXML
-    private TextField tfIdCliente, tfNombreCliente, tfContactoCliente, tfCargoContactoCliente,
-            tfDireccionCliente, tfCiudadCliente, tfPaisCliente, tfTelefono, tfBusquedaClientes,
-            tfBusquedaProductos, tfIdProducto, tfNombreProducto, tfPrecioProducto, tfCategoria, tfExistencias, tfProveedor,
-            tfCantidadLineaFactura, tfDescuentoLineaFactura,
+    private TextField tfNombreCliente,  tfBusquedaClientes,
+            tfBusquedaProductos, tfNombreProducto, tfCantidadLineaFactura, tfDescuentoLineaFactura,
             tfLineaABorrar;
 
     @FXML
@@ -101,19 +103,28 @@ public class FXMLFacturacionController implements Initializable {
             ponerItemSeleccionado();
         }
     };
+    @FXML
+    private Pane pnRightFact, pnLeftFact;
+    @FXML
+    private AnchorPane pnAnchor3;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //CLIENTES
             //rellenar lista de clientes en listado
             Cliente.fillClientesList(listaClientes);
 
             //ocultar campos id
-            lbIdProducto.setVisible(false);
-            lbIdCliente.setVisible(false);
-            tfIdCliente.setVisible(false);
-            tfIdProducto.setVisible(false);
+         //   lbIdProducto.setVisible(false);
+        //    lbIdCliente.setVisible(false); //borrar
+         //   tfIdProducto.setVisible(false);
 
             //lista de clientes para filtrar
             tablaBusquedaCliente.setItems(listaClientesFiltrada);
@@ -209,15 +220,16 @@ public class FXMLFacturacionController implements Initializable {
         final Cliente cliente = getTablaClientesSeleccionado();
         posicionCliente = listaClientes.indexOf(cliente);
         if (cliente != null) {
-            tfIdCliente.setText(cliente.getId());
+            idCliente = cliente.getId();
             tfNombreCliente.setText(cliente.getNombre());
+ /*  borrar
             tfContactoCliente.setText(cliente.getContacto());
             tfCargoContactoCliente.setText(cliente.getCargoContacto());
             tfDireccionCliente.setText(cliente.getDireccion());
             tfCiudadCliente.setText(cliente.getCiudad());
             tfPaisCliente.setText(cliente.getPais());
             tfTelefono.setText(cliente.getTelefono());
-        }
+   */     }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -248,13 +260,14 @@ public class FXMLFacturacionController implements Initializable {
             final Producto producto = getTablaProductoSeleccionado();
             posicionProducto = listaProductos.indexOf(producto);
             if (producto != null) {
-                tfIdProducto.setText(Integer.toString(producto.getId()));
+                idProducto = producto.getId();
                 tfNombreProducto.setText(producto.getNombreProducto());
+/* borrar
                 tfPrecioProducto.setText(Integer.toString(producto.getPrecio()));
                 tfCategoria.setText("--revisar--");
                 tfExistencias.setText(Integer.toString(producto.getExistencias()));
                 tfProveedor.setText("--revisar--");
-
+*/
             }
         } catch (Exception ex) {
             System.out.println("getTablaProductoSeleccionado: " + ex.getMessage());
@@ -264,12 +277,10 @@ public class FXMLFacturacionController implements Initializable {
     ///////////////////////////////////////////////////////////////////////////
     //  LINEA FACTURA
     ///////////////////////////////////////////////////////////////////////////
-    
-
     @FXML
     public void pasarItemAListaFactura() {
 
-        if (validateEmptyField("Debe seleccionar un producto", tfIdProducto.getText().isEmpty())) {
+        if (validateEmptyField("Debe seleccionar un producto", idProducto==0)) {
             if (validateEmptyField("Debe ingresar la cantidad", tfCantidadLineaFactura.getText().isEmpty())) {
                 if (validateEmptyField("Debe ingresar el descuento", tfDescuentoLineaFactura.getText().isEmpty())) {
                     if (validateFormatNumber("Cantidad", tfCantidadLineaFactura.getText())) {
@@ -279,21 +290,21 @@ public class FXMLFacturacionController implements Initializable {
                             double descuento = Double.parseDouble(tfDescuentoLineaFactura.getText());
                             int cantidad = Integer.parseInt(tfCantidadLineaFactura.getText());
 
-                            if (tfIdProducto != null) {
+                            if (idProducto != 0) {
 
                                 numLinea++;
 
                                 for (Producto obj : listaProductos) {
 
                                     //comparacion id ObservableList con id en textField
-                                    if (obj.getId() == Integer.parseInt(tfIdProducto.getText())) {
+                                    if (obj.getId() == idProducto) {
                                         double total = 0;
 
-                                        if (descuento > 0) {
-                                            total = obj.getPrecio() * cantidad * ((100 - descuento) / 100);
-                                        } else {
-                                            total = obj.getPrecio() * cantidad;
-                                        }
+//                    borrar                    if (descuento > 0) {
+//                                            total = obj.getPrecio() * cantidad * (100 -( descuento /100));
+//                                        } else {
+                                        total = obj.getPrecio() * cantidad;
+//                                        }
 
                                         //linea de factura para agregar al Array
                                         nuevaLinea(new LineaFactura(
@@ -324,11 +335,11 @@ public class FXMLFacturacionController implements Initializable {
 
     private void totales() {
 
-        lbSubtotal.setText(dosDecimales(sumaSubtotal()));
+        lbSubtotal.setText(dosDecimales(sumaSubtotalSinDescuento()));
         lbDescuentoTotal.setText(dosDecimales(descuentoTotal()));
-        lbSubtotalDescuento.setText(dosDecimales(sumaSubtotal() - descuentoTotal()));
+        lbSubtotalDescuento.setText(dosDecimales(sumaSubtotalSinDescuento() - descuentoTotal()));
         lbIVA.setText(dosDecimales(importeTotalImpuestos()));
-        lbTotal.setText(dosDecimales(sumaSubtotal() - descuentoTotal() + importeTotalImpuestos()));
+        lbTotal.setText(dosDecimales(sumaSubtotalSinDescuento() - descuentoTotal() + importeTotalImpuestos()));
     }
 
     //recibe un double y lo devuelve como String con 2 decimales
@@ -341,20 +352,18 @@ public class FXMLFacturacionController implements Initializable {
     private void guardarFactura() {
         lbNumPedido.setText(Integer.toString(nuevoNumeroFactura()));
         if (validateEmptyField("No hay articulos agregados a la factura", tablaLineaFactura.getItems().isEmpty())) {
-            if (validateEmptyField("No ha seleccionado ningún cliente", tfIdCliente.getText().isEmpty())) {
+            if (validateEmptyField("No ha seleccionado ningún cliente", idCliente.isEmpty())) {
                 Conexion conexion = new Conexion();
                 Connection con = conexion.conectar();
                 ResultSet rs = null;
                 PreparedStatement stmt = null;
 
-                String numFactura = Integer.toString(nuevoNumeroFactura());;
-                String cliente = tfIdCliente.getText();
-                String empleado = "3";
-                System.out.println(Fecha.hoyAnyoMesDia());
+                String numFactura = Integer.toString(nuevoNumeroFactura());
+
                 try {
                     stmt = con.prepareStatement("INSERT INTO pedidos set numPedido="
-                            + numFactura + ", Cliente=\"" + cliente + "\", empleado="
-                            + empleado + " ,Fecha=\"" + Fecha.hoyAnyoMesDia() + "\"");
+                            + numFactura + ", Cliente=\"" + this.idCliente + "\", empleado="
+                            + this.empleado + " ,Fecha=\"" + Fecha.hoyAnyoMesDia() + "\"");
 
                     stmt.executeUpdate();
 
@@ -364,12 +373,14 @@ public class FXMLFacturacionController implements Initializable {
                         int producto = obj.getProducto();
                         int cantidad = obj.getCantidad();
                         double precio = obj.getPrecio();
-                        double descuento = obj.getDescuento();
-
+                        double descuento = obj.getDescuento() / 100;
+                        double iva = (sumaSubtotalSinDescuento()-(descuento * sumaSubtotalSinDescuento())) * IVA;
+                        double subtotal = (precio * cantidad) - (descuento * sumaSubtotalSinDescuento()) + iva;
+                        
                         stmt = con.prepareStatement("INSERT INTO lineasPedido ( NumLinea, "
-                                + "numPedido, producto, precio, cantidad, descuento) "
+                                + "numPedido, producto, precio, cantidad, descuento,iva, subtotal) "
                                 + " VALUES (" + numLinea + "," + numFactura + ","
-                                + producto + "," + precio + "," + cantidad + "," + descuento + ")");
+                                + producto + "," + precio + "," + cantidad + "," + descuento + "," + iva + "," + subtotal + ")");
                         stmt.executeUpdate();
                     }
                     Alert alert = new Alert(AlertType.INFORMATION);
@@ -397,9 +408,8 @@ public class FXMLFacturacionController implements Initializable {
 
     private void limpiarFactura() {
         tfNombreCliente.clear();
-        tfIdCliente.clear();
         tfNombreProducto.clear();
-        tfIdProducto.clear();
+        //tfIdProducto.clear();
         lineaFacturaList.clear();
         lbIVA.setText("****");
         lbDescuentoTotal.setText("****");
@@ -428,7 +438,7 @@ public class FXMLFacturacionController implements Initializable {
                 lineaFacturaList.get(j).setSubtotal(
                         lineaF.getPrecio()
                         * lineaFacturaList.get(j).getCantidad()
-                        * (100 - lineaFacturaList.get(j).getDescuento()) / 100);
+                        * (lineaFacturaList.get(j).getDescuento() / 100));
             } else {
                 //calcular subtotal cuando el descuento es igual a cero
                 lineaFacturaList.get(j).setSubtotal(
@@ -462,33 +472,6 @@ public class FXMLFacturacionController implements Initializable {
         return numIndex;
     }
 
-    //Sacar el último número de la factura de la base de datos
-    private int nuevoNumeroFactura() {
-        Conexion conexion = new Conexion();
-        Connection con = conexion.conectar();
-        ResultSet rs = null;
-        PreparedStatement stmt = null;
-        int numFactura = 0;
-        try {
-            stmt = con.prepareStatement("SELECT max(numpedido) FROM pedidos");
-            stmt.executeQuery();
-            rs = stmt.executeQuery();
-            rs.first();
-            numFactura = rs.getInt(1);
-        } catch (SQLException ex) {
-            System.out.println("fillProductosList: " + ex.getMessage());
-        } finally {
-            try {
-                stmt.close();
-                rs.close();
-                con.close();
-            } catch (SQLException ex) {
-                System.out.println("Finally, fillProductosList: " + ex.getMessage());
-            }
-        }
-        return numFactura + 1;
-    }
-
     @FXML
     public void borrarLineaNumero() {
         if (validateEmptyField("Debe seleccionar un articulo para borrarlo", tfLineaABorrar.getText().isEmpty())) {
@@ -511,7 +494,6 @@ public class FXMLFacturacionController implements Initializable {
 
     }
 
-    
     //para borrar las lineas en la factura
     //Método que devuelve el objeto de la fila seleccionada
     public LineaFactura getItemSeleccionado() { //de aqui va a los textfields
@@ -537,7 +519,7 @@ public class FXMLFacturacionController implements Initializable {
         }
     }
 
-    public double sumaSubtotal() {
+    public double sumaSubtotalSinDescuento() {
         double total = 0;
 
         for (LineaFactura obj : lineaFacturaList) {
@@ -565,8 +547,9 @@ public class FXMLFacturacionController implements Initializable {
     //ImporteTotalImpuestos(): Devuelve el importe total con el iva(21%).
     public double importeTotalImpuestos() {
         //calculo del importe total más el IVA
-        return (sumaSubtotal() - descuentoTotal()) * IVA;
+        return (sumaSubtotalSinDescuento() - descuentoTotal()) * IVA;
     }
+
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);
@@ -601,6 +584,8 @@ public class FXMLFacturacionController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -613,9 +598,36 @@ public class FXMLFacturacionController implements Initializable {
             Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
             stage2.close();
 
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.getMessage();
         }
+    }
+
+    //Sacar el último número de la factura de la base de datos
+    private int nuevoNumeroFactura() {
+        Conexion conexion = new Conexion();
+        Connection con = conexion.conectar();
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        int numFactura = 0;
+        try {
+            stmt = con.prepareStatement("SELECT max(numpedido) FROM pedidos");
+            stmt.executeQuery();
+            rs = stmt.executeQuery();
+            rs.first();
+            numFactura = rs.getInt(1);
+        } catch (SQLException ex) {
+            System.out.println("fillProductosList: " + ex.getMessage());
+        } finally {
+            try {
+                stmt.close();
+                rs.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Finally, fillProductosList: " + ex.getMessage());
+            }
+        }
+        return numFactura + 1;
     }
 
 }

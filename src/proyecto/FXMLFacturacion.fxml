@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLFacturacionController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="567.0" prefWidth="675.0" stylesheets="@estilo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLFacturacionController">
    <children>
-      <VBox layoutY="51.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="675.0" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="51.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="567.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="79.0" prefWidth="675.0">
                <children>
@@ -19,37 +20,68 @@
                   <Label fx:id="lbFecha" layoutX="379.0" layoutY="31.0" styleClass="numFactura" stylesheets="@estilo.css" text="Fecha real" />
                </children>
             </AnchorPane>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="104.0" prefWidth="675.0">
+          <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="181.0" prefWidth="675.0" styleClass="anchor3" stylesheets="@estilo.css">
                <children>
-                  <Label layoutX="22.0" layoutY="14.0" styleClass="titulo16" stylesheets="@estilo.css" text="CLIENTE" />
-                  <Label layoutX="38.0" layoutY="42.0" text="Nombre" />
-                  <TextField fx:id="tfNombreCliente" layoutX="110.0" layoutY="38.0" prefHeight="22.0" prefWidth="193.0" promptText="Nombre" stylesheets="@estilo.css" />
-                  <Label fx:id="lbIdCliente" layoutX="35.0" layoutY="68.0" text="IdCliente" />
-                  <TextField fx:id="tfIdCliente" layoutX="134.0" layoutY="64.0" prefHeight="22.0" prefWidth="84.0" promptText="id" stylesheets="@estilo.css" />
-                  <TextField fx:id="tfBusquedaClientes" layoutX="134.0" layoutY="13.0" prefHeight="22.0" prefWidth="160.0" promptText="Búsqueda Clientes" />
-                  <TableView fx:id="tablaBusquedaCliente" layoutX="378.0" layoutY="13.0" prefHeight="73.0" prefWidth="265.0" styleClass="noheader" stylesheets="@estilo.css">
-                    <columns>
-                      <TableColumn fx:id="tCnombre" prefWidth="222.0" />
-                    </columns>
-                  </TableView>
+                  <HBox layoutY="20.0" prefHeight="179.0" prefWidth="675.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Pane fx:id="pnRightFact" prefHeight="180.0" prefWidth="330.0" stylesheets="@estilo.css">
+                           <children>
+                              <Label layoutX="35.0" layoutY="21.0" styleClass="titulo16" stylesheets="@estilo.css" text="CLIENTE" />
+                              <TextField fx:id="tfNombreCliente" layoutX="134.0" layoutY="20.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" stylesheets="@estilo.css" />
+                          <!--   BORRAR 
+                                <Label fx:id="lbIdCliente" layoutX="35.0" layoutY="68.0" text="IdCliente" />
+                                      <TextField fx:id="tfIdCliente" layoutX="134.0" layoutY="64.0" prefHeight="22.0" prefWidth="84.0" promptText="id" stylesheets="@estilo.css" />
+                                 -->   <TextField fx:id="tfBusquedaClientes" layoutX="28.0" layoutY="64.0" prefHeight="22.0" prefWidth="265.0" promptText="Búsqueda Clientes" />
+                              <TableView fx:id="tablaBusquedaCliente" layoutX="28.0" layoutY="86.0" prefHeight="73.0" prefWidth="265.0" styleClass="noheader" stylesheets="@estilo.css">
+                                <columns>
+                                  <TableColumn fx:id="tCnombre" prefWidth="222.0" />
+                                </columns>
+                              </TableView>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <styleClass>
+                              <String fx:value="fondo1" />
+                              <String fx:value="bordeRedondo5px" />
+                              <String fx:value="bordeColorTeal" />
+                           </styleClass>
+                        </Pane>
+                        <Pane fx:id="pnLeftFact" prefHeight="180.0" prefWidth="330.0" styleClass="pane2" stylesheets="@estilo.css">
+                           <children>
+                              <Label layoutX="20.0" layoutY="22.0" prefHeight="20.0" prefWidth="104.0" styleClass="titulo16" stylesheets="@estilo.css" text="PRODUCTOS" />
+                              <TextField fx:id="tfBusquedaProductos" layoutX="39.0" layoutY="64.0" prefHeight="22.0" prefWidth="265.0" promptText="Búsqueda Productos" />
+                      <!--  BORRAR
+                     <Label fx:id="lbIdProducto" layoutX="60.0" layoutY="60.0" text="IdProd." />
+                                <TextField fx:id="tfIdProducto" layoutX="124.0" layoutY="56.0" promptText="Id" />
+                         -->     
+                              <TextField fx:id="tfNombreProducto" layoutX="144.0" layoutY="21.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" />
+                              <TableView fx:id="tablaBusquedaProducto" layoutX="39.0" layoutY="86.0" prefHeight="73.0" prefWidth="265.0" styleClass="noheader" stylesheets="@estilo.css">
+                                 <columns>
+                                    <TableColumn fx:id="tCnombreProducto" prefWidth="222.0" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <styleClass>
+                              <String fx:value="fondo2" />
+                              <String fx:value="bordeRedondo5px" />
+                              <String fx:value="bordeColorTeal" />
+                           </styleClass>
+                        </Pane>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="117.0" prefWidth="675.0">
-               <children>
-                  <Label layoutX="21.0" layoutY="14.0" prefHeight="20.0" prefWidth="104.0" styleClass="titulo16" stylesheets="@estilo.css" text="PRODUCTOS" />
-                  <TextField fx:id="tfBusquedaProductos" layoutX="145.0" layoutY="13.0" prefHeight="22.0" prefWidth="160.0" promptText="Búsqueda Productos" />
-                  <TextField fx:id="tfIdProducto" layoutX="124.0" layoutY="56.0" promptText="Id" />
-                  <TextField fx:id="tfNombreProducto" layoutX="145.0" layoutY="45.0" prefHeight="22.0" prefWidth="160.0" promptText="Nombre" />
-                  <Label fx:id="lbIdProducto" layoutX="60.0" layoutY="60.0" text="IdProd." />
-                  <Label layoutX="21.0" layoutY="49.0" text="Nombre" />
-                  <TableView fx:id="tablaBusquedaProducto" layoutX="378.0" layoutY="16.0" prefHeight="58.0" prefWidth="265.0" styleClass="noheader" stylesheets="@estilo.css">
-                     <columns>
-                        <TableColumn fx:id="tCnombreProducto" prefWidth="222.0" />
-                     </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefHeight="322.0" prefWidth="675.0">
+          <AnchorPane fx:id="pnAnchor3" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="667.0" stylesheets="@estilo.css">
                <children>
                   <Label layoutX="24.0" layoutY="27.0" prefHeight="20.0" prefWidth="84.0" styleClass="titulo16" stylesheets="@estilo.css" text="FACTURA" />
                   <TableView fx:id="tablaLineaFactura" layoutX="19.0" layoutY="66.0" prefHeight="127.0" prefWidth="605.0" stylesheets="@estilo.css">
@@ -62,55 +94,66 @@
                         <TableColumn fx:id="tCsubtotal" minWidth="67.0" prefWidth="67.0" text="Subtotal" />
                      </columns>
                   </TableView>
-                  <TextField fx:id="tfCantidadLineaFactura" layoutX="269.0" layoutY="27.0" prefHeight="25.0" prefWidth="38.0" />
-                  <TextField fx:id="tfDescuentoLineaFactura" layoutX="404.0" layoutY="25.0" prefHeight="25.0" prefWidth="65.0" />
-                  <Label layoutX="232.0" layoutY="31.0" text="Cant." />
-                  <Label layoutX="369.0" layoutY="31.0" text="Desc." />
+                  <TextField fx:id="tfCantidadLineaFactura" layoutX="413.0" layoutY="26.0" prefHeight="25.0" prefWidth="38.0" />
+                  <TextField fx:id="tfDescuentoLineaFactura" layoutX="512.0" layoutY="26.0" prefHeight="25.0" prefWidth="38.0" />
+                  <Label layoutX="378.0" layoutY="32.0" text="Cant." />
+                  <Label layoutX="472.0" layoutY="31.0" text="Desc." />
                   
                         <Button fx:id="btAgregarItemALineaFactura" layoutX="572.0" layoutY="27.0" mnemonicParsing="false" onAction="#pasarItemAListaFactura" text="Agregar" />
                   
-                        <Button fx:id="btBorrarLinea" layoutX="66.0" layoutY="213.0" mnemonicParsing="false" onAction="#borrarLineaNumero" text="Borrar Articulo" />
-                  <TextField fx:id="tfLineaABorrar" layoutX="165.0" layoutY="213.0" prefHeight="22.0" prefWidth="43.0" />
+                        <Button fx:id="btBorrarLinea" layoutX="23.0" layoutY="201.0" mnemonicParsing="false" onAction="#borrarLineaNumero" text="Borrar Articulo" />
+                  <TextField fx:id="tfLineaABorrar" layoutX="117.0" layoutY="201.0" prefHeight="22.0" prefWidth="27.0" />
                   
-                        <Button fx:id="btGuardarFactura" layoutX="66.0" layoutY="255.0" mnemonicParsing="false" onAction="#guardarFactura" text="Guardar Factura" />
-                        <Button fx:id="bt_menuPrincipal" layoutX="190.0" layoutY="255.0" mnemonicParsing="false" onAction="#menuPrincipalFX" text="Menu Principal" />
+                        <Button fx:id="btGuardarFactura" layoutX="309.0" layoutY="244.0" mnemonicParsing="false" onAction="#guardarFactura" text="Guardar Factura" />
+                        <Button fx:id="bt_menuPrincipal" layoutX="23.0" layoutY="269.0" mnemonicParsing="false" onAction="#menuPrincipalFX" text="Menu Principal" />
                   
-                        <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="198.0" minWidth="120.0" text="Subtotal" />
-                  <Label fx:id="lbSubtotal" alignment="CENTER_RIGHT" layoutX="579.0" layoutY="198.0" minWidth="40.0" text="****" />
-                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="223.0" minWidth="120.0" text="Descuento" />
-                  <Label fx:id="lbDescuentoTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="223.0" minWidth="40.0" text="****" />
-                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="248.0" minWidth="120.0" text="Subtotal - Descuento" />
-                  <Label fx:id="lbSubtotalDescuento" alignment="CENTER_RIGHT" layoutX="579.0" layoutY="248.0" minWidth="40.0" text="****" />
-                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="273.0" minWidth="120.0" text="IVA" />
-                  <Label fx:id="lbIVA" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="273.0" minWidth="40.0" text="****" />
-                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="298.0" minWidth="120.0" text="Total" />
-                  <Label fx:id="lbTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="298.0" minWidth="40.0" text="****" />
-                  <ComboBox fx:id="cb_busquedaTest" layoutX="96.0" layoutY="2.0" prefWidth="150.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="200.0" minWidth="120.0" text="Subtotal" />
+                  <Label fx:id="lbSubtotal" alignment="CENTER_RIGHT" layoutX="579.0" layoutY="200.0" minWidth="40.0" text="****" />
                   
-                        
+                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="220.0" minWidth="120.0" text="Descuento" />
+                  <Label fx:id="lbDescuentoTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="220.0" minWidth="40.0" text="****" />
+                  
+                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="240.0" minWidth="120.0" text="Subtotal - Descuento" />
+                  <Label fx:id="lbSubtotalDescuento" alignment="CENTER_RIGHT" layoutX="579.0" layoutY="240.0" minWidth="40.0" text="****" />
+                  
+                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="260.0" minWidth="120.0" text="IVA" />
+                  <Label fx:id="lbIVA" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="260.0" minWidth="40.0" text="****" />
+                  
+                  <Label alignment="CENTER_RIGHT" layoutX="425.0" layoutY="280.0" minWidth="120.0" text="Total" />
+                  <Label fx:id="lbTotal" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="579.0" layoutY="280.0" minWidth="40.0" text="****" />
+                  
+
                </children>
+               <styleClass>
+                   <String fx:value="fondo3" />
+                   <String fx:value="bordeRedondo5px" />
+                   <String fx:value="bordeColorTeal" />
+               </styleClass>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin>
           </AnchorPane>
          </children>
       </VBox>
-      <Label layoutX="-574.0" layoutY="193.0" text="Ciudad" />
-      <Label layoutX="-280.0" layoutY="162.0" text="Cargo Contaco" />
-      <Label layoutX="-574.0" layoutY="162.0" text="Direccion" />
-      <Label layoutX="-280.0" layoutY="193.0" text="Pais" />
+      <!-- borrar
+      
       <TextField fx:id="tfCargoContactoCliente" layoutX="-197.0" layoutY="158.0" prefHeight="22.0" prefWidth="178.0" promptText="Cargo" stylesheets="@estilo.css" />
       <TextField fx:id="tfDireccionCliente" layoutX="-511.0" layoutY="158.0" prefHeight="22.0" prefWidth="193.0" promptText="Dirección" stylesheets="@estilo.css" />
       <TextField fx:id="tfCiudadCliente" layoutX="-511.0" layoutY="189.0" prefHeight="22.0" prefWidth="193.0" promptText="Ciudad" stylesheets="@estilo.css" />
       <TextField fx:id="tfPaisCliente" layoutX="-226.0" layoutY="189.0" prefHeight="22.0" prefWidth="206.0" promptText="Pais" stylesheets="@estilo.css" />
-      <Label layoutX="-305.0" layoutY="120.0" text="Contacto" />
       <TextField fx:id="tfContactoCliente" layoutX="-248.0" layoutY="116.0" prefHeight="22.0" prefWidth="206.0" promptText="Contacto" stylesheets="@estilo.css" />
-      <Label layoutX="-305.0" layoutY="89.0" text="Telefono" />
       <TextField fx:id="tfTelefono" layoutX="-220.0" layoutY="85.0" prefHeight="22.0" prefWidth="178.0" promptText="Telefono" stylesheets="@estilo.css" />
       <TextField fx:id="tfPrecioProducto" layoutX="-421.0" layoutY="276.0" promptText="Precio" />
       <TextField fx:id="tfCategoria" layoutX="-175.0" layoutY="276.0" promptText="Categoria" />
       <TextField fx:id="tfExistencias" layoutX="-421.0" layoutY="305.0" promptText="Existencias" />
       <TextField fx:id="tfProveedor" layoutX="-168.0" layoutY="305.0" promptText="Proveedor" />
-      <Label layoutX="-485.0" layoutY="280.0" text="Precio" />
-      <Label layoutX="-480.0" layoutY="309.0" text="Existencias" />
-      <Label layoutX="-238.0" layoutY="309.0" text="Proveedor" />
-      <Label layoutX="-238.0" layoutY="280.0" text="Categoria" />
+      -->
    </children>
+      <styleClass>
+                   <String fx:value="fondo4" />
+
+               </styleClass>
 </AnchorPane>

@@ -18,28 +18,70 @@ and open the template in the editor.
 .titulo20{
     -fx-font-family:"Open Sans";
     -fx-font-weight:bold;
-    -fx-font-color: #ccccff;
+    -fx-text-fill: whitesmoke;
     -fx-font-size:20;
     -fx-alignment:CENTER;
 }
 .titulo16{
     -fx-font-family:"Open Sans";
     -fx-font-weight:bold;
-    -fx-font-color: #ccccff;
+    -fx-text-fill: black;
     -fx-font-size:16;
 }
 
-.botonMainMenu{
-    -fx-border-radius:0;
+.leftPane{
+    -fx-padding:0;
+    -fx-spacing:0;
     -fx-border-color:#000000;
-    -fx-background-radius:0;
-    -fx-border-width:1px;
+    -fx-background-color:#FFFFFF;
+    -fx-color:#fff;
 }
-.botonMainMenuOK{
-    -fx-border-radius:0;
-    -fx-border-color:#44ff55;
-    -fx-background-radius:0;
-    -fx-border-width:1px;
+.rightPane{
+    -fx-border-color:#000000;
+    -fx-background-color:#e0f2f1;
+    -fx-color:#fff;
+}
+/*
+
+color name="primaryColor">#baddf9</color>
+<color name="primaryLightColor">#edffff</color>
+<color name="primaryDarkColor">#89abc6</color>
+<color namesecondaryColor">#2979ff</color>
+<color name="secondaryLightColor">#75a7ff</color>
+<color name="secondaryDarkColor">#004ecb</color>
+<color name="primaryTextColor">#000000</color>
+<color name="secondaryTextColor">#fafafa*/
+.botonMainMenu{
+    -fx-padding:0;
+    -fx-border-color:#777777;
+    -fx-background-color:#ffffff;
+    -fx-color:#fff;
+    -fx-font-size:15px;
+    -fx-font-weight:bold;
+}
+
+
+.botonMainMenu:hover{
+    -fx-border-color:#000000;
+    -fx-background-color:#ffffff;
+    -fx-color:#ffffff;
+    -fx-font-size:15px;
+    -fx-font-weight:bold;
+}
+.botonMainMenu12{
+    -fx-padding:0;
+    -fx-border-color:#777777;
+    -fx-background-color:#ffffff;
+    -fx-color:#fff;
+    -fx-font-size:12px;
+    -fx-font-weight:bold;
+}
+.botonMainMenu:hover{
+    -fx-border-color:#000000;
+    -fx-background-color:#ffffff;
+    -fx-color:#ffffff;
+    -fx-font-size:12px;
+    -fx-font-weight:bold;
 }
 .boton{
     -fx-font-family:"Ebrima";
@@ -112,15 +154,41 @@ and open the template in the editor.
 }
 .tableview:disabled{
     -fx-opacity: 0.7; /* Muestra el texto deshabilitado con más claridad*/
-    -fx-background-color: rgba(0,0,22,0.5);
+    -fx-background-color: rgba(0,0,22,0.6);
+    -fx-color:rgba(40,0,22,0.6);
 }
-.TextField{
-    -fx-background-color:rgba(0,0,0,0);
-    -fx-opacity: 1.0; /* Muestra el texto deshabilitado con más claridad*/
-    -fx-background-radius:5px;
-}
+
+
 .numFactura{
-    -fx-font-color: whitesmoke;
+    -fx-text-fill: whitesmoke;
     -fx-font-size:14;
     -fx-font-weight: bold;
+    
 }
+.fondo1{
+    -fx-background-color:#bbdefb;
+    
+
+}
+.fondo2{
+    -fx-background-color:#dcedc8;
+  
+}
+.fondo3{
+    -fx-background-color:#d1c4e9;
+  
+}
+.fondo4{
+    -fx-background-color:#333333;
+  
+}
+.bordeRedondo5px{
+    -fx-background-radius:5px;
+    -fx-border-radius:5px;
+}
+.bordeColorTeal{
+    -fx-border-width: 1; 
+    -fx-border-color: teal;
+}
+
+

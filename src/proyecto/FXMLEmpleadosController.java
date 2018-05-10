@@ -10,16 +10,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -49,6 +44,8 @@ import javafx.stage.Stage;
  */
 public class FXMLEmpleadosController implements Initializable {
 
+    private int tipoUsuario;
+    private int empleado;
     private String genIdEmpleado = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -95,6 +92,12 @@ public class FXMLEmpleadosController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+    }
+
+    public void initVariable(int tipoUsuario, int empleado) {
+        this.tipoUsuario = tipoUsuario;
+        this.empleado = empleado;
         try {
             //CLIENTES
             //rellenar lista de empleados en listado
@@ -106,6 +109,7 @@ public class FXMLEmpleadosController implements Initializable {
             //busqueda en tiempo real por nombre, contacto, cargo contacto, ciudad. Tiene en cuenta las tildes 
             tfBusquedaEmpleados.setOnKeyReleased(keyEvent -> {
                 listaEmpleadosFiltrada.setPredicate(obj -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaEmpleados.getText().toLowerCase().trim()));
+                System.out.println(tfBusquedaEmpleados.getText());
             });
 
             //Valores para rellenar la vista de la tabla
@@ -174,27 +178,7 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
-    @FXML
-    private void menuPrincipalFX() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-            stage.setTitle("..::Menú Principal::..");
-
-            //cierra la ventana abierta anteriormente
-            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
-            stage2.close();
-
-        } catch (Exception ex) {
-            ex.getMessage();
-        }
-    }
+   
 
     @FXML
     private void editarTextoFX() {
@@ -379,7 +363,7 @@ public class FXMLEmpleadosController implements Initializable {
                 String fCont = dpFcontrato.getValue().format(DateTimeFormatter.ISO_DATE);
                 System.out.println(fNac);
                 System.out.println(fCont);
-                stmt = con.prepareStatement("UPDATE empleados SET Nombre=\""+nombre+"\", Apellidos=\""+apellidos+"\", Cargo=\""+cargo+"\", FNacimiento=\""+fNac+"\", FContrato=\""+fCont+"\", Telefono=\""+telefono+"\", Jefe="+jefe+" where idempleado=?");
+                stmt = con.prepareStatement("UPDATE empleados SET Nombre=\"" + nombre + "\", Apellidos=\"" + apellidos + "\", Cargo=\"" + cargo + "\", FNacimiento=\"" + fNac + "\", FContrato=\"" + fCont + "\", Telefono=\"" + telefono + "\", Jefe=" + jefe + " where idempleado=?");
 
                 stmt.setString(1, tfIdEmpleado.getText());
                 stmt.executeUpdate();
@@ -464,5 +448,28 @@ public class FXMLEmpleadosController implements Initializable {
             return false;
         }
         return true;
+    }
+     @FXML
+    private void menuPrincipalFX() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+            stage.setTitle("..::Menú Principal::..");
+
+            //cierra la ventana abierta anteriormente
+            Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
+            stage2.close();
+
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
     }
 }
