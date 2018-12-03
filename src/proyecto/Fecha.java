@@ -1,14 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+finished commenting
+*/
 package proyecto;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
+/**
+ * Clase Fecha.
+ * 
+ * @author German Navarro.
+ */
 public class Fecha {
 
     private int day;
@@ -47,11 +48,22 @@ public class Fecha {
         this.year = year;
     }
 
-    //corta(): mostrará la fecha en formato corto (02-09-2003). 
+    /**
+     * Muestra la fecha en formato corto (31-01-2001).
+     *
+     * @return La fecha como texto en formato 31-01-2001
+     */
     public String corta() {
         return this.day + "-" + this.month + "-" + this.year;
     }
 
+    /**
+     * Convierte un texto recibido de la clase String '31-01-2001' y lo
+     * convierte al formato de la clase Fecha.
+     *
+     * @param texto Fecha del tipo {@code String}.
+     * @return Fecha del tipo {@code Fecha}.
+     */
     public static Fecha stringToFecha(String texto) {
         Fecha fecha = null;
         String[] array = texto.split("-");
@@ -63,17 +75,14 @@ public class Fecha {
         return fecha;
     }
 
-    public LocalDate datePicker() {
-        String fecha = this.year + "/" + this.month + "/" + this.day;
-        final DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy/MMM/dd");
-        final LocalDate fechaConvertida = LocalDate.parse(fecha, formato);
-        return fechaConvertida;
-    }
-    
-    public boolean contains(Fecha fecha){
-        return true;
-    }
-
+    /**
+     * Compara si la fecha recibida por parámetro es anterior a la fecha de la
+     * clase.
+     *
+     * @param fecha Fecha con formato de la clase Fecha.
+     * @return {@code true} si la fecha es anterior a la fecha de la clase.
+     * {@code false} si la fecha no es anterior.
+     */
     public boolean menorQue(Fecha fecha) {
         boolean lower = false;
         if (this.year < fecha.year) {
@@ -88,6 +97,14 @@ public class Fecha {
         return lower;
     }
 
+    /**
+     * Compara si la fecha recibida por parámetro es posterior a la fecha de la
+     * clase.
+     *
+     * @param fecha Fecha con formato de la clase Fecha.
+     * @return {@code true} si la fecha es posterior a la fecha de la clase.
+     * {@code false} si la fecha no es posterior.
+     */
     public boolean mayorQue(Fecha fecha) {
         boolean upper = false;
         if (this.year > fecha.year) {
@@ -101,6 +118,15 @@ public class Fecha {
         }
         return upper;
     }
+
+    /**
+     * Compara si la fecha recibida por parámetro es anterior o igual a la fecha
+     * de la clase.
+     *
+     * @param fecha Fecha con formato de la clase Fecha.
+     * @return {@code true} si la fecha es anterior o igual a la fecha de la
+     * clase. {@code false} si la fecha es posterior.
+     */
     public boolean menorIgualQue(Fecha fecha) {
         boolean lower = false;
         if (this.year < fecha.year) {
@@ -115,6 +141,14 @@ public class Fecha {
         return lower;
     }
 
+    /**
+     * Compara si la fecha recibida por parámetro es posterior o igual a la
+     * fecha de la clase.
+     *
+     * @param fecha Fecha con formato de la clase Fecha.
+     * @return {@code true} si la fecha es posterior o igual a la fecha de la
+     * clase. {@code false} si la fecha es anterior.
+     */
     public boolean mayorIgualQue(Fecha fecha) {
         boolean upper = false;
         if (this.year > fecha.year) {
@@ -129,6 +163,14 @@ public class Fecha {
         return upper;
     }
 
+    /**
+     * Calcula si la fecha del sistema comparada con la fecha de la clase es
+     * mayor que la edad recibida por parámetro.
+     *
+     * @param edad Número entero que representa una edad.
+     * @return {@code true} si la fecha recibida es mayor que el cálculo. 
+     * {@code false} si el cálculo es inferior o igual.
+     */
     public boolean mayorDe(int edad) {
         Calendar cal = Calendar.getInstance();
         boolean mayorDe = true;
@@ -148,8 +190,12 @@ public class Fecha {
         return mayorDe;
 
     }
-    
-    public static String hoyDiaMesAnyo() {       
+
+    /**
+     * Convierte la fecha de 'hoy' a un formato '31-01-2001' como {@code String}.
+     * @return La fecha de hoy como {@code String}.
+     */
+    public static String hoyDiaMesAnyo() {
         Calendar cal = Calendar.getInstance();
 
         int anyo = cal.get(Calendar.YEAR);
@@ -157,10 +203,15 @@ public class Fecha {
         int dia = cal.get(Calendar.DAY_OF_MONTH);
 
         //EL MES DEL SISTEMA ME DA -1 MES **************************************************
-        return dia+"-"+mes+"-"+anyo;
+        return dia + "-" + mes + "-" + anyo;
 
     }
-    public static String hoyAnyoMesDia() {       
+
+    /**
+     * Convierte la fecha de 'hoy' a un formato '2001-01-31' como {@code String}.
+     * @return La fecha de hoy como {@code String}.
+     */
+    public static String hoyAnyoMesDia() {
         Calendar cal = Calendar.getInstance();
 
         int anyo = cal.get(Calendar.YEAR);
@@ -168,7 +219,7 @@ public class Fecha {
         int dia = cal.get(Calendar.DAY_OF_MONTH);
 
         //EL MES DEL SISTEMA ME DA -1 MES **************************************************
-        return anyo+"-"+mes+"-"+dia;
+        return anyo + "-" + mes + "-" + dia;
 
     }
 }

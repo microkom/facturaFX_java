@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+Finished commenting
  */
 package proyecto;
 
@@ -9,26 +7,55 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * Clase Producto.
  *
- * @author German
+ * author German German Navarro.
  */
 public class Producto {
 
+    /**
+     * Variable de clase privada: número de identificación del producto.
+     */
     private int id;
+
+    /**
+     * Variable de clase privada: nombre del producto.
+     */
     private String nombreProducto;
+
+    /**
+     * Variable de clase privada: número que identifica al proveedor.
+     */
     private int proveedor;
+
+    /**
+     * Variable de clase privada: nombre del proveedor.
+     */
     private String nomProveedor;
+
+    /**
+     * Variable de clase privada: nombre de la categoría.
+     */
     private String nomCategoria;
+
+    /**
+     * Variable de clase privada: número que identifica la categoría.
+     */
     private int categoria;
+
+    /**
+     * Variable de clase privada: precio del producto.
+     */
     private int precio;
+
+    /**
+     * Variable de clase privada: cantidad del producto en inventario.
+     */
     private int existencias;
 
     public static ObservableList<Proveedor> listaProveedor = FXCollections.observableArrayList();
@@ -37,7 +64,7 @@ public class Producto {
     public Producto(int id, String nombreProducto, int proveedor, int categoria, int precio, int existencias) {
         this.id = id;
         this.nombreProducto = nombreProducto;
-        this.proveedor = proveedor;  
+        this.proveedor = proveedor;
         setNomProveedor();
         setNomCategoria();
         this.categoria = categoria;
@@ -47,7 +74,7 @@ public class Producto {
 
     public String getNomProveedor() {
         return Proveedor.getNombreProveedor(proveedor);
-        
+
     }
 
     public void setNomProveedor() {
@@ -61,8 +88,6 @@ public class Producto {
     public void setNomCategoria() {
         this.nomCategoria = Categoria.getNombreCategoria(this.categoria);
     }
-    
-    
 
     public int getId() {
         return id;
@@ -127,53 +152,58 @@ public class Producto {
     public static void setListaCategoria(ObservableList<Categoria> listaCategoria) {
         Producto.listaCategoria = listaCategoria;
     }
- 
-    public String toString(){
+
+    @Override
+    public String toString() {
         return nombreProducto;
     }
 
-
-//    public String getProveedor() {
-//        String prov = "";
-//        Proveedor proveedor = null;
-//        prov = proveedor.getNombre();
-//        return prov;
-//    }
-//    public String getCategoria() {
-//        String cat = "";
-//        Categoria categoria = null;
-//        cat = categoria.getNombre();
-//        return cat;
-//    }
+     /**
+     * Metodo que concatena los valores: 'id, nombre del producto, precio' para 
+     * usarlos como datos de búsqueda
+     * @return Texto que contiene valores de búsqueda.
+     */
     public String getDatosBusqueda() {
         return id + " " + nombreProducto + " " + precio;
     }
-    
+
     static ObservableList<Producto> nombreProdList = FXCollections.observableArrayList();
 
-    public static String getNombreProducto(int idRecibido){
-        
+    /**
+     * Método que averigua el nombre del producto usando como parámetro el id del
+     * producto.
+     * 
+     * @param idRecibido Número entero que identifica al producto.
+     * @return Devuelve el nombre del producto como {@code String}
+     */
+    public static String getNombreProducto(int idRecibido) {
+
         String nombre = "";
         boolean found = false;
         Iterator<Producto> pro = nombreProdList.iterator();
         Producto obj = null;
         while (pro.hasNext() && found == false) {
-           obj = pro.next();
-            if (obj.id == idRecibido){
-               nombre = obj.nombreProducto;
-               found = true;
-           }
+            obj = pro.next();
+            if (obj.id == idRecibido) {
+                nombre = obj.nombreProducto;
+                found = true;
+            }
         }
         return nombre;
     }
 
+    /**
+     * Método que rellena un ObservableList con los datos de los productos.
+     * 
+     * @param listaProductos Contiene el listado de los productos almacenados en
+     * la base de datos.
+     */
     public static void fillProductosList(ObservableList<Producto> listaProductos) {
-        
+
         //Necesarios para mostrar los valores en el tableview en la tabla Productos
         Proveedor.fillProveedorList(listaProveedor);
         Categoria.fillCategoriaList(listaCategoria);
-        
-        
+
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
         ResultSet rs;
@@ -191,7 +221,7 @@ public class Producto {
                                 rs.getInt("Categoria"),
                                 rs.getInt("Precio"),
                                 rs.getInt("Existencias")));
-                
+
             }
             nombreProdList = listaProductos;
             stmt.close();
@@ -206,108 +236,4 @@ public class Producto {
             }
         }
     }
-  /*  
-    public static String getNombreProducto(int producto) {
-
-        boolean found = false;
-        String nombre = "";
-        Iterator<Proveedor> ite = listaProductos.iterator();
-        Proveedor obj;
-
-        while (ite.hasNext() && found == false) {
-            obj = ite.next();
-            if (Integer.parseInt(obj.getId()) == producto) {
-                nombre = obj.getNombre();
-                found = true;
-            }
-        }
-        return nombre;
-    }
-*/
-//    public String getNombreProveedor(int proveedor) {
-//         
-//       boolean found = false;
-//        String nombre = "";
-//        Iterator<Proveedor> ite = listaProveedor.iterator();
-//        Proveedor obj;
-//
-//        while (ite.hasNext() && found == false) {
-//            obj = ite.next();
-//            if (Integer.parseInt(obj.getId()) == proveedor) {
-//                nombre = obj.getNombre();
-//                found = true;
-//            }
-//        }
-//        return nombre;
-//    }
-//
-//    public static String getNombreCategoria(int categoria) {
-//
-//        boolean found = false;
-//        String nombre = "";
-//        Iterator<Categoria> ite = listaCategoria.iterator();
-//        Categoria obj;
-//
-//        while (ite.hasNext() && found == false) {
-//            obj = ite.next();
-//            if (Integer.parseInt(obj.getId()) == categoria) {
-//                nombre = obj.getNombre();
-//                found = true;
-//            }
-//        }
-//        return nombre;
-//    }
-//    public static String getNombreProveedor(int proveedor) {
-//
-//        Conexion conexion = new Conexion();
-//        Connection con = conexion.conectar();
-//        ResultSet rs;
-//        PreparedStatement stmt;
-//        String nombre = "";
-//        try {
-//            stmt = con.prepareStatement("SELECT nombre FROM proveedores where idproveedor=?");
-//            stmt.setInt(1, proveedor);
-//            rs = stmt.executeQuery();
-//            rs.first();
-//            nombre = rs.getString("nombre");
-//            stmt.close();
-//            rs.close();
-//        } catch (SQLException ex) {
-//            System.out.println("getNombreProveedor: " + ex.getMessage());
-//        } finally {
-//            try {
-//                con.close();
-//            } catch (SQLException ex) {
-//                Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        return nombre;
-//    }
-
-//    public static String getNombreCategoria(int categoria) {
-//        Conexion conexion = new Conexion();
-//        Connection con = conexion.conectar();
-//        ResultSet rs = null;
-//        PreparedStatement stmt = null;
-//        String nombre = "";
-//        try {
-//            stmt = con.prepareStatement("SELECT nomCategoria FROM categorias where idcategoria=?");
-//            stmt.setInt(1, categoria);
-//            rs = stmt.executeQuery();
-//            rs.first();
-//            nombre = rs.getString("nomCategoria");
-//
-//        } catch (SQLException ex) {
-//            System.out.println("getNombreCategoria: " + ex.getMessage());
-//        } finally {
-//            try {
-//                stmt.close();
-//                rs.close();
-//                con.close();
-//            } catch (SQLException ex) {
-//                System.out.println("FINALLY: getNombreCategoria:  " + ex.getMessage());
-//            }
-//        }
-//        return nombre;
-//    }
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="169.0" prefWidth="187.0" stylesheets="@estilo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLIVAController">
+   <children>
+      <VBox alignment="CENTER" layoutX="56.0" layoutY="12.0" prefHeight="145.0" prefWidth="75.0" spacing="10.0">
+         <children>
+            <Label prefHeight="20.0" prefWidth="71.0" stylesheets="@estilo.css" text="IVA Actual">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="17.0" prefWidth="75.0">
+               <children>
+                  <Label fx:id="lbIvaDBase" prefHeight="17.0" prefWidth="24.0" stylesheets="@estilo.css" text="IVA" />
+                  <Label text="\%" />
+               </children>
+            </HBox>
+            <TextField fx:id="tfIVA" alignment="CENTER" prefHeight="25.0" prefWidth="62.0" stylesheets="@estilo.css" />
+            <Button fx:id="btGuardar" mnemonicParsing="false" onAction="#guardarFX" stylesheets="@estilo.css" text="Guardar" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

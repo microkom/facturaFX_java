@@ -1,8 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+Finished commenting
+*/
 package proyecto;
 
 import java.sql.Connection;
@@ -14,13 +12,25 @@ import javafx.collections.ObservableList;
 import static proyecto.Producto.listaCategoria;
 
 /**
- *
- * @author German
+ * Clase Categoria.
+ * @author German Navarro
  */
 public class Categoria {
 
+    /**
+     * Variable de clase: identificador de la categoría
+     */
     private String id;
+    
+    /**
+     * Variable de clase: nombre de la categoría.
+     */
+    
     private String nombre;
+    
+    /**
+     * Variable de clase: descripción de la categoría.
+     */
     private String descripcion;
 
     public Categoria(String id, String nombre, String descripcion) {
@@ -53,6 +63,11 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
+    /**
+     * Método usado para agrupar los datos que se usan en una búsqueda de datos
+     * de esta clase.
+     * @return La concatenación del {@code id} el {@code nombre} y la {@code descripción}. 
+     */
     public String getDatosBusqueda() {
         return id + " " + nombre + " " + descripcion;
     }
@@ -61,6 +76,11 @@ public class Categoria {
         return nombre;
     }
 
+    /**
+     * Método para rellenar un ObservableList con las categorías.
+     * @param listaCagegoria ObservableList que ha de rellenarse usando datos de
+     * la base de datos
+     */
     public static void fillCategoriaList(ObservableList<Categoria> listaCagegoria) {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -92,8 +112,17 @@ public class Categoria {
         }
     }
 
+    /**
+     * Método que busca el nombre de una categoría basandose en un número entero 
+     * recibido por parámetro.
+     * @param categoria Número entero que indica la categoría.
+     * @return Devuelve el nombre de la categoría como un {@code String}.
+     */
     public static String getNombreCategoria(int categoria) {
 
+        /**
+         * Variable boolean: usada para controlar
+         */
         boolean found = false;
         String nombre = "";
         Iterator<Categoria> ite = listaCategoria.iterator();

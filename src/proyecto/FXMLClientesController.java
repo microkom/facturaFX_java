@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting
  */
 package proyecto;
 
@@ -35,14 +33,27 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLClientes.fxml
  *
- * @author German
+ * @author German Navarro
  */
 public class FXMLClientesController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
+
+    /**
+     * Variable de clase privada: almacena el número de identificación generado
+     * para el cliente.
+     */
     private String genIdCliente = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -78,13 +89,19 @@ public class FXMLClientesController implements Initializable {
     };
 
     /**
-     * Initializes the controller class.
+     * Método que existe por defecto, NO USADO.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
     }
 
+    /**
+     * Método que carga al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario Identifica el tipo de usuario.
+     * @param empleado Identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
 
         this.tipoUsuario = tipoUsuario;
@@ -123,7 +140,12 @@ public class FXMLClientesController implements Initializable {
         estadoInicialBotonesVisibles();
     }
 
-    //Método que devuelve el objeto de la fila seleccionada
+    /**
+     * Método, que se cuando realiza una búsqueda, captura el objeto
+     * seleccionado
+     *
+     * @return Un objeto del tipo Cliente que ha sido seleccionado.
+     */
     public Cliente getTablaClientesSeleccionado() { //de aqui va a los textfields
 
         Cliente clienteSeleccionado = null;
@@ -137,8 +159,10 @@ public class FXMLClientesController implements Initializable {
         return clienteSeleccionado;
     }
 
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
+    /**
+     * Método, que cuando se realiza una búsqueda, muestra en el formulario el
+     * objeto seleccionado.
+     */
     public void ponerClienteSeleccionado() {
         final Cliente cliente = getTablaClientesSeleccionado();
         posicionCliente = listaClientes.indexOf(cliente);
@@ -154,6 +178,9 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Abre el menú principal.
+     */
     @FXML
     private void menuPrincipalFX() {
         try {
@@ -178,6 +205,9 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Activa los campos para editar el cliente seleccionado.
+     */
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero un cliente", tfIdCliente.getText().isEmpty())) {
@@ -186,6 +216,9 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Cancela la edición deshabilitando los campos editables.
+     */
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
@@ -193,6 +226,9 @@ public class FXMLClientesController implements Initializable {
         clearForm();
     }
 
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     @FXML
     private void guardarEditarFX() {
         estadoInicialBotonesVisibles();
@@ -201,12 +237,18 @@ public class FXMLClientesController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Método que actualiza la tabla que muestra la búsqueda realizada.
+     */
     @FXML
     private void actualizaTablaBusqueda() {
         listaClientes.clear();
         Cliente.fillClientesList(listaClientes);
     }
 
+    /**
+     * Activa y limplia los campos para crear un nuevo cliente.
+     */
     @FXML
     private void nuevoClienteFX() {
         clearForm();
@@ -218,6 +260,9 @@ public class FXMLClientesController implements Initializable {
         //el usuario rellena los datos en este punto
     }
 
+    /**
+     * LLama al método para guardar los datos nuevos en la base de datos.
+     */
     @FXML
     private void guardarNuevoRegistroFX() {
         if (validateEmptyField("No hay datos para guardar", tfIdCliente.getText().isEmpty())) {
@@ -229,6 +274,10 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Al ejecutarse este método los botones vuelven al estado inicial y los
+     * campos para escribir texto vuelven a estar deshabilitados.
+     */
     @FXML
     private void cancelarNuevoClienteFX() {
         estadoInicialBotonesVisibles();
@@ -236,6 +285,11 @@ public class FXMLClientesController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Llama al método que ejecuta el borrado del registro actual.
+     *
+     * @see borrarRegistro().
+     */
     @FXML
     private void borrarRegistroFX() {
         if (validateEmptyField("Debe seleccionar primero un cliente", tfIdCliente.getText().isEmpty())) {
@@ -258,6 +312,10 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Borra de la base de datos el registro del cliente actualmente
+     * seleccionado.
+     */
     private void borrarRegistro() {
         PreparedStatement stmt2;
 
@@ -271,7 +329,11 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
-    //Generador de codigos aleatorios usados como ID del cliente
+    /**
+     * Generador de codigos aleatorios usados para identificar al cliente.
+     *
+     * @return Código que identifica al cliente.
+     */
     public String generateString() {
         String uuid = UUID.randomUUID().toString();
         uuid = uuid.replace("-", "");
@@ -279,7 +341,9 @@ public class FXMLClientesController implements Initializable {
         return uuid.toUpperCase();
     }
 
-    //mostrar formulario en blanco
+    /**
+     * Limpia el formulario.
+     */
     private void clearForm() {
         tfIdCliente.clear();
         tfNombreCliente.clear();
@@ -291,7 +355,9 @@ public class FXMLClientesController implements Initializable {
         tfTelefono.clear();
     }
 
-    //Guarda un registro nuevo
+    /**
+     * Guarda un registro nuevo en la base de datos.
+     */
     private void guardarNuevoRegistro() {
         PreparedStatement stmt;
         try {
@@ -320,7 +386,9 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
-    //Guarda lo editado
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     private void guardarEditado() {
         if (validateEmptyField("No hay datos para guardar", tfIdCliente.getText().isEmpty())) {
             PreparedStatement stmt;
@@ -350,6 +418,9 @@ public class FXMLClientesController implements Initializable {
         }
     }
 
+    /**
+     * Habilita los campos para ser editables.
+     */
     private void enableTextFieldEditable() {
         tfIdCliente.setEditable(false);// siempre deshabilitado
         tfNombreCliente.setEditable(true);
@@ -361,6 +432,9 @@ public class FXMLClientesController implements Initializable {
         tfTelefono.setEditable(true);
     }
 
+     /**
+     * Deshabilita los campos para que no sean editables.
+     */
     private void disableTextFieldEditable() {
         tfIdCliente.setMouseTransparent(true);// siempre deshabilitado
         tfIdCliente.setEditable(false);// siempre deshabilitado
@@ -373,6 +447,9 @@ public class FXMLClientesController implements Initializable {
         tfTelefono.setEditable(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Editar'.
+     */
     private void editarTextoPressed() {
         tablaBusquedaCliente.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -384,6 +461,9 @@ public class FXMLClientesController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Nuevo Cliente'.
+     */
     private void nuevoClientePressed() {
         tablaBusquedaCliente.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -395,6 +475,10 @@ public class FXMLClientesController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Definición del estado de visibilidad o habilitabilidad en el que deben
+     * estar los botones.
+     */
     private void estadoInicialBotonesVisibles() {
         tablaBusquedaCliente.setDisable(false);
         bt_editarTexto.setVisible(true);
@@ -406,6 +490,13 @@ public class FXMLClientesController implements Initializable {
         bt_borrarRegistro.setVisible(true);
     }
 
+    /**
+     * Comprueba que el campo evaluado está vacío
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code false} si está vacío, {@code true} si contiene información
+     */
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);

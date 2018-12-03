@@ -1,53 +1,70 @@
+/*
+finished commenting
+*/
 package proyecto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Clase Factura.
+ * 
+ * @author German Navarro.
+ */
 public class Factura {
 
+    /**
+     * Variable de clase privada: Número de la factura, se guarda como numPedido
+     * en la base de datos.
+     */
     private String numPedido;
-    private String cliente;
-    private int empleado;
-    private String nombreEmpleado;
-    private String nombreCliente;
-    private String fecha;
-    private double total;
-    private ArrayList<LineaFactura> lineas = new ArrayList<LineaFactura>();
 
-//    Textos texto = new Textos();
+    /**
+     * Variable de clase privada: Nombre del cliente.
+     */
+    private String cliente;
+
+    /**
+     * Variable de clase privada: ID del empleado.
+     */
+    private int empleado;
+
+    /**
+     * Variable de clase privada: Nombre del empleado.
+     */
+    private String nombreEmpleado;
+
+    /**
+     * Variablde de clase privada: Nombre del cliente.
+     */
+    private String nombreCliente;
+
+    /**
+     * Variable de clase privada: Fecha de la factura.
+     */
+    private String fecha;
+
+    /**
+     * Variable de clase privada: Valor total de la factura.
+     */
+    private double total;
+
+    /**
+     * Variable de clase privada: Lista de las facturas.
+     */
+    private ObservableList<LineaFactura> listaF = FXCollections.observableArrayList();
+
     public Factura(String numPedido, String cliente, int empleado, String fecha) {
         this.numPedido = numPedido;
         this.cliente = cliente;
         this.empleado = empleado;
         this.fecha = fecha;
-        //    setNombreEmpleado();
         setNombreCliente();
-        setTotal();
-
     }
-//pendiente de arreglar
-
-    public void setTotal() {
-
-        double total = 0;
-        for (LineaFactura obj : lineas) {
-            total = obj.getSubtotal() - (obj.getPrecio() * obj.getCantidad() * (obj.getDescuento() / 100) * 0.21);
-        }
-        this.total = total;
-    }
-//    public String getNombreEmpleado() {
-//        return Empleado.JefeList(this.empleado);
-//    }
-//
-//    public void setNombreEmpleado() {
-//        this.nombreEmpleado = Empleado.JefeList(this.empleado);
-//    }
 
     public String getNombreCliente() {
         return Cliente.nombreCliente(this.cliente);
@@ -85,29 +102,26 @@ public class Factura {
         return fecha;
     }
 
-//    public boolean getFechaTipoFecha(Fecha f1, Fecha f2) {
-//        if (f1.mayorIgualQue(Fecha.stringToFecha(this.fecha)) && f2.menorIgualQue(Fecha.stringToFecha(this.fecha))) {
-//            return true;
-//        }
-//        return false;
-//    }
-
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
-    public ArrayList<LineaFactura> getLineas() {
-        return lineas;
-    }
-
-    public void setLineas(ArrayList<LineaFactura> lineas) {
-        this.lineas = lineas;
-    }
-
+    /**
+     * Metodo que concatena los valores: 'numPedido, cliente' para usarlos como
+     * datos de búsqueda
+     *
+     * @return Texto que contiene valores de búsqueda.
+     */
     public String getDatosBusqueda() {
         return numPedido + " " + cliente;
     }
 
+    /**
+     * Método que rellena un ObservableList con las facturas existentes.
+     *
+     * @param listaFacturas Contiene el listado de las facturas almacenadas en
+     * la base de datos.
+     */
     public static void fillFacturasList(ObservableList<Factura> listaFacturas) {
 
         Conexion conexion = new Conexion();
@@ -127,7 +141,6 @@ public class Factura {
                                 rs.getString("fecha")
                         ));
             }
-
         } catch (SQLException ex) {
             System.out.println("fillFacturasList: " + ex.getMessage());
         } finally {
@@ -140,10 +153,4 @@ public class Factura {
             }
         }
     }
-
-//    public void fetchLineas(){
-//        for(LineaFactura obj:lineas){
-//            this.obj.getNumPedido()
-//        }
-//    }
 }

@@ -1,10 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting.
  */
 package proyecto;
-
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,20 +20,38 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLLogin.fxml
  *
- * @author DAW
+ * @author German Navarro
  */
 public class FXMLLoginController implements Initializable {
 
+    /**
+     * Variable de clase privada: usuario.
+     */
     private String usuario;
+
+    /**
+     * Variable de clase privada: contraseña.
+     */
     private String contrasena;
+
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
+
     private ResultSet rs;
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
@@ -47,55 +62,43 @@ public class FXMLLoginController implements Initializable {
     private TextField tfUser;
     @FXML
     private Button bt_login;
+    @FXML
+    private AnchorPane apLogin;
 
     /**
-     * Initializes the controller class.
+     * Método que carga al iniciar el controlador de la clase.
      *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        tfUser.setText("andrew"); //borrar
-        tfPass.setText("123"); //borrar
+        tfUser.setText("andrew");   //puesto temporalmente para acceder a la app más rapido
+        tfPass.setText("123");      //puesto temporalmente para acceder a la app más rapido
 
         enterWithEnter();
 
     }
 
+    /**
+     * Método que cierra la ventana al presionar la tecla ESC o al hacer click
+     * sobre la ventana.
+     */
     private void enterWithEnter() {
-        tfPass.setOnKeyPressed(e -> {
+        apLogin.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                System.out.println(e.getCode());
                 usuarioPass();
             } else if (e.getCode() == KeyCode.ESCAPE) {
-                System.out.println(e.getCode());
-                Stage stage2 = (Stage) bt_login.getScene().getWindow();
-                stage2.close();
-            }
-        });
-        tfUser.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                System.out.println(e.getCode());
-                usuarioPass();
-            } else if (e.getCode() == KeyCode.ESCAPE) {
-                System.out.println(e.getCode());
-                Stage stage2 = (Stage) bt_login.getScene().getWindow();
-                stage2.close();
-            }
-        });
-        bt_login.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                System.out.println(e.getCode());
-                usuarioPass();
-            } else if (e.getCode() == KeyCode.ESCAPE) {
-                System.out.println(e.getCode());
                 Stage stage2 = (Stage) bt_login.getScene().getWindow();
                 stage2.close();
             }
         });
     }
 
+    /**
+     * Consulta en la base datos el si el usuario y contraseña ingresados
+     * existen en ella.
+     */
     @FXML
     private void usuarioPass() {
         PreparedStatement stmt;
@@ -116,7 +119,7 @@ public class FXMLLoginController implements Initializable {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
                     Parent root1 = (Parent) fxmlLoader.load();
                     FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
-                    controller.initVariable(this.tipoUsuario,this.empleado);
+                    controller.initVariable(this.tipoUsuario, this.empleado);
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root1));
 
@@ -143,8 +146,4 @@ public class FXMLLoginController implements Initializable {
             System.out.println("USUARIO: " + ex.getMessage());
         }
     }
-//    
-//    public void setUser(String usuario){
-//         this.usuario = usuario;
-//    }
 }

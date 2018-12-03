@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting.
  */
 package proyecto;
 
@@ -15,67 +13,54 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLMainMenu.fxml
  *
- * @author DAW
+ * @author German Navarro
  */
 public class FXMLMainMenuController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
 
-//    @FXML
-//    private void loadFxml(ActionEvent event) throws IOException {
-//        Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLEmpleados.fxml"));
-//        pane1.getChildren().add(newLoadedPane);
-//        pane1.toFront();
-//    }
     @FXML
-    private Button btEditarFactura, btProveedores, btEmpleados, bt_clientes, bt_facturacion, 
-            bt_productos, bt_categorias;
+    private Button btEditarFactura, btProveedores, btEmpleados, bt_clientes, bt_facturacion,
+            bt_productos, bt_categorias, btSalir;
     @FXML
-    private AnchorPane pnLeftPane, pnRightPane;
-    
-    
+    private AnchorPane apMainAnchorPane;
+    @FXML
+    private MenuItem menuItemSalir, menuItemIVA, menuItemAcercaDe;
 
-//    @FXML
-//    private void handleButtonAction(ActionEvent event) throws IOException {
-//        if (event.getSource() == btProveedores) {
-//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLProveedores.fxml"));
-//            pnProveedores.getChildren().add(newLoadedPane);
-//            pnProveedores.toFront();
-//        } else if (event.getSource() == btEmpleados) {
-//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLClientes.fxml"));
-//            pnClientes.getChildren().add(newLoadedPane);
-//            pnClientes.toFront();
-//        }else if (event.getSource() == bt_clientes) {
-//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLBusquedaFactura.fxml"));
-//            pnBusquedaFactura.getChildren().add(newLoadedPane);
-//            pnBusquedaFactura.toFront();
-//        }else if (event.getSource() == bt_facturacion) {
-//            Pane newLoadedPane = FXMLLoader.load(getClass().getResource("FXMLClientes.fxml"));
-//            pane4.getChildren().add(newLoadedPane);
-//            pane4.toFront();
-//        }
-//    }
     /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
+     * Método que existe por defecto. NO USADO.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        seguridadSegunUsuario();
     }
 
+    /**
+     * Método que carga al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario Identifica el tipo de usuario.
+     * @param empleado Identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
@@ -83,6 +68,9 @@ public class FXMLMainMenuController implements Initializable {
 
     }
 
+    /**
+     * Comprueba el tipo de usuario para aplicar la seguridad.
+     */
     public void seguridadSegunUsuario() {
         switch (tipoUsuario) {
             case 1:
@@ -106,7 +94,7 @@ public class FXMLMainMenuController implements Initializable {
             case 3:
                 btEditarFactura.setDisable(false);
                 btEmpleados.setDisable(true);
-                bt_clientes.setDisable(true);
+                bt_clientes.setDisable(false);
                 bt_facturacion.setDisable(false);
                 bt_productos.setDisable(true);
                 bt_categorias.setDisable(true);
@@ -117,13 +105,49 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Cierra la aplicación.
+     */
+    @FXML
+    private void salirFX() {
+        Stage stage = (Stage) apMainAnchorPane.getScene().getWindow();
+        stage.close();
+    }
+
+    /**
+     * Abre la ventana para mostrar información de acerca de la aplicación.
+     */
+    @FXML
+    private void acercaDeFX() {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLAcercaDe.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1, Color.rgb(0, 0, 0, 0.1)));
+            stage.initStyle(StageStyle.TRANSPARENT);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("s_supermarket.png"));
+            stage.setTitle("..:: Acerca De ::..");
+            stage.show();
+
+        } catch (IOException ex) {
+            System.out.println("productosFX: " + ex.getMessage());
+        }
+
+    }
+
+    /**
+     * Abre la ventana para agregar, modificar, o borrar Productos.
+     */
     @FXML
     private void productosFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLProductos.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLProductosController controller = fxmlLoader.<FXMLProductosController>getController();
-            controller.initVariable(tipoUsuario , empleado);
+            controller.initVariable(tipoUsuario, empleado);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
 
@@ -141,20 +165,46 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para modificar el IVA.
+     */
+    @FXML
+    private void ivaFX() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLIVA.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            FXMLIVAController controller = fxmlLoader.<FXMLIVAController>getController();
+            controller.initVariable(tipoUsuario);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.getIcons().add(new Image("s_supermarket.png"));
+            stage.setTitle("..:: IVA ::..");
+            stage.show();
+
+        } catch (IOException ex) {
+            System.out.println("ivaFX: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Abre la ventana para agregar, modificar, o borrar Categorías.
+     */
     @FXML
     private void categoriasFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLCategorias.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLCategoriasController controller = fxmlLoader.<FXMLCategoriasController>getController();
-            controller.initVariable(tipoUsuario,empleado);
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..:: Categorias ::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) bt_categorias.getScene().getWindow();
@@ -165,20 +215,23 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para agregar, modificar, o borrar Empleados.
+     */
     @FXML
     private void empleadosFX(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLEmpleados.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLEmpleadosController controller = fxmlLoader.<FXMLEmpleadosController>getController();
-            controller.initVariable(tipoUsuario,empleado);
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..::Empleados::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) btEmpleados.getScene().getWindow();
@@ -189,21 +242,23 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para agregar, modificar, o borrar Proveedores.
+     */
     @FXML
     private void proveedoresFX(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLProveedores.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLProveedoresController controller = fxmlLoader.<FXMLProveedoresController>getController();
-            controller.initVariable(tipoUsuario,empleado);
-            
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..::Proveedores::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) btProveedores.getScene().getWindow();
@@ -214,20 +269,23 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para crear facturas.
+     */
     @FXML
     private void facturacionFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLFacturacion.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLFacturacionController controller = fxmlLoader.<FXMLFacturacionController>getController();
-            controller.initVariable(tipoUsuario,empleado);
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..::Facturacion::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) bt_facturacion.getScene().getWindow();
@@ -238,20 +296,23 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para buscar o editar facturas.
+     */
     @FXML
     private void busquedaFacturaFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLBusquedaFactura.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLBusquedaFacturaController controller = fxmlLoader.<FXMLBusquedaFacturaController>getController();
-            controller.initVariable(tipoUsuario,empleado);
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..:: Buscar Factura ::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) btEditarFactura.getScene().getWindow();
@@ -262,20 +323,23 @@ public class FXMLMainMenuController implements Initializable {
         }
     }
 
+    /**
+     * Abre la ventana para agregar, modificar, o borrar Clientes.
+     */
     @FXML
     private void clientexFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLClientes.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             FXMLClientesController controller = fxmlLoader.<FXMLClientesController>getController();
-            controller.initVariable(tipoUsuario,empleado);
+            controller.initVariable(tipoUsuario, empleado);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
-
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
+            stage.getIcons().add(new Image("s_supermarket.png"));
             stage.setTitle("..::Clientes::..");
+            stage.show();
 
             //cierra la ventana abierta anteriormente
             Stage stage2 = (Stage) bt_clientes.getScene().getWindow();
@@ -285,5 +349,4 @@ public class FXMLMainMenuController implements Initializable {
             System.out.println("clientexFX: " + ex.getMessage());
         }
     }
-
 }

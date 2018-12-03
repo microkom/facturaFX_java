@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting
  */
 package proyecto;
 
@@ -14,7 +12,7 @@ import javafx.collections.ObservableList;
 import static proyecto.Producto.listaProveedor;
 
 /**
- *
+ * Clase Proveedor, hereda de la clase Persona.
  *
  * @author German
  */
@@ -24,15 +22,27 @@ public class Proveedor extends Persona {
         super(id, nombre, contacto, cargoContacto, direccion, ciudad, pais, telefono);
     }
 
+      /**
+     * Metodo que concatena todos los atributos de la clase para usarlos como 
+     * datos de búsqueda
+     * @return Texto que contiene valores de búsqueda.
+     */
     public String getDatosBusqueda() {
         return super.id + " " + super.nombre + " " + super.contacto + " " + super.cargoContacto
                 + " " + super.direccion + " " + super.ciudad + " " + super.pais + " " + super.telefono;
     }
-
+    
+    @Override
     public String toString() {
         return super.nombre;
     }
 
+    /**
+     * Método que rellena un ObservableList con los datos de los proveedores.
+     * 
+     * @param listaProveedor Contiene el listado de los proveedores almacenados en
+     * la base de datos.
+     */
     public static void fillProveedorList(ObservableList<Proveedor> listaProveedor) {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -68,6 +78,14 @@ public class Proveedor extends Persona {
         }
     }
 
+     /**
+     * Método que averigua el nombre del proveedor usando como parámetro el id del
+     * proveedor.
+     * 
+     * @param proveedor Número entero que identifica al proveedor.
+     * @return Devuelve el nombre del proveedor como {@code String}
+     */
+    
     public static String getNombreProveedor(int proveedor) {
 
         boolean found = false;

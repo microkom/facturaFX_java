@@ -1,8 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+finished commenting
+*/
 package proyecto;
 
 import java.sql.Connection;
@@ -13,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * Clase Cliente, hereda de la clase Persona.
  *
- * @author German
+ * @author German Navarro
+ * @see Persona
  */
 public class Cliente extends Persona {
 
@@ -41,6 +40,12 @@ public class Cliente extends Persona {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Método para rellenar un ObservableList con los clientes.
+     *
+     * @param listaClientes ObservableList que ha de rellenarse usando datos de
+     * la base de datos
+     */
     public static void fillClientesList(ObservableList<Cliente> listaClientes) {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -61,7 +66,6 @@ public class Cliente extends Persona {
                                 rs.getString("Ciudad"),
                                 rs.getString("Pais"),
                                 rs.getString("Telefono")));
-                //rs.getString("observaciones")
             }
 
         } catch (SQLException ex) {
@@ -77,11 +81,23 @@ public class Cliente extends Persona {
         }
     }
 
+    /**
+     * Metodo que concatena los valores: 'id, nombre, contacto, direccion, ciudad
+     * pais, telefono' para usarlos como datos de búsqueda
+     * @return Texto que contiene valores de búsqueda.
+     */
     public String getDatosBusqueda() {
-        return super.getId() + " " + super.getNombre() + " " + super.getContacto() + " " + super.getCargoContacto()
-                + " " + super.getDireccion() + " " + super.getCiudad() + " " + super.getPais() + " " + super.getTelefono();
+        return super.getId() + " " + super.getNombre() + " " + super.getContacto() 
+                + " " + super.getCargoContacto() + " " + super.getDireccion() + " " 
+                + super.getCiudad() + " " + super.getPais() + " " 
+                + super.getTelefono();
     }
 
+    /**
+     * Método que averigua el nombre de un cliente usando el id del cliente.
+     * @param cliente Texto que identifica al cliente.
+     * @return Devuelve el nombre del cliente
+     */
     public static String nombreCliente(String cliente) {
 
         ArrayList<Cliente> listaClientes = new ArrayList<Cliente>();
@@ -106,9 +122,7 @@ public class Cliente extends Persona {
                                 rs.getString("Ciudad"),
                                 rs.getString("Pais"),
                                 rs.getString("Telefono")));
-                //rs.getString("observaciones")
             }
-
         } catch (SQLException ex) {
             System.out.println("nombreCliente: " + ex.getMessage());
         } finally {

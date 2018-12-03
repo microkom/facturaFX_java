@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting.
  */
 package proyecto;
 
@@ -13,7 +11,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -35,17 +32,32 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLCategorias.fxml
  *
- * @author German
+ * @author German Navarro.
  */
 public class FXMLCategoriasController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
+
+    /**
+     * Variable de clase privada: almacena el número de identificación generado
+     * para la categoría.
+     */
     private String genIdCategoria = "";
+
     private ResultSet rs;
     private ResultSet rs2;
+
     Conexion conexion = new Conexion();
     Connection con = conexion.conectar();
 
@@ -78,13 +90,19 @@ public class FXMLCategoriasController implements Initializable {
     };
 
     /**
-     * Initializes the controller class.
+     * Método que existe por defecto, NO USADO.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
     }
 
+    /**
+     * Método que carga al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario Identifica el tipo de usuario.
+     * @param empleado Identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
@@ -120,7 +138,12 @@ public class FXMLCategoriasController implements Initializable {
 
     }
 
-    //Método que devuelve el objeto de la fila seleccionada
+    /**
+     * Método, que cuando se realiza una búsqueda, captura el objeto
+     * seleccionado.
+     *
+     * @return Un objeto del tipo Categoría que ha sido seleccionado.
+     */
     public Categoria getTablaCategoriasSeleccionado() { //de aqui va a los textfields
 
         Categoria categoriaSeleccionada = null;
@@ -134,8 +157,10 @@ public class FXMLCategoriasController implements Initializable {
         return categoriaSeleccionada;
     }
 
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
+    /**
+     * Método, que cuando se realiza una búsqueda, muestra en el formulario el
+     * objeto seleccionado.
+     */
     public void ponerCategoriaSeleccionada() {
         final Categoria categoria = getTablaCategoriasSeleccionado();
         posicionCategoria = listaCategorias.indexOf(categoria);
@@ -147,6 +172,9 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Abre el menú principal
+     */
     @FXML
     private void menuPrincipalFX() {
         try {
@@ -171,6 +199,9 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Activa los campos para editar la Categoria seleccionada.
+     */
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero una categoria", tfIdCategoria.getText().isEmpty())) {
@@ -179,6 +210,9 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Cancela la edición deshabilitando los campos editables.
+     */
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
@@ -186,6 +220,9 @@ public class FXMLCategoriasController implements Initializable {
         clearForm();
     }
 
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     @FXML
     private void guardarEditarFX() {
         estadoInicialBotonesVisibles();
@@ -194,12 +231,18 @@ public class FXMLCategoriasController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Método que actualiza la tabla que muestra la búsqueda realizada.
+     */
     @FXML
     private void actualizaTablaBusqueda() {
         listaCategorias.clear();
         Categoria.fillCategoriaList(listaCategorias);
     }
 
+    /**
+     * Activa y limplia los campos para crear una nueva categoría.
+     */
     @FXML
     private void nuevaCategoriaFX() {
         clearForm();
@@ -211,6 +254,9 @@ public class FXMLCategoriasController implements Initializable {
         //el usuario rellena los datos en este punto
     }
 
+    /**
+     * LLama al método para guardar los datos nuevos en la base de datos.
+     */
     @FXML
     private void guardarNuevoRegistroFX() {
         if (validateEmptyField("No hay datos para guardar", tfIdCategoria.getText().isEmpty())) {
@@ -222,6 +268,10 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Al ejecutarse este método los botones vuelven al estado inicial y los campos para
+     * escribir texto vuelven a estar deshabilitados.
+     */
     @FXML
     private void cancelarNuevaCategoriaFX() {
         estadoInicialBotonesVisibles();
@@ -229,6 +279,11 @@ public class FXMLCategoriasController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Llama al método que ejecuta el borrado del registro actual.
+     *
+     * @see borrarRegistro().
+     */
     @FXML
     private void borrarRegistroFX() {
         if (validateEmptyField("Debe seleccionar primero una categoria", tfIdCategoria.getText().isEmpty())) {
@@ -251,6 +306,10 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+     /**
+     * Borra de la base de datos el registro de la categoría actualmente
+     * seleccionada.
+     */
     private void borrarRegistro() {
         PreparedStatement stmt2;
 
@@ -264,18 +323,24 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Genera un número de identificación nuevo para el registro que se va a
+     * crear.
+     *
+     * @return Número de identificación.
+     */
     private int nuevoNumeroId() {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
         ResultSet rs = null;
         PreparedStatement stmt = null;
-        int numFactura = 0;
+        int numCategoria = 0;
         try {
             stmt = con.prepareStatement("SELECT max(IdCategoria) FROM categorias");
             stmt.executeQuery();
             rs = stmt.executeQuery();
             rs.first();
-            numFactura = rs.getInt(1);
+            numCategoria = rs.getInt(1);
         } catch (SQLException ex) {
             System.out.println("nuevoNumeroiId: " + ex.getMessage());
         } finally {
@@ -287,10 +352,12 @@ public class FXMLCategoriasController implements Initializable {
                 System.out.println("Finally, nuevoNumeroiId: " + ex.getMessage());
             }
         }
-        return numFactura + 1;
+        return numCategoria + 1;
     }
 
-    //mostrar formulario en blanco
+    /**
+     * Limpia el formulario.
+     */
     private void clearForm() {
         tfIdCategoria.clear();
         tfNombre.clear();
@@ -298,7 +365,10 @@ public class FXMLCategoriasController implements Initializable {
 
     }
 
-    //Guarda un registro nuevo
+    /**
+     * Guarda un registro nuevo en la base de datos.
+     *
+     */
     private void guardarNuevoRegistro() {
         PreparedStatement stmt;
         try {
@@ -322,7 +392,9 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
-    //Guarda lo editado
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     private void guardarEditado() {
         if (validateEmptyField("No hay datos para guardar", tfIdCategoria.getText().isEmpty())) {
             PreparedStatement stmt;
@@ -351,12 +423,18 @@ public class FXMLCategoriasController implements Initializable {
         }
     }
 
+    /**
+     * Habilita los campos para ser editables.
+     */
     private void enableTextFieldEditable() {
         tfIdCategoria.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(true);
         tfDescripcion.setEditable(true);
     }
 
+    /**
+     * Deshabilita los campos para que no sean editables.
+     */
     private void disableTextFieldEditable() {
         tfIdCategoria.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(false);
@@ -364,6 +442,9 @@ public class FXMLCategoriasController implements Initializable {
 
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Editar'.
+     */
     private void editarTextoPressed() {
         tablaBusquedaCategoria.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -375,6 +456,9 @@ public class FXMLCategoriasController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Acciones que se realizan cuando el botón 'Nueva categoría' es presionado.
+     */
     private void nuevaCategoriaPressed() {
         tablaBusquedaCategoria.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -386,6 +470,10 @@ public class FXMLCategoriasController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Definición del estado de visibilidad o habilitabilidad en el que deben
+     * estar los botones.
+     */
     private void estadoInicialBotonesVisibles() {
         tablaBusquedaCategoria.setDisable(false);
         bt_editarTexto.setVisible(true);
@@ -397,6 +485,13 @@ public class FXMLCategoriasController implements Initializable {
         bt_borrarRegistro.setVisible(true);
     }
 
+    /**
+     * Comprueba que el campo evaluado está vacío
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code false} si está vacío, {@code true} si contiene información
+     */
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);

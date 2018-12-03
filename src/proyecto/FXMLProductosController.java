@@ -1,10 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting.
  */
 package proyecto;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,19 +34,30 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import static proyecto.Producto.listaCategoria;
-import static proyecto.Producto.listaProveedor;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLProductos.fxml
  *
- * @author German
+ * @author German Navarro
  */
 public class FXMLProductosController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
+
+    /**
+     * Variable de clase privada: número que identifica al producto.
+     */
     private String genIdProducto = "";
+
     private ResultSet rs;
     private ResultSet rs2;
     Conexion conexion = new Conexion();
@@ -62,21 +72,19 @@ public class FXMLProductosController implements Initializable {
     @FXML
     private TableView<Producto> tablaBusquedaProducto;
     @FXML
-    private TableColumn<Producto, String> tCidProducto, tCnombreProducto, tCproveedor, tCcategoria, tCPrecio, tCexistencias;
+    private TableColumn<Producto, String> tCidProducto, tCnombreProducto, tCproveedor, tCcategoria,
+            tCPrecio, tCexistencias;
 
     @FXML
     private TextField tfIdProducto, tfNombreProducto, tfPrecio, tfExistencias, tfBusquedaProductos;
 
-    //IDs botones de edición
     @FXML
-    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar;
-
-    //IDs botones nuevo registro
-    @FXML
-    private Button bt_nuevoProducto, bt_cancelarNuevoProducto, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
+    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar, bt_nuevoProducto,
+            bt_cancelarNuevoProducto, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
 
     @FXML
     private ComboBox cb_categorias, cb_proveedores;
+
     private final ListChangeListener<Producto> selectorTablaProductos = new ListChangeListener<Producto>() {
         @Override
         public void onChanged(ListChangeListener.Change<? extends Producto> c) {
@@ -85,13 +93,22 @@ public class FXMLProductosController implements Initializable {
     };
 
     /**
-     * Initializes the controller class.
+     * Método que existe por defecto en la clase. NO USADO.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
     }
 
+    /**
+     * Método que se ejecuta al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario número que identifica al tipo de usuario.
+     * @param empleado número que identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
@@ -132,7 +149,12 @@ public class FXMLProductosController implements Initializable {
 
     }
 
-    //Método que devuelve el objeto de la fila seleccionada
+    /**
+     * Método, que se cuando realiza una búsqueda, captura el objeto
+     * seleccionado
+     *
+     * @return Un objeto del tipo Producto que ha sido seleccionado.
+     */
     public Producto getTablaProductosSeleccionado() { //de aqui va a los textfields
 
         Producto productoSeleccionado = null;
@@ -146,8 +168,10 @@ public class FXMLProductosController implements Initializable {
         return productoSeleccionado;
     }
 
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
+    /**
+     * Método, que cuando se realiza una búsqueda, muestra en el formulario el
+     * objeto seleccionado.
+     */
     public void ponerProductoSeleccionado() {
         final Producto producto = getTablaProductosSeleccionado();
         posicionProducto = listaProductos.indexOf(producto);
@@ -166,6 +190,9 @@ public class FXMLProductosController implements Initializable {
         }
     }
 
+    /**
+     * Activa los campos para editar el producto seleccionado.
+     */
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero un producto", tfIdProducto.getText().isEmpty())) {
@@ -174,11 +201,17 @@ public class FXMLProductosController implements Initializable {
         }
     }
 
+    /**
+     * Cancela la edición deshabilitando los campos editables.
+     */
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
     }
 
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     @FXML
     private void guardarEditarFX() {
         estadoInicialBotonesVisibles();
@@ -186,12 +219,18 @@ public class FXMLProductosController implements Initializable {
         actualizaTablaBusqueda();
     }
 
+    /**
+     * Método que actualiza la tabla que muestra la búsqueda realizada.
+     */
     @FXML
     private void actualizaTablaBusqueda() {
         listaProductos.clear();
         Producto.fillProductosList(listaProductos);
     }
 
+    /**
+     * Activa y limplia los campos para crear un nuevo producto.
+     */
     @FXML
     private void nuevoProductoFX() {
         clearForm();
@@ -207,6 +246,9 @@ public class FXMLProductosController implements Initializable {
         //el usuario rellena los datos en este punto
     }
 
+    /**
+     * LLama al método para guardar los datos nuevos en la base de datos.
+     */
     @FXML
     private void guardarNuevoRegistroFX() {
 
@@ -227,12 +269,21 @@ public class FXMLProductosController implements Initializable {
         }
     }
 
+    /**
+     * Al ejecutarse este método los botones vuelven al estado inicial y los
+     * campos para escribir texto vuelven a estar deshabilitados.
+     */
     @FXML
     private void cancelarNuevoProductoFX() {
         estadoInicialBotonesVisibles();
         clearForm();
     }
 
+    /**
+     * Llama al método que ejecuta el borrado del registro actual.
+     *
+     * @see borrarRegistro().
+     */
     @FXML
     private void borrarRegistroFX() {
         if (validateEmptyField("Debe seleccionar primero un producto", tfIdProducto.getText().isEmpty())) {
@@ -255,10 +306,14 @@ public class FXMLProductosController implements Initializable {
         }
     }
 
+    /**
+     * Borra de la base de datos el registro del cliente actualmente
+     * seleccionado.
+     */
     private void borrarRegistro() {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
-        PreparedStatement stmt2;
+        PreparedStatement stmt2 = null;
 
         try {
             stmt2 = con.prepareStatement("DELETE FROM productos where idproducto=?");
@@ -267,10 +322,19 @@ public class FXMLProductosController implements Initializable {
             stmt2.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } finally {
+            try {
+                stmt2.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
-    //mostrar formulario en blanco
+    /**
+     * Limpia el formulario.
+     */
     private void clearForm() {
         tfIdProducto.clear();
         tfNombreProducto.clear();
@@ -278,12 +342,14 @@ public class FXMLProductosController implements Initializable {
         tfExistencias.clear();
     }
 
-    //Guarda un registro nuevo
+    /**
+     * Guarda un registro nuevo en la base de datos.
+     */
     private void guardarNuevoRegistro() {
 
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
-        PreparedStatement stmt;
+        PreparedStatement stmt = null;
         try {
             String id = Integer.toString(nuevoNumeroIdProudcto());
             String nombre = tfNombreProducto.getText();
@@ -304,14 +370,25 @@ public class FXMLProductosController implements Initializable {
             alert.setContentText("Nuevo Producto guardado correctamente");
             alert.showAndWait();
 
-            stmt.close();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } finally {
+            try {
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
 
     }
-//Sacar el último número de la factura de la base de datos
 
+    /**
+     * Genera un número de identificación nuevo para el registro que se va a
+     * crear consultando antes el último número de la base de datos.
+     *
+     * @return Número de identificación.
+     */
     private int nuevoNumeroIdProudcto() {
 
         Conexion conexion = new Conexion();
@@ -339,12 +416,14 @@ public class FXMLProductosController implements Initializable {
         return idProducto + 1;
     }
 
-    //Guarda lo editado
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     private void guardarEditado() {
 
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
-        PreparedStatement stmt;
+        PreparedStatement stmt = null;
         try {
 
             String nombre = tfNombreProducto.getText();
@@ -369,9 +448,19 @@ public class FXMLProductosController implements Initializable {
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+        } finally {
+            try {
+                stmt.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
+    /**
+     * Habilita los campos para ser editables.
+     */
     private void enableTextFieldEditable() {
         tfIdProducto.setEditable(false);// siempre deshabilitado
         tfNombreProducto.setEditable(true);
@@ -379,6 +468,9 @@ public class FXMLProductosController implements Initializable {
         tfExistencias.setEditable(true);
     }
 
+    /**
+     * Deshabilita los campos para que no sean editables.
+     */
     private void disableTextFieldEditable() {
         tfIdProducto.setEditable(false);// siempre deshabilitado
         tfNombreProducto.setEditable(false);
@@ -386,6 +478,9 @@ public class FXMLProductosController implements Initializable {
         tfExistencias.setEditable(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Editar'.
+     */
     private void editarTextoPressed() {
         tablaBusquedaProducto.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -397,6 +492,9 @@ public class FXMLProductosController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Nuevo producto'.
+     */
     private void nuevoProductoPressed() {
         tablaBusquedaProducto.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -408,6 +506,10 @@ public class FXMLProductosController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Definición del estado de visibilidad o habilitabilidad en el que deben
+     * estar los botones.
+     */
     private void estadoInicialBotonesVisibles() {
         tablaBusquedaProducto.setDisable(false);
         bt_editarTexto.setVisible(true);
@@ -419,6 +521,13 @@ public class FXMLProductosController implements Initializable {
         bt_borrarRegistro.setVisible(true);
     }
 
+    /**
+     * Comprueba que el campo evaluado está vacío
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code false} si está vacío, {@code true} si contiene información
+     */
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);
@@ -431,8 +540,13 @@ public class FXMLProductosController implements Initializable {
         return true;
     }
 
-//| tfCantidadLineaFactura.getText().isEmpty()
-    //Validar si el texto es un número
+    /**
+     * Valida si los caracteres recibidos son un número o no.
+     *
+     * @param texto Texto para mostrar en la ventana de advertencia.
+     * @param numero Número que se comprueba
+     * @return {@code false} si es un número, {@code true} si no lo es.
+     */
     private boolean validateFormatNumber(String campo, String numero) {
         Pattern p = Pattern.compile("[0-9]+");
         Matcher m = p.matcher(numero);
@@ -448,6 +562,9 @@ public class FXMLProductosController implements Initializable {
         }
     }
 
+    /**
+     * Abre el menú principal.
+     */
     @FXML
     private void menuPrincipalFX() {
         try {
@@ -467,8 +584,8 @@ public class FXMLProductosController implements Initializable {
             Stage stage3 = (Stage) bt_menuPrincipal.getScene().getWindow();
             stage3.close();
 
-        } catch (Exception ex) {
-            ex.getMessage();
+        } catch (IOException ex) {
+            System.out.println("menuPrincipalFX: " + ex.getMessage());
         }
     }
 }

@@ -1,10 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+finished commenting.
  */
 package proyecto;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,14 +37,27 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLEmpleados.fxml
  *
- * @author German
+ * @author German Navarro
  */
 public class FXMLEmpleadosController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
+
+    /**
+     * Variable de clase privada: almacena el número de identificación generado
+     * para el empleado.
+     */
     private String genIdEmpleado = "";
     private ResultSet rs;
     private ResultSet rs2;
@@ -58,7 +70,6 @@ public class FXMLEmpleadosController implements Initializable {
 
     @FXML
     private TableView<Empleado> tablaBusquedaEmpleado;
-
     @FXML
     private TableColumn<Empleado, String> tcIdEmpleado, tcNombre, tcApellidos, tcCargo, tcJefe, tcTelefono, tcFNacimiento, tcFContrato;
 
@@ -67,14 +78,11 @@ public class FXMLEmpleadosController implements Initializable {
 
     //IDs botones de edición
     @FXML
-    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar;
-
-    //IDs botones nuevo registro
-    @FXML
-    private Button bt_nuevoEmpleado, bt_cancelarNuevoEmpleado, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
+    private Button bt_editarTexto, bt_cancelarEditar, bt_guardarEditar, bt_nuevoEmpleado, bt_cancelarNuevoEmpleado, bt_borrarRegistro, bt_guardarNuevoRegistro, bt_menuPrincipal;
 
     @FXML
     private ComboBox cb_empleados;
+
     private final ListChangeListener<Empleado> selectorTablaEmpleados = new ListChangeListener<Empleado>() {
         @Override
         public void onChanged(ListChangeListener.Change<? extends Empleado> c) {
@@ -88,13 +96,19 @@ public class FXMLEmpleadosController implements Initializable {
     private DatePicker dpFcontrato, dpFnacimiento;
 
     /**
-     * Initializes the controller class.
+     * Método que existe por defecto, NO USADO.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
     }
 
+    /**
+     * Método que carga al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario Identifica el tipo de usuario.
+     * @param empleado Identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
@@ -112,16 +126,19 @@ public class FXMLEmpleadosController implements Initializable {
                 System.out.println(tfBusquedaEmpleados.getText());
             });
 
-            //Valores para rellenar la vista de la tabla
-            tcIdEmpleado.setCellValueFactory(new PropertyValueFactory<Empleado, String>("id"));
-            tcNombre.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nombre"));
-            tcApellidos.setCellValueFactory(new PropertyValueFactory<Empleado, String>("apellido"));
-            tcCargo.setCellValueFactory(new PropertyValueFactory<Empleado, String>("cargo"));
-            tcJefe.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nomJefe"));
-            tcTelefono.setCellValueFactory(new PropertyValueFactory<Empleado, String>("telefono"));
-            tcFNacimiento.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fNacimiento"));
-            tcFContrato.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fContrato"));
-
+            try {
+                //Valores para rellenar la vista de la tabla
+                tcIdEmpleado.setCellValueFactory(new PropertyValueFactory<Empleado, String>("id"));
+                tcNombre.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nombre"));
+                tcApellidos.setCellValueFactory(new PropertyValueFactory<Empleado, String>("apellido"));
+                tcCargo.setCellValueFactory(new PropertyValueFactory<Empleado, String>("cargo"));
+                tcJefe.setCellValueFactory(new PropertyValueFactory<Empleado, String>("nomJefe"));
+                tcTelefono.setCellValueFactory(new PropertyValueFactory<Empleado, String>("telefono"));
+                tcFNacimiento.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fnacimiento"));
+                tcFContrato.setCellValueFactory(new PropertyValueFactory<Empleado, String>("fcontrato"));
+            } catch (Exception ex) {
+                System.out.println("table columns empleado " + ex.getMessage());
+            }
             //En el initialize añadimos el «Listener» al TableView
             final ObservableList<Empleado> tablaEmpleadoSel
                     = tablaBusquedaEmpleado.getSelectionModel().getSelectedItems();
@@ -136,7 +153,12 @@ public class FXMLEmpleadosController implements Initializable {
 
     }
 
-    //Método que devuelve el objeto de la fila seleccionada
+    /**
+     * Método, que se cuando realiza una búsqueda, captura el objeto
+     * seleccionado
+     *
+     * @return Un objeto del tipo Empleado que ha sido seleccionado.
+     */
     public Empleado getTablaEmpleadosSeleccionado() { //de aqui va a los textfields
 
         Empleado empleadoSeleccionado = null;
@@ -150,16 +172,18 @@ public class FXMLEmpleadosController implements Initializable {
         return empleadoSeleccionado;
     }
 
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
+    /**
+     * Método, que cuando se realiza una búsqueda, muestra en el formulario el
+     * objeto seleccionado.
+     */
     public void ponerEmpleadoSeleccionado() {
         final Empleado empleado = getTablaEmpleadosSeleccionado();
         posicionEmpleado = listaEmpleados.indexOf(empleado);
         if (empleado != null) {
 
             //convert String to LocalDate
-            LocalDate fContratoLocalDate = LocalDate.parse(empleado.getfContrato());
-            LocalDate fNacimientoLocalDate = LocalDate.parse(empleado.getfNacimiento());
+            LocalDate fContratoLocalDate = LocalDate.parse(empleado.getFcontrato());
+            LocalDate fNacimientoLocalDate = LocalDate.parse(empleado.getFnacimiento());
 
             tfIdEmpleado.setText(empleado.getId());
             tfNombre.setText(empleado.getNombre());
@@ -178,8 +202,9 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
-   
-
+    /**
+     * Activa los campos para editar el cliente seleccionado.
+     */
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero un empleado", tfIdEmpleado.getText().isEmpty())) {
@@ -188,6 +213,9 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
+    /**
+     * Cancela la edición deshabilitando los campos editables.
+     */
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
@@ -195,6 +223,9 @@ public class FXMLEmpleadosController implements Initializable {
         clearForm();
     }
 
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     @FXML
     private void guardarEditarFX() {
         estadoInicialBotonesVisibles();
@@ -203,12 +234,18 @@ public class FXMLEmpleadosController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Método que actualiza la tabla que muestra la búsqueda realizada.
+     */
     @FXML
     private void actualizaTablaBusqueda() {
         listaEmpleados.clear();
         Empleado.fillEmpleadoList(listaEmpleados);
     }
 
+    /**
+     * Activa y limplia los campos para crear un nuevo empleado.
+     */
     @FXML
     private void nuevoEmpleadoFX() {
         clearForm();
@@ -223,6 +260,9 @@ public class FXMLEmpleadosController implements Initializable {
         //el usuario rellena los datos en este punto
     }
 
+    /**
+     * LLama al método para guardar los datos nuevos en la base de datos.
+     */
     @FXML
     private void guardarNuevoRegistroFX() {
         if (validateEmptyField("No hay datos para guardar", tfIdEmpleado.getText().isEmpty())) {
@@ -234,6 +274,10 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
+    /**
+     * Al ejecutarse este método los botones vuelven al estado inicial y los
+     * campos para escribir texto vuelven a estar deshabilitados.
+     */
     @FXML
     private void cancelarNuevoEmpleadoFX() {
         estadoInicialBotonesVisibles();
@@ -241,6 +285,11 @@ public class FXMLEmpleadosController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Llama al método que ejecuta el borrado del registro actual.
+     *
+     * @see borrarRegistro().
+     */
     @FXML
     private void borrarRegistroFX() {
         if (validateEmptyField("Debe seleccionar primero un empleado", tfIdEmpleado.getText().isEmpty())) {
@@ -263,6 +312,10 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
+    /**
+     * Borra de la base de datos el registro del cliente actualmente
+     * seleccionado.
+     */
     private void borrarRegistro() {
         PreparedStatement stmt2;
 
@@ -276,6 +329,12 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
+    /**
+     * Genera un número de identificación nuevo para el registro que se va a
+     * crear.
+     *
+     * @return Número de identificación.
+     */
     private int nuevoNumeroId() {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -302,7 +361,9 @@ public class FXMLEmpleadosController implements Initializable {
         return numFactura + 1;
     }
 
-    //mostrar formulario en blanco
+    /**
+     * Limpia el formulario.
+     */
     private void clearForm() {
         tfIdEmpleado.clear();
         tfNombre.clear();
@@ -315,7 +376,9 @@ public class FXMLEmpleadosController implements Initializable {
         tfJefe.setVisible(false);
     }
 
-    //Guarda un registro nuevo
+    /**
+     * Guarda un registro nuevo en la base de datos.
+     */
     private void guardarNuevoRegistro() {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -346,7 +409,9 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
-    //Guarda lo editado
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     private void guardarEditado() {
 
         if (validateEmptyField("No hay datos para guardar", tfIdEmpleado.getText().isEmpty())) {
@@ -381,6 +446,9 @@ public class FXMLEmpleadosController implements Initializable {
         }
     }
 
+    /**
+     * Habilita los campos para ser editables.
+     */
     private void enableTextFieldEditable() {
         tfIdEmpleado.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(true);
@@ -392,6 +460,9 @@ public class FXMLEmpleadosController implements Initializable {
         tfTelefono.setEditable(true);
     }
 
+     /**
+     * Deshabilita los campos para que no sean editables.
+     */
     private void disableTextFieldEditable() {
         tfIdEmpleado.setEditable(false);// siempre deshabilitado
         tfNombre.setEditable(false);
@@ -403,6 +474,9 @@ public class FXMLEmpleadosController implements Initializable {
         tfTelefono.setEditable(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Editar'.
+     */
     private void editarTextoPressed() {
         tablaBusquedaEmpleado.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -414,6 +488,9 @@ public class FXMLEmpleadosController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Nuevo empleado'.
+     */
     private void nuevoEmpleadoPressed() {
         tablaBusquedaEmpleado.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -426,6 +503,10 @@ public class FXMLEmpleadosController implements Initializable {
         tfJefe.setVisible(false);
     }
 
+    /**
+     * Definición del estado de visibilidad o habilitabilidad en el que deben
+     * estar los botones.
+     */
     private void estadoInicialBotonesVisibles() {
         tablaBusquedaEmpleado.setDisable(false);
         bt_editarTexto.setVisible(true);
@@ -438,6 +519,13 @@ public class FXMLEmpleadosController implements Initializable {
         tfJefe.setVisible(false);
     }
 
+    /**
+     * Comprueba que el campo evaluado está vacío
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code false} si está vacío, {@code true} si contiene información
+     */
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);
@@ -449,7 +537,11 @@ public class FXMLEmpleadosController implements Initializable {
         }
         return true;
     }
-     @FXML
+
+    /**
+     * Abre el menú principal.
+     */
+    @FXML
     private void menuPrincipalFX() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
@@ -468,7 +560,7 @@ public class FXMLEmpleadosController implements Initializable {
             Stage stage2 = (Stage) bt_menuPrincipal.getScene().getWindow();
             stage2.close();
 
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             ex.getMessage();
         }
     }

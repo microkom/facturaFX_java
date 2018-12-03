@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="apAcerca" prefHeight="138.0" prefWidth="254.0" styleClass="fondoColorTeal" stylesheets="@estilo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.FXMLAcercaDeController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="29.0" layoutY="41.0" prefHeight="56.0" prefWidth="196.0" stylesheets="@estilo.css">
+         <children>
+            <Label stylesheets="@estilo.css" text="Software de Facturación" />
+            <Label stylesheets="@estilo.css" text="Diseñado por German Navarro" />
+            <Label stylesheets="@estilo.css" text="microkom@gmail.com" />
+            <Label stylesheets="@estilo.css" text="Version 1.0" />
+         </children>
+      </VBox>
+      <Pane layoutX="-42.0" layoutY="-62.0" prefHeight="200.0" prefWidth="200.0" styleClass="bordeColorTeal" stylesheets="@estilo.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   </children>
+</AnchorPane>

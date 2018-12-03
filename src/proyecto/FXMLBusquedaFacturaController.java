@@ -31,7 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLBusquedaFactura.fxml
  *
  * @author German
  */
@@ -44,13 +44,35 @@ public class FXMLBusquedaFacturaController implements Initializable {
     ObservableList<Factura> lista = FXCollections.observableArrayList();
     FilteredList<Factura> listaF = new FilteredList(lista, obj -> true);
 
+    /**
+     * El tipo de usuario que define la seguridad.
+     */
     private int tipoUsuario;
+
+    /**
+     * El id del empleado usado para almacenarlo en la factura.
+     */
     private int empleado;
+
+    /**
+     * La posición del índice del articulo seleccionado en el arraylist.
+     */
     int posicionItem = 0;
+
+    /**
+     * Almacena el número de la factura.
+     */
     int numFactura = 0;
 
+    /**
+     * Tabla de visualización de la factura para la búsqueda 
+     */
     @FXML
-    private TableView<Factura> tablaBusquedaF, tablaBusqueda;
+    private TableView<Factura> tablaBusquedaF;
+
+    @FXML
+    private TableView<Factura> tablaBusqueda;
+
     @FXML
     private TableColumn<Factura, String> tcNum, tcCliente, tcFecha, tcNumF, tcClienteF, tcFechaF, tcTotal, tcTotalF;
     @FXML
@@ -68,11 +90,9 @@ public class FXMLBusquedaFacturaController implements Initializable {
             ponerItemSeleccionado();
         }
     };
-    private final ListChangeListener<Factura> selectorItemFacturaF = new ListChangeListener<Factura>() {
-        @Override
-        public void onChanged(ListChangeListener.Change<? extends Factura> p) {
-            ponerItemSeleccionadoF();
-        }
+    
+    private final ListChangeListener<Factura> selectorItemFacturaF = (ListChangeListener.Change<? extends Factura> p) -> {
+        ponerItemSeleccionadoF();
     };
 
     @Override
@@ -80,12 +100,19 @@ public class FXMLBusquedaFacturaController implements Initializable {
 
     }
 
+    /**
+     * Método que carga al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario Identifica el tipo de usuario.
+     * @param empleado Identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
 
         Factura.fillFacturasList(listaFacturas);
 
+        //tableview para mostrar el filtrado por texto
         tablaBusqueda.setItems(listaFiltrada);
 
         //busqueda en tiempo real por nombre, contacto, cargo contacto, ciudad. Tiene en cuenta las tildes 
@@ -94,17 +121,22 @@ public class FXMLBusquedaFacturaController implements Initializable {
                     -> obj.getDatosBusqueda().toLowerCase().contains(tfBusqueda.getText().toLowerCase().trim()));
         });
 
+        //Columas que muestran el filtrado por texto 
         tcNum.setCellValueFactory(new PropertyValueFactory<Factura, String>("numPedido"));
         tcCliente.setCellValueFactory(new PropertyValueFactory<Factura, String>("nombreCliente"));
         tcFecha.setCellValueFactory(new PropertyValueFactory<Factura, String>("fecha"));
         tcTotal.setCellValueFactory(new PropertyValueFactory<Factura, String>("subtotal"));
 
+        //tableview para mostrar el filtrado por fecha
         tablaBusquedaF.setItems(listaFiltradaF);
 
+        //Columnas que muestran el filtrado por fecha
         tcNumF.setCellValueFactory(new PropertyValueFactory<Factura, String>("numPedido"));
         tcClienteF.setCellValueFactory(new PropertyValueFactory<Factura, String>("nombreCliente"));
         tcFechaF.setCellValueFactory(new PropertyValueFactory<Factura, String>("fecha"));
         tcTotal.setCellValueFactory(new PropertyValueFactory<Factura, String>("subtotal"));
+
+        //campos de fecha deshabilitados
         dpFechaInicial.setEditable(false);
         dpFechaFinal.setEditable(false);
 
@@ -118,19 +150,147 @@ public class FXMLBusquedaFacturaController implements Initializable {
                 = tablaBusquedaF.getSelectionModel().getSelectedItems();
         itemFacturaSelF.addListener(selectorItemFacturaF);
 
+        //tabla de búsqueda por fecha deshabilitada hasta que se efectue una búsqueda
         tablaBusquedaF.setDisable(true);
     }
 
-//    @FXML
-//    public void filtroFechaFX() {
-//        Fecha fechaMayor = Fecha.stringToFecha(dpFechaFinal.getValue().toString());
-//        Fecha fechaMenor = Fecha.stringToFecha(dpFechaInicial.getValue().toString());
-//        btFiltrarFecha.setOnKeyReleased(keyEvent -> {
-//            listaF.setPredicate(obj
-//                    -> obj.getFechaTipoFecha(fechaMenor,fechaMayor));
-//        });
-//    }
+    /**
+     * Método, que cuando realiza una búsqueda por nombre o ID, captura el
+     * objeto seleccionado
+     *
+     * @return Un objeto del tipo Factura que ha sido seleccionado.
+     */
+    public Factura getItemSeleccionado() { //de aqui va a los textfields
 
+        Factura itemSeleccionado = null;
+        if (tablaBusqueda != null) {
+            List<Factura> tabla = tablaBusqueda.getSelectionModel().getSelectedItems();
+            if (tabla.size() == 1) {
+                itemSeleccionado = tabla.get(0);
+                return itemSeleccionado;
+            }
+        }
+        return itemSeleccionado;
+    }
+
+    /**
+     * Método, que cuando se realiza una búsqueda por nombre o ID, muestra en el
+     * formulario el objeto seleccionado.
+     */
+    public void ponerItemSeleccionado() {
+        final Factura item = getItemSeleccionado();
+        posicionItem = listaFacturas.indexOf(item);
+        if (item != null) {
+            numFactura = Integer.parseInt(item.getNumPedido()); //usado para agregar el producto a la lista como nuevo
+            //tfLineaAActualizar.setText(Integer.toString(item.getNumLinea()));
+
+        }
+    }
+
+    /**
+     * Método, que cuando realiza una búsqueda por fecha, captura el objeto
+     * seleccionado.
+     *
+     * @return Un objeto del tipo Factura que ha sido seleccionado.
+     */
+    public Factura getItemSeleccionadoF() { //de aqui va a los textfields
+
+        Factura itemSeleccionado = null;
+        if (tablaBusquedaF != null) {
+            List<Factura> tabla = tablaBusquedaF.getSelectionModel().getSelectedItems();
+            if (tabla.size() == 1) {
+                itemSeleccionado = tabla.get(0);
+                return itemSeleccionado;
+            }
+        }
+        return itemSeleccionado;
+    }
+
+    /**
+     * Método, que cuando realiza una búsqueda por fecha, muestra en el
+     * formulario el objeto seleccionado.
+     *
+     */
+    public void ponerItemSeleccionadoF() {
+        final Factura item = getItemSeleccionadoF();
+        posicionItem = listaF.indexOf(item);
+        if (item != null) {
+            numFactura = Integer.parseInt(item.getNumPedido());
+        }
+    }
+
+    /**
+     * Comprueba que el número es un entero.
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code true} si {@code field} contiene un número; {@code false}
+     * si {@code field} contiene algo distinto de un número.
+     */
+    private boolean validateInteger(String text, int field) {
+        if (field == 0) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de campos");
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Comprueba que se ha seleccionado una fecha
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code true} si la variable {@code 'field'} está vacía;
+     * {@code false} si contiene información.
+     */
+    private boolean validaFechaVacia(String text, boolean field) {
+        if (field) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Validación de campos");
+            alert.setHeaderText(null);
+            alert.setContentText(text);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Abre el menú principal
+     */
+    @FXML
+    public void menuPrincipalFX() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
+            controller.initVariable(tipoUsuario, empleado);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+            stage.setTitle("..::Menú Principal::..");
+
+            //cierra la ventana abierta anteriormente 
+            Stage stage2 = (Stage) btMenuPrincipal.getScene().getWindow();
+            stage2.close();
+            Stage stage3 = (Stage) btMenuPrincipal2.getScene().getWindow();
+            stage3.close();
+
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
+    }
+
+    /**
+     * Realiza el filtrado de las facturas por fecha
+     */
     @FXML
     public void filtroFechaFX() {
         try {
@@ -139,7 +299,7 @@ public class FXMLBusquedaFacturaController implements Initializable {
 
                     Fecha fechaMayor = Fecha.stringToFecha(dpFechaFinal.getValue().toString());
                     Fecha fechaMenor = Fecha.stringToFecha(dpFechaInicial.getValue().toString());
-                    
+
                     lista.clear();
                     for (Factura obj : listaFacturas) {
                         Fecha fechaObj = Fecha.stringToFecha(obj.getFecha());
@@ -149,6 +309,7 @@ public class FXMLBusquedaFacturaController implements Initializable {
                         }
                     }
 
+                    //tableview para mostrar el filtrado por fecha
                     tablaBusquedaF.setItems(listaF);
 
                     tcNumF.setCellValueFactory(new PropertyValueFactory<Factura, String>("numPedido"));
@@ -157,7 +318,6 @@ public class FXMLBusquedaFacturaController implements Initializable {
                     tcTotal.setCellValueFactory(new PropertyValueFactory<Factura, String>("subtotal"));
 
                     tablaBusquedaF.setDisable(false);
-                    
                 }
             }
         } catch (Exception ex) {
@@ -165,7 +325,11 @@ public class FXMLBusquedaFacturaController implements Initializable {
             System.out.println("filtroFechaFX: localizedMessage " + ex.getLocalizedMessage());
         }
     }
-     
+
+    /**
+     * Abre una ventana para ver la última factura realizada o para editarla si
+     * se tienen privilegios para ello.
+     */
     @FXML
     public void editarFacturaFX() {
 
@@ -184,117 +348,9 @@ public class FXMLBusquedaFacturaController implements Initializable {
 
                 stage.setTitle("..:: Editar Factura " + numFactura + " ::..");
 
-                //cierra la ventana abierta anteriormente
-//            Stage stage2 = (Stage) bt_categorias.getScene().getWindow();
-//            stage2.close();
             } catch (IOException ex) {
                 System.out.println("categoriasFX: " + ex.getMessage());
             }
-        }
-    }
-
-    //para borrar las lineas en la factura
-    //Método que devuelve el objeto de la fila seleccionada
-    public Factura getItemSeleccionado() { //de aqui va a los textfields
-
-        Factura itemSeleccionado = null;
-        if (tablaBusqueda != null) {
-            List<Factura> tabla = tablaBusqueda.getSelectionModel().getSelectedItems();
-            if (tabla.size() == 1) {
-                itemSeleccionado = tabla.get(0);
-                return itemSeleccionado;
-            }
-        }
-        return itemSeleccionado;
-    }
-
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
-    public void ponerItemSeleccionado() {
-        final Factura item = getItemSeleccionado();
-        posicionItem = listaFacturas.indexOf(item);
-        if (item != null) {
-            numFactura = Integer.parseInt(item.getNumPedido()); //usado para agregar el producto a la lista como nuevo
-            //tfLineaAActualizar.setText(Integer.toString(item.getNumLinea()));
-
-        }
-    }
-
-    //para borrar las lineas en la factura
-    //Método que devuelve el objeto de la fila seleccionada
-    public Factura getItemSeleccionadoF() { //de aqui va a los textfields
-
-        Factura itemSeleccionado = null;
-        if (tablaBusquedaF != null) {
-            List<Factura> tabla = tablaBusquedaF.getSelectionModel().getSelectedItems();
-            if (tabla.size() == 1) {
-                itemSeleccionado = tabla.get(0);
-                return itemSeleccionado;
-            }
-        }
-        return itemSeleccionado;
-    }
-
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
-    public void ponerItemSeleccionadoF() {
-        final Factura item = getItemSeleccionadoF();
-        posicionItem = listaF.indexOf(item);
-        if (item != null) {
-            numFactura = Integer.parseInt(item.getNumPedido());
-
-        }
-
-    }
-
-    private boolean validateInteger(String text, int field) {
-        if (field == 0) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Validación de campos");
-            alert.setHeaderText(null);
-            alert.setContentText(text);
-            alert.showAndWait();
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validaFechaVacia(String text, boolean field) {
-        if (field) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Validación de campos");
-            alert.setHeaderText(null);
-            alert.setContentText(text);
-            alert.showAndWait();
-            return false;
-        }
-        return true;
-    }
-
-    @FXML
-    public void menuPrincipalFX() {
-        System.out.println("presionado");
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLMainMenu.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            FXMLMainMenuController controller = fxmlLoader.<FXMLMainMenuController>getController();
-            controller.initVariable(tipoUsuario, empleado);
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root1));
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-            stage.setTitle("..::Menú Principal::..");
-
-            //cierra la ventana abierta anteriormente
-            Stage stage2 = (Stage) btMenuPrincipal.getScene().getWindow();
-            stage2.close();
-            Stage stage3 = (Stage) btMenuPrincipal2.getScene().getWindow();
-            stage3.close();
-
-        } catch (IOException ex) {
-            ex.getMessage();
         }
     }
 }

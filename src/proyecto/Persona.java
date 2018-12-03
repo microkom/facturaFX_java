@@ -1,23 +1,53 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+finished commenting.
+*/
 package proyecto;
 
 /**
+ * Clase Persona
  *
- * @author German
+ * @author German Navarro
  */
 public class Persona {
-    
+
+    /**
+     * Variable de clase privada: número de identificación.
+     */
     protected String id;
+
+    /**
+     * Variable de clase privada: nombre de la persona.
+     */
     protected String nombre;
+    
+    /**
+     * Variable de clase privada: nombre del contacto.
+     */
     protected String contacto;
+    
+    /**
+     * Variable de clase privada: cargo del contacto.
+     */
     protected String cargoContacto;
+    
+    /**
+     * Variable de clase privada: dirección.
+     */
     protected String direccion;
+    
+    /**
+     * Variable de clase privada: ciudad.
+     */
     protected String ciudad;
+    
+    /**
+     * Variable de clase privada: país.
+     */
     protected String pais;
+    
+    /**
+     * Variable de clase privada: número de telefono.
+     */
     protected String telefono;
 
     public Persona(String id, String nombre, String contacto, String cargoContacto, String direccion, String ciudad, String pais, String telefono) {
@@ -31,16 +61,29 @@ public class Persona {
         this.telefono = telefono;
     }
 
+    /**
+     * Constructor con tres parametros.
+     *
+     * @param id "id" de la persona
+     * @param nombre nombre de la persona
+     * @param telefono número de teléfono de la persona.
+     */
     public Persona(String id, String nombre, String telefono) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
     }
+
+    /**
+     * Constructor con dos parametros.
+     *
+     * @param id "id" de la persona
+     * @param nombre nombre de la persona
+     */
     public Persona(String id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
-    
 
     public String getId() {
         return id;
@@ -105,5 +148,4 @@ public class Persona {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-   
 }

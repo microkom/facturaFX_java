@@ -1,8 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+finished commenting
+*/
 package proyecto;
 
 import java.sql.Connection;
@@ -12,20 +10,56 @@ import java.sql.SQLException;
 import javafx.collections.ObservableList;
 
 /**
+ * Clase LineaFactura.
  *
  * @author German
  */
 public class LineaFactura {
-    
+
+    /**
+     * Variable de clase privada: número que identifica la linea.
+     */
     private int numLinea;
+
+    /**
+     * Variable de clase privada: número de la factura.
+     */
     private int numPedido;
+
+    /**
+     * Variable de clase privada: ID que identifica al producto.
+     */
     private int producto;
+
+    /**
+     * Variable de clase privada: precio del producto.
+     */
     private double precio;
+
+    /**
+     * Variable de clase privada: cantidad del producto.
+     */
     private int cantidad;
+
+    /**
+     * Variable de clase privada: descuento aplicado.
+     */
     private double descuento;
+
+    /**
+     * Variable de clase privada: nombre del producto.
+     */
     private String nombreProducto;
+
+    /**
+     * Variable de clase privada: subtotal de la linea.
+     */
     private double subtotal;
-    
+
+    /**
+     * Variable de clase privada: descuento que se muestra en la linea.
+     */
+    private double descuentoMostrar;
 
     public LineaFactura(int numLinea, int numPedido, int producto, double precio, int cantidad, double descuento, String nombreProducto, double subtotal) {
         this.numLinea = numLinea;
@@ -36,7 +70,9 @@ public class LineaFactura {
         this.descuento = descuento;
         this.nombreProducto = nombreProducto;
         this.subtotal = subtotal;
+        this.descuentoMostrar = this.descuento * 100;
     }
+
     public LineaFactura(int numLinea, int numPedido, int producto, double precio, int cantidad, double descuento) {
         this.numLinea = numLinea;
         this.numPedido = numPedido;
@@ -45,9 +81,10 @@ public class LineaFactura {
         this.cantidad = cantidad;
         this.descuento = descuento;
         setNombreProducto();
- 
+        this.descuentoMostrar = this.descuento * 100;
     }
-    public LineaFactura(int numLinea, int numPedido, int producto, double precio, int cantidad, double descuento,  double subtotal) {
+
+    public LineaFactura(int numLinea, int numPedido, int producto, double precio, int cantidad, double descuento, double subtotal) {
         this.numLinea = numLinea;
         this.numPedido = numPedido;
         this.producto = producto;
@@ -56,16 +93,25 @@ public class LineaFactura {
         this.descuento = descuento;
         this.subtotal = subtotal;
         setNombreProducto();
- 
+        this.descuentoMostrar = this.descuento * 100;
     }
 
-    public void setNombreProducto(){
+    public double getDescuentoMostrar() {
+        return descuentoMostrar;
+    }
+
+    public void setDescuentoMostrar(double descuentoMostrar) {
+        this.descuentoMostrar = descuentoMostrar;
+    }
+
+    public void setNombreProducto() {
         this.nombreProducto = Producto.getNombreProducto(this.producto);
     }
-    public String getNombreProducto(){
+
+    public String getNombreProducto() {
         return Producto.getNombreProducto(this.producto);
     }
-    
+
     public int getNumLinea() {
         return numLinea;
     }
@@ -121,14 +167,25 @@ public class LineaFactura {
     public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
-    
-    //recibe un double y lo devuelve como String con 2 decimales
-    //
+
+    /**
+     * Muestra siempre los últimos dos decimales del número recibido por
+     * parámetro.
+     *
+     * @param number Valor del que se quieren mostrar dos decimales
+     * @return El mismo valor recibido con dos decimales.
+     */
     private String dosDecimales(double number) {
         return String.format("%.2f", number);
     }
-    
-     public static void fillLineaFacturasList(ObservableList<LineaFactura> listaFacturas) {
+
+    /**
+     * Método que rellena un ObservableList con los datos las lineas de facturas.
+     *
+     * @param listaFacturas Contiene el listado de las lineas de facturas
+     * almacenados en la base de datos.
+     */
+    public static void fillLineaFacturasList(ObservableList<LineaFactura> listaFacturas) {
 
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -139,10 +196,9 @@ public class LineaFactura {
             stmt = con.prepareStatement("SELECT * FROM lineaspedido");
             rs = stmt.executeQuery();
             while (rs.next()) {
-                double subtotalL =0;
+                double subtotalL = 0;
                 subtotalL = rs.getDouble("precio") * rs.getInt("cantidad");
-                
-                
+
                 listaFacturas.add(
                         new LineaFactura( //int numLinea, int numPedido, int producto, double precio, 
                                 //int cantidad, double descuento, String nombreProducto, double subtotal
@@ -153,7 +209,7 @@ public class LineaFactura {
                                 rs.getInt("cantidad"),
                                 rs.getDouble("descuento"),
                                 //rs.getString("nombreProducto"),
-                                subtotalL                                
+                                subtotalL
                         ));
             }
 

@@ -13,12 +13,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,20 +30,31 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Clase controladora del archivo FXMLProveedores.fxml
  *
- * @author German
+ * @author German Navarro
  */
 public class FXMLProveedoresController implements Initializable {
 
+    /**
+     * Variable de clase privada: número que identifica al tipo de usuario
+     * conectado.
+     */
     private int tipoUsuario;
+
+    /**
+     * Variable de clase privada: número que identifica al empleado.
+     */
     private int empleado;
 
+    /**
+     * Variable de clase privada: almacena el número que identifica al
+     * proveedor.
+     */
     private String genIdProveedor = "";
 
     Conexion conexion = new Conexion();
@@ -80,15 +89,22 @@ public class FXMLProveedoresController implements Initializable {
     };
 
     /**
-     * Initializes the controller class.
+     * Método que existe por defecto en la clase. NO USADO.
+     *
+     * @param url
+     * @param rb
      */
-        @Override
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
 
     }
 
-    
+    /**
+     * Método que se ejecuta al iniciar el controlador de la clase.
+     *
+     * @param tipoUsuario número que identifica al tipo de usuario.
+     * @param empleado número que identifica al empleado.
+     */
     public void initVariable(int tipoUsuario, int empleado) {
         this.tipoUsuario = tipoUsuario;
         this.empleado = empleado;
@@ -105,7 +121,7 @@ public class FXMLProveedoresController implements Initializable {
                 listaProveedorFiltrada.setPredicate(obj -> obj.getDatosBusqueda().toLowerCase().contains(tfBusquedaProveedor.getText().toLowerCase().trim()));
 
             });
-        
+
             //Valores para rellenar la vista de la tabla
             tCnombreProveedor.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("nombre"));
             tCcontacto.setCellValueFactory(new PropertyValueFactory<Proveedor, String>("contacto"));
@@ -129,7 +145,12 @@ public class FXMLProveedoresController implements Initializable {
 
     }
 
-    //Método que devuelve el objeto de la fila seleccionada
+    /**
+     * Método, que se cuando realiza una búsqueda, captura el objeto
+     * seleccionado
+     *
+     * @return Un objeto del tipo Proveedor que ha sido seleccionado.
+     */
     public Proveedor getTablaProveedorSeleccionado() { //de aqui va a los textfields
 
         Proveedor proveedorSeleccionado = null;
@@ -143,8 +164,10 @@ public class FXMLProveedoresController implements Initializable {
         return proveedorSeleccionado;
     }
 
-    //Método que a partir del objeto seleccionado lo muestra en el formulario
-    //También puede habilitar/deshabilitar botones en el formualrio
+    /**
+     * Método, que cuando se realiza una búsqueda, muestra en el formulario el
+     * objeto seleccionado.
+     */
     public void ponerProveedorSeleccionado() {
         final Proveedor proveedor = getTablaProveedorSeleccionado();
         posicionProveedor = listaProveedor.indexOf(proveedor);
@@ -160,6 +183,9 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Activa los campos para editar el producto seleccionado.
+     */
     @FXML
     private void editarTextoFX() {
         if (validateEmptyField("Debe seleccionar primero un proveedor", tfIdProveedor.getText().isEmpty())) {
@@ -168,6 +194,9 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Cancela la edición deshabilitando los campos editables.
+     */
     @FXML
     private void cancelarEditarTextoFX() {
         estadoInicialBotonesVisibles();
@@ -175,6 +204,9 @@ public class FXMLProveedoresController implements Initializable {
         clearForm();
     }
 
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     @FXML
     private void guardarEditarFX() {
         estadoInicialBotonesVisibles();
@@ -183,12 +215,18 @@ public class FXMLProveedoresController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Método que actualiza la tabla que muestra la búsqueda realizada.
+     */
     @FXML
     private void actualizaTablaBusqueda() {
         listaProveedor.clear();
         Proveedor.fillProveedorList(listaProveedor);
     }
 
+    /**
+     * Activa y limplia los campos para crear un nuevo proveedor.
+     */
     @FXML
     private void nuevoProveedorFX() {
         clearForm();
@@ -200,6 +238,9 @@ public class FXMLProveedoresController implements Initializable {
         //el usuario rellena los datos en este punto
     }
 
+    /**
+     * LLama al método para guardar los datos nuevos en la base de datos.
+     */
     @FXML
     private void guardarNuevoRegistroFX() {
         if (validateEmptyField("No hay datos para guardar", tfIdProveedor.getText().isEmpty())) {
@@ -211,6 +252,10 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Al ejecutarse este método los botones vuelven al estado inicial y los
+     * campos para escribir texto vuelven a estar deshabilitados.
+     */
     @FXML
     private void cancelarNuevoProveedorFX() {
         estadoInicialBotonesVisibles();
@@ -218,6 +263,11 @@ public class FXMLProveedoresController implements Initializable {
         disableTextFieldEditable();
     }
 
+    /**
+     * Llama al método que ejecuta el borrado del registro actual.
+     *
+     * @see borrarRegistro().
+     */
     @FXML
     private void borrarRegistroFX() {
         if (validateEmptyField("Debe seleccionar primero un proveedor", tfIdProveedor.getText().isEmpty())) {
@@ -240,6 +290,10 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Borra de la base de datos el registro del cliente actualmente
+     * seleccionado.
+     */
     private void borrarRegistro() {
         PreparedStatement stmt2;
 
@@ -253,6 +307,12 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Genera un número de identificación nuevo para el registro que se va a
+     * crear consultando antes el último número de la base de datos.
+     *
+     * @return Número de identificación.
+     */
     private int nuevoNumeroId() {
         Conexion conexion = new Conexion();
         Connection con = conexion.conectar();
@@ -279,7 +339,9 @@ public class FXMLProveedoresController implements Initializable {
         return numFactura + 1;
     }
 
-    //mostrar formulario en blanco
+    /**
+     * Limpia el formulario.
+     */
     private void clearForm() {
         tfIdProveedor.clear();
         tfNombreProveedor.clear();
@@ -291,7 +353,9 @@ public class FXMLProveedoresController implements Initializable {
         tfTelefono.clear();
     }
 
-    //Guarda un registro nuevo
+    /**
+     * Guarda un registro nuevo en la base de datos.
+     */
     private void guardarNuevoRegistro() {
         PreparedStatement stmt;
         try {
@@ -320,7 +384,9 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
-    //Guarda lo editado
+    /**
+     * Guarda los campos editados en la base de datos.
+     */
     private void guardarEditado() {
         if (validateEmptyField("No hay datos para guardar", tfIdProveedor.getText().isEmpty())) {
             PreparedStatement stmt;
@@ -350,6 +416,9 @@ public class FXMLProveedoresController implements Initializable {
         }
     }
 
+    /**
+     * Habilita los campos para ser editables.
+     */
     private void enableTextFieldEditable() {
         tfIdProveedor.setEditable(false);// siempre deshabilitado
         tfNombreProveedor.setEditable(true);
@@ -361,6 +430,9 @@ public class FXMLProveedoresController implements Initializable {
         tfTelefono.setEditable(true);
     }
 
+    /**
+     * Deshabilita los campos para que no sean editables.
+     */
     private void disableTextFieldEditable() {
         tfIdProveedor.setMouseTransparent(true);// siempre deshabilitado
         tfIdProveedor.setEditable(false);// siempre deshabilitado
@@ -373,6 +445,9 @@ public class FXMLProveedoresController implements Initializable {
         tfTelefono.setEditable(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Editar'.
+     */
     private void editarTextoPressed() {
         tablaBusquedaProveedor.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -384,6 +459,9 @@ public class FXMLProveedoresController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Acciones que se realizan cuando se presiona el botón 'Nuevo proveedor'.
+     */
     private void nuevoProveedorPressed() {
         tablaBusquedaProveedor.setDisable(true);
         bt_editarTexto.setVisible(false);
@@ -395,6 +473,10 @@ public class FXMLProveedoresController implements Initializable {
         bt_borrarRegistro.setVisible(false);
     }
 
+    /**
+     * Definición del estado de visibilidad o habilitabilidad en el que deben
+     * estar los botones.
+     */
     private void estadoInicialBotonesVisibles() {
         tablaBusquedaProveedor.setDisable(false);
         bt_editarTexto.setVisible(true);
@@ -406,6 +488,13 @@ public class FXMLProveedoresController implements Initializable {
         bt_borrarRegistro.setVisible(true);
     }
 
+    /**
+     * Comprueba que el campo evaluado está vacío
+     *
+     * @param text Texto que se muestra en la ventana de advertencia
+     * @param field Campo que se comprueba
+     * @return {@code false} si está vacío, {@code true} si contiene información
+     */
     private boolean validateEmptyField(String text, boolean field) {
         if (field) {
             Alert alert = new Alert(AlertType.WARNING);
@@ -418,6 +507,9 @@ public class FXMLProveedoresController implements Initializable {
         return true;
     }
 
+    /**
+     * Abre el menú principal.
+     */
     @FXML
     private void menuPrincipalFX() {
         try {
